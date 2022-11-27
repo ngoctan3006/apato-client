@@ -1,9 +1,8 @@
 import axios from 'axios';
 
 const apiClient = axios.create({
-  baseURL: "https://apato-server.vercel.app/",
+  baseURL: "http://localhost:4000/",
   responseType: "json",
-  withCredentials: true,
   timeout: 20000,
 })
 
