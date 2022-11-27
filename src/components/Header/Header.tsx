@@ -15,7 +15,7 @@ const Header: React.FC = () => {
   return (
     <div className={styles.headerContainer}>
       <div>
-        <AppText>Course Hub</AppText>
+        <AppText>Rent Apartment</AppText>
       </div>
       <SearchInput
         value={searchText}

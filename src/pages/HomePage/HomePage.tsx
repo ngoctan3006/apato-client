@@ -1,8 +1,6 @@
 import React from "react";
-import {Button} from "@mui/material";
 import useAuth from "../../hook/useAuth";
-import {Link, useNavigate} from "react-router-dom";
-import AppText from "../../components/AppText/AppText";
+import {useNavigate} from "react-router-dom";
 import Header from "../../components/Header/Header";
 import ApartListItem from "./components/ApartListItem";
 import styles from "./HomePage.module.css";
@@ -13,19 +11,19 @@ const HomePage: React.FC = () => {
   return (
     <div style={{background: "whitesmoke"}}>
       <Header/>
-      <nav>
-        {
-          user ? <Button onClick={() => {
-              signOut()
-            }}>{`Hi, ${user?.id}, sign out`}</Button>
-            :
-            <Link to={"/login"}>Login to discovery more</Link>
-        }
-      </nav>
+      {/*<nav>*/}
+      {/*  {*/}
+      {/*    user ? <Button onClick={() => {*/}
+      {/*        signOut()*/}
+      {/*      }}>{`Hi, ${user?.id}, sign out`}</Button>*/}
+      {/*      :*/}
+      {/*      <Link to={"/login"}>Login to discovery more</Link>*/}
+      {/*  }*/}
+      {/*</nav>*/}
 
-      <div>
-        <AppText>This is the website content</AppText>
-      </div>
+      {/*<div>*/}
+      {/*  <AppText>This is the website content</AppText>*/}
+      {/*</div>*/}
       <div className={styles.listContainer}>
         {FAKE_DATA.map((item) => {
           return (
