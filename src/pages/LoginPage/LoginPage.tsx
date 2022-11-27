@@ -23,6 +23,7 @@ const LoginPage: React.FC = () => {
       if (res.status === 201) {
         signIn({
           user: {
+            ...resData?.user_info,
             id: resData?.user_info?.email,
             token: resData?.access_token
           }
@@ -51,6 +52,7 @@ const LoginPage: React.FC = () => {
       if (res.status === 201) {
         signIn({
           user: {
+            ...resData?.user_info,
             id: resData?.user_info?.email,
             token: resData?.access_token
           }
