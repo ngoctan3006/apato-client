@@ -8,10 +8,11 @@ import {EMAIL_REGEX} from "../../../utils/utils";
 import {Button} from "@mui/material";
 
 interface RegisterFormProps {
-  onSubmit:  React.FormEventHandler<HTMLFormElement> | undefined
+  onSubmit: React.FormEventHandler<HTMLFormElement> | undefined
   register: UseFormRegister<FieldValues>;
-  errors:  FieldErrors<FieldValues>
+  errors: FieldErrors<FieldValues>
 }
+
 const RegisterForm: React.FC<RegisterFormProps> = (props) => {
   const {onSubmit, register, errors} = props
 
@@ -19,6 +20,39 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
     <form
       className={styles.formContainer}
       onSubmit={onSubmit}>
+      <input
+        className={styles.input}
+        {...register("name", {
+          required: true,
+        })}
+        name={"name"}
+        placeholder={"Tên của bạn"}
+        type={"text"}/>
+      {errors.name?.type === 'required' && <AppText
+          className={styles.errorText}
+          role="alert">Name is required</AppText>}
+      <input
+        className={styles.input}
+        {...register("address", {
+          required: true,
+        })}
+        name={"address"}
+        placeholder={"Địa chỉ của bạn"}
+        type={"text"}/>
+      {errors.address?.type === 'required' && <AppText
+          className={styles.errorText}
+          role="alert">Address is required</AppText>}
+      <input
+        className={styles.input}
+        {...register("phone", {
+          required: true,
+        })}
+        name={"phone"}
+        placeholder={"SĐT của bạn"}
+        type={"phone"}/>
+      {errors.phone?.type === 'required' && <AppText
+          className={styles.errorText}
+          role="alert">Phone is required</AppText>}
       <input
         className={styles.input}
         {...register("email", {
@@ -40,15 +74,14 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
       {errors.password?.type === 'required' && <AppText
           className={styles.errorText}
           role="alert">Password is required</AppText>}
-      <input
-        className={styles.input}
-        {...register("password", {required: true, minLength: 8})}
-        type={"password"}
-        name={"password"}
-        placeholder={"Nhập lại mật khẩu của bạn"}/>
-      {errors.password?.type === 'required' && <AppText
-          className={styles.errorText}
-          role="alert">Password is required</AppText>}
+      <div className={styles.checkBoxContainer}>
+        <input
+          {...register("admin")}
+          name={"admin"}
+          type={"checkbox"}
+        />
+        <AppText>Bạn là chủ trọ?</AppText>
+      </div>
       <Button
         sx={{
           borderRadius: "10px",

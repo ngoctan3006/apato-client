@@ -7,6 +7,7 @@ import {useForm} from "react-hook-form";
 import styles from "./LoginPage.module.css";
 import LoginForm from "./components/LoginForm";
 import RegisterForm from "./components/RegisterForm";
+import {signUpAPI} from "../../api/service";
 
 const {isStrongPassword, isEmail} = validator;
 
@@ -26,8 +27,11 @@ const LoginPage: React.FC = () => {
     })
     navigate("/")
   }
-  const registerHandler = (data: any) => {
-    console.log(data)
+  const registerHandler = async (data: any) => {
+    // console.log(data)
+    if (data?.admin){
+      console.log(data)
+    }
     signIn({
       user: {
         id: data.email,

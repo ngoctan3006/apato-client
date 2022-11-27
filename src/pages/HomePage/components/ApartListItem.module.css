@@ -1,0 +1,42 @@
+.itemContainer{
+    width: 200px;
+    border-radius: 10px;
+    background: white;
+}
+
+.image{
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 10px;
+}
+
+.content{
+    padding: 10px 15px;
+}
+.name{
+    font-size: 1.6rem;
+    color: black;
+}
+.address{
+    font-size: 1.4rem;
+    color: black;
+    margin-top: 8px;
+}
+.itemFooter{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 12px;
+    justify-content: space-between;
+}
+
+.rate{
+   font-size: 1.4rem;
+    color: grey;
+}
+
+
+.price{
+    font-size: 1.6rem;
+    color: red;
+}

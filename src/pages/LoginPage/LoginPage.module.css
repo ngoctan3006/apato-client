@@ -42,6 +42,17 @@
     margin: 8px 12px;
 }
 
+.checkBoxContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 12px 8px;
+}
+
+.checkBoxContainer > input{
+    margin-right: 12px;
+}
+
 .needRegister{
     font-size: 1.6rem;
     color: black;

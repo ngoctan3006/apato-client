@@ -1,0 +1,9 @@
+.listContainer{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    column-gap: 30px;
+    row-gap: 30px;
+}
