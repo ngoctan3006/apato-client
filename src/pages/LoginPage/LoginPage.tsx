@@ -58,7 +58,6 @@ const LoginPage: React.FC = () => {
         navigate("/")
       }
     } catch (e) {
-      setError(e)
       console.log(e)
     }
   }
