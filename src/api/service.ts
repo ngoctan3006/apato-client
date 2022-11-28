@@ -49,7 +49,6 @@ export const createPost = (data: any, token: string) => {
   };
 
   return fetch("http://localhost:4000/posts/", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
+    .then(response => response.json())
     .catch(error => console.log('error', error));
 }

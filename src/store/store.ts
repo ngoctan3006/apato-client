@@ -2,10 +2,12 @@ import {combineReducers, configureStore} from '@reduxjs/toolkit'
 import {TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {FLUSH, PAUSE, PERSIST, persistReducer, persistStore, PURGE, REGISTER, REHYDRATE} from 'redux-persist'
 import {authSlice} from "./slice/authSlide";
-import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
+import storage from 'redux-persist/lib/storage'
+import {postSlice} from "./slice/postSlice"; // defaults to localStorage for web
 
 const combinedReducers = combineReducers({
-  authentication: authSlice.reducer
+  authentication: authSlice.reducer,
+  post: postSlice.reducer
 });
 
 const persistConfig = {

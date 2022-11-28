@@ -7,11 +7,13 @@ import {createPost, uploadImage} from "../../api/service";
 import {AccessToken} from "../../api/AccessToken";
 import useAuth from "../../hook/useAuth";
 import {useNavigate} from "react-router-dom";
+import usePost from "../../hook/usePost";
 
 const PostApartPage: React.FC = () => {
   const {register, handleSubmit, formState: {errors}} = useForm()
   const auth = useAuth()
   const user = auth.user
+  const {pushFakePost} = usePost()
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -23,6 +25,10 @@ const PostApartPage: React.FC = () => {
       .then((res) => {
         console.log(res)
         console.log("Created Post successfully")
+        pushFakePost({
+          ...res,
+          image: "http://" + res.image[0]
+        })
         navigate("/")
       })
       .catch(e => console.log(e))
@@ -34,11 +40,9 @@ const PostApartPage: React.FC = () => {
       .then((res) => {
         console.log("HTD", res)
         submitPost({
-          title: data?.name,
-          address: data?.address,
-          image: [`${res}`],
-          price: data?.price,
-          detail: data?.description
+          ...data,
+          price: Number(data.price),
+          image: [`${res}`]
         })
       })
       .catch(e => console.log(e))
