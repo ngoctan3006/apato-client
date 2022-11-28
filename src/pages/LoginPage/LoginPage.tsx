@@ -36,8 +36,8 @@ const LoginPage: React.FC = () => {
   }
   const registerHandler = async (data: any) => {
     let role: string | undefined = undefined
-    if (data?.admin) {
-      role = "ADMIN"
+    if (data?.seller) {
+      role = "SELLER"
     }
     try {
       const res = await signUpAPI({

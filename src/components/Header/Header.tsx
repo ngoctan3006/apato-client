@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useCallback, useMemo, useState} from "react";
 import styles from "./Header.module.css";
 import {Button} from "@mui/material";
 import SearchInput from "./components/SearchInput/SearchInput";
@@ -13,9 +13,17 @@ const Header: React.FC = () => {
   const auth = useAuth()
   const user = auth.user
 
+  const showCreatePostButton: boolean = useMemo(() => {
+    return user?.role === "SELLER"
+  }, [user?.role])
+
   const navigateToLogIn = () => {
     navigate("/login")
   }
+  const navigateToPostApart = useCallback(() => {
+    navigate("/post-apart")
+  }, [showCreatePostButton])
+
   return (
     <div className={styles.headerContainer}>
       <div>
@@ -29,8 +37,16 @@ const Header: React.FC = () => {
         user ?
           <>
             <div onClick={() => signOut()}>
-            <AppText>{user.id}</AppText>
+              <AppText>{user.id}</AppText>
             </div>
+            {showCreatePostButton &&
+                <Button
+                    style={{
+                      fontSize: "14px",
+                      textTransform: "none",
+                    }}
+                    variant="outlined"
+                    onClick={navigateToPostApart}>Đăng bài</Button>}
           </>
           : <Button
             onClick={navigateToLogIn}
@@ -47,7 +63,8 @@ const Header: React.FC = () => {
               justifySelf: "flex-end"
             }}>
             Đăng nhập
-          </Button>}
+          </Button>
+      }
     </div>
   )
 }

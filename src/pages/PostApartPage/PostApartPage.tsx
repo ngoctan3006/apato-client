@@ -1,13 +1,48 @@
-import React from "react";
+import React, {useEffect} from "react";
 import styles from "./PostApartPage.module.css";
 import AppText from "../../components/AppText/AppText";
 import {Button} from "@mui/material";
 import {useForm} from "react-hook-form";
+import {createPost, uploadImage} from "../../api/service";
+import {AccessToken} from "../../api/AccessToken";
+import useAuth from "../../hook/useAuth";
+import {useNavigate} from "react-router-dom";
 
 const PostApartPage: React.FC = () => {
   const {register, handleSubmit, formState: {errors}} = useForm()
-  const postHandler = () => {
+  const auth = useAuth()
+  const user = auth.user
+  const navigate = useNavigate()
 
+  useEffect(() => {
+    AccessToken.value = user?.token!
+  }, [])
+
+  const submitPost = (data: any) => {
+    createPost(data, AccessToken.value!)
+      .then((res) => {
+        console.log(res)
+        console.log("Created Post successfully")
+        navigate("/")
+      })
+      .catch(e => console.log(e))
+  }
+
+  const postHandler = (data: any) => {
+    console.log(data)
+    uploadImage(data?.image, AccessToken.value!)
+      .then((res) => {
+        console.log("HTD", res)
+        submitPost({
+          title: data?.name,
+          address: data?.address,
+          image: [`${res}`],
+          price: data?.price,
+          detail: data?.description
+        })
+      })
+      .catch(e => console.log(e))
+    // uploadImage()
   }
   return (
     <div className={styles.container}>
@@ -21,7 +56,7 @@ const PostApartPage: React.FC = () => {
           })}
           name={"image"}
           placeholder={"Ảnh"}
-          type={"image"}/>
+          type={"file"}/>
         {errors.image?.type === 'required' && <AppText
             className={styles.errorText}
             role="alert">Image is required</AppText>}

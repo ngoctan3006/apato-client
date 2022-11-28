@@ -76,8 +76,8 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           role="alert">Password is required</AppText>}
       <div className={styles.checkBoxContainer}>
         <input
-          {...register("admin")}
-          name={"admin"}
+          {...register("seller")}
+          name={"seller"}
           type={"checkbox"}
         />
         <AppText>Bạn là chủ trọ?</AppText>
