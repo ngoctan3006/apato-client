@@ -2,11 +2,16 @@ import React, {useState} from "react";
 import AppText from "../../components/AppText/AppText";
 import styles from "./ApartDetailPage.module.css";
 import ApartReviewItem from "./components/ApartReviewItem";
+import usePost from "../../hook/usePost";
+import {useParams} from "react-router-dom";
 
 const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
 const ApartDetailPage: React.FC = () => {
   const [comment, setComment] = useState("")
+  const params = useParams()
+  const {posts} = usePost()
+  const item = posts.find(item => item.id === Number(params.apartId))
   return (
     <div>
       {/*<Header/>*/}
@@ -18,40 +23,34 @@ const ApartDetailPage: React.FC = () => {
               <img
                 alt=""
                 className={styles.image}
-                src={FAKE_URL}/>
+                src={item?.image}/>
               <img
                 alt=""
                 className={styles.image}
-                src={FAKE_URL}/>
+                src={item?.image}/>
               <img
                 alt=""
                 className={styles.image}
-                src={FAKE_URL}/>
+                src={item?.image}/>
               <img
                 alt=""
                 className={styles.image}
-                src={FAKE_URL}/>
+                src={item?.image}/>
             </div>
             <div className={styles.info}>
               <div className={styles.infoHeader}>
                 <div>
                   <AppText fontType={"semi"} className={styles.detail}>Name: </AppText>
-                  <AppText className={styles.value}>Apartment 1</AppText>
+                  <AppText className={styles.value}>{item?.title}</AppText>
                 </div>
-                <AppText className={styles.rate}>5/5 Rates</AppText>
+                <AppText className={styles.rate}>{item?.rating}</AppText>
               </div>
               <AppText fontType={"semi"} className={styles.detail}>Address: </AppText>
-              <AppText className={styles.value}>Address 1</AppText>
+              <AppText className={styles.value}>{item?.address}</AppText>
               <AppText fontType={"semi"} className={styles.detail}>Description: </AppText>
-              <AppText className={styles.value}>Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown
-                printer took a galley of type and scrambled it to make a type specimen book. It has survived not only
-                five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was
-                popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-                recently with desktop publishing software like Aldus PageMaker including versions of Lorem
-                Ipsum.</AppText>
-              <AppText fontType={"semi"} className={styles.detail}>Contact: </AppText>
-              <AppText className={styles.value}>0000000000</AppText>
+              <AppText className={styles.value}>{item?.detail}</AppText>
+              <AppText fontType={"semi"} className={styles.detail}>Price: </AppText>
+              <AppText className={styles.value}>{item?.price} VND</AppText>
             </div>
           </div>
         </div>

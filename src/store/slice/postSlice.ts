@@ -8,7 +8,8 @@ export interface ApartModel {
   rating: number,
   price: string,
   total_rating: number,
-  user_id: number
+  user_id: number,
+  detail: string
 }
 
 function genFakeApartList() {
@@ -21,8 +22,9 @@ function genFakeApartList() {
       address: "DongDa, Hanoi, Viet Nam",
       rating: Math.ceil(Math.random() * 5),
       total_rating: 0,
-      price: "1.000.000 VND",
-      user_id: i
+      price: "1.000.000",
+      user_id: i,
+      detail: "Nha chung cu"
     })
   }
   return Data
