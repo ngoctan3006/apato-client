@@ -24,7 +24,7 @@ yarn build
 yarn preview
 ```
 
-###chú ý khi commit
+#Chú ý khi commit
 
 - phải tạo branch: dev - "Tên" và code trên branch của mình
 - Không đc push trực tiếp lên nhánh master
