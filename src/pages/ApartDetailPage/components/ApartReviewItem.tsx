@@ -1,26 +1,28 @@
 import React from "react";
-import {CommentModel} from "../ApartDetailPage";
 import AppText from "../../../components/AppText/AppText";
 import styles from "./ApartReviewItem.module.css";
+import {Comment} from "../../../model/ApartDetailModel";
+import {FAKE_URL} from "../ApartDetailPage";
 
 interface ApartReviewItemProps {
-  item: CommentModel
+  item: Comment
 }
 
 const ApartReviewItem: React.FC<ApartReviewItemProps> = ({item}) => {
   return (
     <div className={styles.itemContainer}>
       <img
+        alt=""
         className={styles.image}
-        src={item.author.avatar}/>
+        src={FAKE_URL}/>
       <div>
         <AppText
           fontType={"semi"}
-          className={styles.name}>{item.author.name}</AppText>
+          className={styles.name}>{item.userId}</AppText>
         <AppText
-          className={styles.content}>{item.content}</AppText>
+          className={styles.content}>{item.comment}</AppText>
         <AppText
-          className={styles.createdAt}>{item.createdAt}</AppText>
+          className={styles.createdAt}>{new Date(item.created_at).toLocaleDateString()}</AppText>
       </div>
     </div>
   )

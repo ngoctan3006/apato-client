@@ -1,4 +1,6 @@
 import apiClient from "./client";
+import {ApartModel} from "../model/ApartModel";
+import {ApartDetailModel} from "../model/ApartDetailModel";
 
 export const signUpAPI = (data: any) => {
   return apiClient.post("auth/register", data)
@@ -51,4 +53,20 @@ export const createPost = (data: any, token: string) => {
   return fetch("http://localhost:4000/posts/", requestOptions)
     .then(response => response.json())
     .catch(error => console.log('error', error));
+}
+
+export const loadAllPost = (data: any) => {
+  return apiClient.post<ApartModel[]>("posts/all", data)
+}
+
+export const getApartDetail = (apatoId: number) => {
+  return apiClient.get<ApartDetailModel>(`posts/${apatoId.toString()}`)
+}
+
+export const postReviewApart = (apatoId: string, data: any, token: string) => {
+  return apiClient.post(`posts/comment/${apatoId}`, data, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
 }

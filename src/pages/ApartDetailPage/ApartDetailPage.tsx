@@ -1,17 +1,62 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import AppText from "../../components/AppText/AppText";
 import styles from "./ApartDetailPage.module.css";
 import ApartReviewItem from "./components/ApartReviewItem";
-import usePost from "../../hook/usePost";
 import {useParams} from "react-router-dom";
+import {ApartDetailModel} from "../../model/ApartDetailModel";
+import {getApartDetail, postReviewApart} from "../../api/service";
+import {Rating} from "@mui/material";
+import useAuth from "../../hook/useAuth";
 
-const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
+export const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
 const ApartDetailPage: React.FC = () => {
-  const [comment, setComment] = useState("")
   const params = useParams()
-  const {posts} = usePost()
-  const item = posts.find(item => item.id === Number(params.apartId))
+  const auth = useAuth()
+  const user = auth.user
+  const [apartDetail, setApartDetail] = useState<ApartDetailModel>()
+  const [comment, setComment] = useState("")
+  const [rating, setRating] = useState<number | null | undefined>(null)
+  const [needRefresh, setNeedRefresh] = useState(false)
+
+  const loadApartDetailPageData = async () => {
+    try {
+      const res = await getApartDetail(Number(params.apartId))
+      if (res.status === 200) {
+        const newImageData = res.data.image.map((item) => {
+          return "http://" + item
+        })
+        setApartDetail({
+          ...res.data,
+          image: [...newImageData]
+        })
+      }
+    } catch (e: any) {
+      console.log(e?.response?.data?.message)
+    } finally {
+
+    }
+  }
+
+  useEffect(() => {
+    loadApartDetailPageData().finally(() => {
+    })
+  }, [needRefresh])
+
+  const submitReview = async () => {
+    try {
+      const res = await postReviewApart(params.apartId!, {
+        comment: comment,
+        rating: rating
+      }, user?.token!)
+      if (res.status === 201) {
+        setNeedRefresh(!needRefresh)
+      }
+    } catch (e: any) {
+      console.log(e?.response?.data?.message)
+    }
+  }
+
   return (
     <div>
       {/*<Header/>*/}
@@ -23,34 +68,35 @@ const ApartDetailPage: React.FC = () => {
               <img
                 alt=""
                 className={styles.image}
-                src={item?.image}/>
+                src={apartDetail?.image[0]}/>
               <img
                 alt=""
                 className={styles.image}
-                src={item?.image}/>
+                src={apartDetail?.image[1]}/>
               <img
                 alt=""
                 className={styles.image}
-                src={item?.image}/>
+                src={apartDetail?.image[2]}/>
               <img
                 alt=""
                 className={styles.image}
-                src={item?.image}/>
+                src={apartDetail?.image[3]}/>
             </div>
             <div className={styles.info}>
               <div className={styles.infoHeader}>
                 <div>
                   <AppText fontType={"semi"} className={styles.detail}>Name: </AppText>
-                  <AppText className={styles.value}>{item?.title}</AppText>
+                  <AppText className={styles.value}>{apartDetail?.title}</AppText>
                 </div>
-                <AppText className={styles.rate}>{item?.rating}</AppText>
+                <AppText className={styles.rate}>{apartDetail?.total_rating}/5</AppText>
               </div>
               <AppText fontType={"semi"} className={styles.detail}>Address: </AppText>
-              <AppText className={styles.value}>{item?.address}</AppText>
+              <AppText className={styles.value}>{apartDetail?.address}</AppText>
               <AppText fontType={"semi"} className={styles.detail}>Description: </AppText>
-              <AppText className={styles.value}>{item?.detail}</AppText>
+              <AppText className={styles.value}>{apartDetail?.detail}</AppText>
               <AppText fontType={"semi"} className={styles.detail}>Price: </AppText>
-              <AppText className={styles.value}>{item?.price} VND</AppText>
+              <AppText className={styles.value}>{apartDetail?.price} VND</AppText>
+              <AppText fontType={"semi"} className={styles.detail}>Created by {apartDetail?.creator.name}</AppText>
             </div>
           </div>
         </div>
@@ -58,14 +104,34 @@ const ApartDetailPage: React.FC = () => {
         <div className={styles.reviewContainer}>
           {/*//Comment*/}
           <AppText fontType={"bold"} className={styles.detailBlockTitle}>Reviews</AppText>
+          <Rating
+            name="simple-controlled"
+            style={{
+              marginTop: "12px",
+              fontSize: "40px",
+            }}
+            size="large"
+            value={rating}
+            onChange={(event, newValue) => {
+              setRating(newValue);
+            }}
+          />
           <textarea
             name="textarea"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             placeholder={"Comment"}
+            onKeyPress={async (e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                await submitReview()
+                setRating(null)
+                setComment("")
+              }
+            }}
             className={styles.cmtField}/>
           <div className={styles.cmtList}>
-            {FAKE_COMMENT.map((item) => {
+            {apartDetail?.comments?.map((item) => {
               return (
                 <ApartReviewItem
                   key={item.id}
@@ -80,31 +146,3 @@ const ApartDetailPage: React.FC = () => {
   )
 }
 export default ApartDetailPage;
-
-export interface CommentModel {
-  id: number,
-  content: string,
-  author: {
-    name: string,
-    avatar: string
-  },
-  createdAt: string
-}
-
-function genFakeComment() {
-  let Data: CommentModel[] = []
-  for (let i = 1; i < 20; i++) {
-    Data.push({
-      id: i,
-      content: "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-      author: {
-        name: "Robert" + " " + i.toString(),
-        avatar: FAKE_URL
-      },
-      createdAt: new Date().toISOString().slice(0, 10).toString()
-    })
-  }
-  return Data
-}
-
-const FAKE_COMMENT: CommentModel[] = genFakeComment()
