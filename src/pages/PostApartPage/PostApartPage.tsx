@@ -27,6 +27,7 @@ const PostApartPage: React.FC = () => {
         console.log("Created Post successfully")
         pushFakePost({
           ...res,
+          rating: 0,
           image: "http://" + res.image[0]
         })
         navigate("/")

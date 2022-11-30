@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit'
 
-export interface ApartModel {
+export interface FakeApartModel {
   id: number,
   image: string,
   title: string,
@@ -13,11 +13,11 @@ export interface ApartModel {
 }
 
 function genFakeApartList() {
-  let Data: ApartModel[] = []
+  let Data: FakeApartModel[] = []
   for (let i = 1; i < 100; i++) {
     Data.push({
       id: i + 100,
-      image: "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg",
+      image: "https://img5.thuthuatphanmem.vn/uploads/2022/01/13/logo-nha-ngoi_075713022.jpg",
       title: "Apartment" + " " + i.toString(),
       address: "DongDa, Hanoi, Viet Nam",
       rating: Math.ceil(Math.random() * 5),
@@ -30,10 +30,10 @@ function genFakeApartList() {
   return Data
 }
 
-export const FAKE_DATA: ApartModel[] = genFakeApartList()
+export const FAKE_DATA: FakeApartModel[] = genFakeApartList()
 
 export interface PostState {
-  posts: ApartModel[],
+  posts: FakeApartModel[],
 }
 
 const initialState = {
@@ -44,7 +44,7 @@ export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    _pushFakePost(state, action: PayloadAction<ApartModel>) {
+    _pushFakePost(state, action: PayloadAction<FakeApartModel>) {
       const newPost = action.payload
       state.posts.unshift(newPost)
     },

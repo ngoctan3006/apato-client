@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo} from "react";
 import styles from "./Header.module.css";
 import {Button} from "@mui/material";
 import SearchInput from "./components/SearchInput/SearchInput";
@@ -6,8 +6,13 @@ import AppText from "../AppText/AppText";
 import {useNavigate} from "react-router-dom";
 import useAuth from "../../hook/useAuth";
 
-const Header: React.FC = () => {
-  const [searchText, setSearchText] = useState("")
+interface HeaderProps {
+  searchText: string,
+  setSearchText: React.Dispatch<React.SetStateAction<string>>
+}
+
+const Header: React.FC<HeaderProps> = (props) => {
+  const {searchText, setSearchText} = props
   const navigate = useNavigate()
   const {signOut} = useAuth()
   const auth = useAuth()
@@ -23,6 +28,10 @@ const Header: React.FC = () => {
   const navigateToPostApart = useCallback(() => {
     navigate("/post-apart")
   }, [showCreatePostButton])
+
+  useEffect(() => {
+
+  }, [])
 
   return (
     <div className={styles.headerContainer}>
