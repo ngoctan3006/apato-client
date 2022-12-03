@@ -8,6 +8,8 @@ import useAuth from "../../hook/useAuth";
 import AppText from "../../components/AppText/AppText";
 import SearchInput from "../../components/Header/components/SearchInput/SearchInput";
 import {Button} from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate()
@@ -21,6 +23,7 @@ const HomePage: React.FC = () => {
   const [areaStart, setAreaStart] = useState("")
   const [areaEnd, setAreaEnd] = useState("")
   const [apartList, setApartList] = useState<ApartModel[]>([])
+  const [showFilterBar, setShowFilterBar] = useState(false)
 
   const showCreatePostButton: boolean = useMemo(() => {
     return user?.role === "SELLER"
@@ -100,8 +103,7 @@ const HomePage: React.FC = () => {
   }, [searchKey])
 
   return (
-    <div style={{background: "whitesmoke"}}>
-
+    <div>
       <div className={styles.headerContainer}>
         <div>
           <AppText>Rent Apartment</AppText>
@@ -143,19 +145,79 @@ const HomePage: React.FC = () => {
             </Button>
         }
       </div>
-
-
-      <div className={styles.listContainer}>
-        {apartList?.map((item) => {
-          return (
-            <ApartListItem
-              onClick={() => {
-                navigate(`/apart-detail/${item.id}`)
-              }}
-              key={item.id}
-              item={item}/>
-          )
-        })}
+      <div className={styles.body}>
+        {showFilterBar && <div className={styles.filterBar}>
+            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
+                <AppText className={styles.filterBarTitle}>Lọc</AppText>
+                <div onClick={() => {
+                  setShowFilterBar(!showFilterBar)
+                }}>
+                    <CloseIcon
+                        style={{fontSize: "40px"}}/>
+                </div>
+            </div>
+            <AppText className={styles.label}>Khoảng Giá (VND)</AppText>
+            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
+                <input
+                    value={priceStart}
+                    onChange={(e) => setPriceStart(e.target.value)}
+                    className={styles.filterInput}
+                    placeholder={"Tối thiểu"}/>
+                <div style={{width: "10px"}}/>
+                <input
+                    value={priceEnd}
+                    onChange={(e) => setPriceEnd(e.target.value)}
+                    className={styles.filterInput}
+                    placeholder={"Tối đa"}/>
+            </div>
+            <AppText className={styles.label}>Diện tích (mét vuông)</AppText>
+            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
+                <input
+                    value={areaStart}
+                    onChange={(e) => setAreaStart(e.target.value)}
+                    className={styles.filterInput}
+                    placeholder={"Tối thiểu"}/>
+                <div style={{width: "10px"}}/>
+                <input
+                    value={areaEnd}
+                    onChange={(e) => setAreaEnd(e.target.value)}
+                    className={styles.filterInput}
+                    placeholder={"Tối đa"}/>
+            </div>
+            <div
+                onClick={async () => {
+                  await loadHomePageData()
+                }}
+                className={styles.filterSubmitButton}>
+                <AppText className={styles.filterBtnText}>Lọc</AppText>
+            </div>
+        </div>}
+        <div className={styles.listContainer}>
+          <div className={styles.alignRow}>
+            <AppText className={styles.listTitle}>Danh sách Nhà trọ</AppText>
+            <div onClick={() => {
+              setShowFilterBar(!showFilterBar)
+            }}>
+              {!showFilterBar && <FilterListIcon
+                  style={{
+                    fontSize: "30px",
+                    marginLeft: "100px",
+                  }}/>}
+            </div>
+          </div>
+          <div className={styles.listContainerGrid}>
+            {apartList?.map((item) => {
+              return (
+                <ApartListItem
+                  onClick={() => {
+                    navigate(`/apart-detail/${item.id}`)
+                  }}
+                  key={item.id}
+                  item={item}/>
+              )
+            })}
+          </div>
+        </div>
       </div>
 
     </div>

@@ -2,16 +2,17 @@ import React, {useEffect, useState} from "react";
 import AppText from "../../components/AppText/AppText";
 import styles from "./ApartDetailPage.module.css";
 import ApartReviewItem from "./components/ApartReviewItem";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {ApartDetailModel} from "../../model/ApartDetailModel";
-import {getApartDetail, postReviewApart} from "../../api/service";
-import {Rating} from "@mui/material";
+import {deletePostAPI, getApartDetail, postReviewApart} from "../../api/service";
+import {Button, Rating} from "@mui/material";
 import useAuth from "../../hook/useAuth";
 
 export const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
 const ApartDetailPage: React.FC = () => {
   const params = useParams()
+  const navigate = useNavigate()
   const auth = useAuth()
   const user = auth.user
   const [apartDetail, setApartDetail] = useState<ApartDetailModel>()
@@ -57,12 +58,39 @@ const ApartDetailPage: React.FC = () => {
     }
   }
 
+  const deletePost = async () => {
+    try {
+      const res = await deletePostAPI(params.apartId!, user?.token!)
+      console.log(res)
+      if (res.status === 200) {
+        console.log("Deleted successfully")
+        navigate("/")
+      }
+    } catch (e: any) {
+      console.log(e)
+    }
+  }
+
   return (
     <div>
       {/*<Header/>*/}
       <div className={styles.container}>
         <div className={styles.contentContainer}>
-          <AppText fontType={"bold"} className={styles.detailBlockTitle}>Apartment Detail</AppText>
+          <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
+            <AppText fontType={"bold"} className={styles.detailBlockTitle}>Apartment Detail</AppText>
+            <div className={styles.alignRow}>
+              <Button
+                variant={"outlined"}
+                onClick={() => {
+                  navigate(`/edit-post/${params.apartId}`)
+                }}>Edit</Button>
+              <Button
+                variant={"outlined"}
+                onClick={async () => {
+                  await deletePost()
+                }}>Delete</Button>
+            </div>
+          </div>
           <div className={styles.detailBlock}>
             <div className={styles.imageContainer}>
               <img

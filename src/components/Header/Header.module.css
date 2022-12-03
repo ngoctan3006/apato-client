@@ -4,7 +4,8 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    padding: 0 32px;
-    background: aliceblue;
+    padding: 0 28px;
+    background: white;
     justify-content: space-between;
+    border-bottom: 1px solid #e8ebed;
 }
