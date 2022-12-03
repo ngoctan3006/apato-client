@@ -8,12 +8,13 @@ interface LayoutProps {
 
 const DefaultLayout: React.FC<LayoutProps> = ({children}) => {
   return (
-    <div>
+    <div className={styles.layoutContainer}>
       <Header/>
-      {children}
+      <div className={styles.layoutBody}>
+        {children}
+      </div>
     </div>
   )
-
 }
 
 export default DefaultLayout;

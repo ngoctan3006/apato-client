@@ -1,13 +1,13 @@
 .itemContainer{
     width: 200px;
-    border-radius: 10px;
-    background: white;
+    /*border-radius: 10px;*/
+    background: whitesmoke;
 }
 
 .image{
     width: 100%;
     aspect-ratio: 1;
-    border-radius: 10px;
+    /*border-radius: 10px;*/
 }
 
 .content{

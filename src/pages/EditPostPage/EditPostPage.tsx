@@ -1,43 +1,44 @@
 import React, {useEffect} from "react";
-import styles from "./PostApartPage.module.css";
+import styles from "../PostApartPage/PostApartPage.module.css";
 import AppText from "../../components/AppText/AppText";
 import {Button} from "@mui/material";
 import {useForm} from "react-hook-form";
-import {createPost} from "../../api/service";
-import {AccessToken} from "../../api/AccessToken";
 import useAuth from "../../hook/useAuth";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {AccessToken} from "../../api/AccessToken";
+import {editPost} from "../../api/service";
 
-const PostApartPage: React.FC = () => {
+const EditPostPage: React.FC = () => {
   const {register, handleSubmit, formState: {errors}} = useForm()
   const auth = useAuth()
   const user = auth.user
-  // const {pushFakePost} = usePost()
+  const params = useParams()
   const navigate = useNavigate()
 
   useEffect(() => {
     AccessToken.value = user?.token!
   }, [])
 
-  const submitPost = (data: any) => {
-    createPost(data, AccessToken.value!)
+  const editPostData = (data: any) => {
+    editPost(params.apartId!, data, AccessToken.value!)
       .then((res) => {
         console.log(res)
-        console.log("Created Post successfully")
+        console.log("Edited Post successfully")
         navigate("/")
       })
       .catch(e => console.log(e))
   }
 
-  const postHandler = (data: any) => {
+  const editPostHandler = (data: any) => {
     console.log(data)
-    submitPost(data)
+    editPostData(data)
   }
+
   return (
     <div className={styles.container}>
       <form
         className={styles.formContainer}
-        onSubmit={handleSubmit(postHandler)}>
+        onSubmit={handleSubmit(editPostHandler)}>
         <input
           className={styles.input}
           {...register("image", {
@@ -114,11 +115,11 @@ const PostApartPage: React.FC = () => {
             fontSize: "16px",
             margin: "40px 0"
           }}>
-          Submit
+          Save Change
         </Button>
       </form>
     </div>
   )
 }
 
-export default PostApartPage
+export default EditPostPage;

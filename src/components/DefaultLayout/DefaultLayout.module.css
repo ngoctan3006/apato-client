@@ -1,0 +1,9 @@
+.layoutContainer{
+    display: flex;
+    flex-direction: column;
+}
+
+.layoutBody{
+    position: relative;
+    height: 100vh;
+}
