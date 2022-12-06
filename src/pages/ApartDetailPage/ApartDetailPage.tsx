@@ -75,13 +75,6 @@ const ApartDetailPage: React.FC = () => {
     }
   }
 
-  const getRating = (value: number) => {
-    if (value){
-      return 0
-    }
-    return value
-  }
-
   return (
     <div>
       {/*<Header/>*/}
