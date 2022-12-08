@@ -132,7 +132,7 @@ const HomePage: React.FC = () => {
                 textTransform: "none",
                 justifySelf: "flex-end"
               }}>
-              Đăng nhập
+              Log in
             </Button>
         }
       </div>

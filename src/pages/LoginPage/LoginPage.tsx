@@ -71,7 +71,7 @@ const LoginPage: React.FC = () => {
           <AppText
             className={styles.loginLogo}
             fontType={"bold"}>
-            {!showRegisterForm ? "Đăng nhập" : "Đăng ký"}
+            {!showRegisterForm ? "Log in" : "Sign up"}
           </AppText>
 
           {
@@ -89,8 +89,8 @@ const LoginPage: React.FC = () => {
           <div onClick={() => setShowRegisterForm(!showRegisterForm)}>
             <AppText className={styles.needRegister}>
               {!showRegisterForm
-                ? "Chưa có tài khoản? Đăng ký"
-                : "Đã có tài khoản? Đăng nhập"}
+                ? "Don't have an account yet? Sign up now"
+                : "Already have an account? Sign in"}
             </AppText>
           </div>
         </div>
