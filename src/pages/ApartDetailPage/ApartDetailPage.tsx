@@ -5,7 +5,7 @@ import ApartReviewItem from "./components/ApartReviewItem";
 import {useNavigate, useParams} from "react-router-dom";
 import {ApartDetailModel} from "../../model/ApartDetailModel";
 import {deletePostAPI, getApartDetail, postReviewApart} from "../../api/service";
-import {Button, Rating} from "@mui/material";
+import {Button, Modal, Rating} from "@mui/material";
 import useAuth from "../../hook/useAuth";
 import {numberWithCommas} from "../../utils/utils";
 
@@ -21,6 +21,7 @@ const ApartDetailPage: React.FC = () => {
   const [rating, setRating] = useState<number | null | undefined>(null)
   const [needRefresh, setNeedRefresh] = useState(false)
   const [canEdit, setCanEdit] = useState(false)
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false)
 
   const loadApartDetailPageData = async () => {
     try {
@@ -33,7 +34,7 @@ const ApartDetailPage: React.FC = () => {
           ...res.data,
           image: [...newImageData]
         })
-        if (res.data?.creator?.email === user?.email){
+        if (res.data?.creator?.email === user?.email) {
           setCanEdit(true)
         }
       }
@@ -65,6 +66,7 @@ const ApartDetailPage: React.FC = () => {
 
   const deletePost = async () => {
     try {
+      console.log(user?.token)
       const res = await deletePostAPI(params.apartId!, user?.token!)
       console.log(res)
       if (res.status === 200) {
@@ -84,16 +86,14 @@ const ApartDetailPage: React.FC = () => {
           <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
             <AppText fontType={"bold"} className={styles.detailBlockTitle}>Apartment Detail</AppText>
             {canEdit && <div className={styles.alignRow}>
-              <Button
-                variant={"outlined"}
-                onClick={() => {
-                  navigate(`/edit-post/${params.apartId}`)
-                }}>Edit</Button>
-              <Button
-                variant={"outlined"}
-                onClick={async () => {
-                  await deletePost()
-                }}>Delete</Button>
+                <Button
+                    variant={"outlined"}
+                    onClick={() => {
+                      navigate(`/edit-post/${params.apartId}`)
+                    }}>Edit</Button>
+                <Button
+                    variant={"outlined"}
+                    onClick={() => setShowConfirmDelete(true)}>Delete</Button>
             </div>}
           </div>
           <div className={styles.detailBlock}>
@@ -102,9 +102,9 @@ const ApartDetailPage: React.FC = () => {
                 alt=""
                 className={styles.image}
                 src={apartDetail?.image[0]}
-                height = "500"
+                height="500"
                 width="500"
-                />
+              />
             </div>
             <div className={styles.info}>
               <div className={styles.infoHeader}>
@@ -165,6 +165,59 @@ const ApartDetailPage: React.FC = () => {
           </div>
         </div>
 
+        <Modal
+          open={showConfirmDelete}
+          onClose={() => setShowConfirmDelete(false)}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              flex: 1,
+              transform: 'translate(-50%, -50%)',
+              width: 400,
+              height: 200,
+              border: '1px solid gray',
+              boxShadow: "rgba(0, 0, 0, 0.24) 0 3px 8px",
+              background: "white",
+              borderRadius: "20px"
+            }}>
+            <AppText>Do you want to delete this post permanently?</AppText>
+            <div style={{
+              display: "flex",
+              flexDirection: 'row',
+              alignItems: "center",
+              justifyContent: 'space-between',
+              marginTop: "30px"
+            }}>
+              <Button
+                onClick={() => setShowConfirmDelete(false)}
+                style={{
+                  marginRight: "30px",
+                  fontSize: "1.6rem",
+                  textTransform: "none"
+                }}
+                variant={"contained"}>Cancel</Button>
+              <Button
+                onClick={async () => {
+                  await deletePost()
+                }}
+                style={{
+                  fontSize: "1.6rem",
+                  textTransform: "none"
+                }}
+                color={"error"}
+                variant={"contained"}>Delete</Button>
+            </div>
+          </div>
+        </Modal>
       </div>
     </div>
   )
