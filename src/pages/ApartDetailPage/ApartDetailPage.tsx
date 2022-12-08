@@ -7,6 +7,7 @@ import {ApartDetailModel} from "../../model/ApartDetailModel";
 import {deletePostAPI, getApartDetail, postReviewApart} from "../../api/service";
 import {Button, Rating} from "@mui/material";
 import useAuth from "../../hook/useAuth";
+import {numberWithCommas} from "../../utils/utils";
 
 export const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
@@ -118,7 +119,7 @@ const ApartDetailPage: React.FC = () => {
               <AppText fontType={"semi"} className={styles.detail}>Description: </AppText>
               <AppText className={styles.value}>{apartDetail?.detail}</AppText>
               <AppText fontType={"semi"} className={styles.detail}>Price: </AppText>
-              <AppText className={styles.value}>{apartDetail?.price} VND</AppText>
+              <AppText className={styles.value}>{numberWithCommas(Number(apartDetail?.price))} VND</AppText>
               <AppText fontType={"semi"} className={styles.detail}>Created by {apartDetail?.creator.name}</AppText>
             </div>
           </div>

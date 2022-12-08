@@ -2,6 +2,7 @@ import React from 'react';
 import AppText from "../../../components/AppText/AppText";
 import styles from "./ApartListItem.module.css";
 import {ApartModel} from "../../../model/ApartModel";
+import {numberWithCommas} from "../../../utils/utils";
 
 interface ApartListItemProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   item: ApartModel
@@ -25,7 +26,7 @@ const ApartListItem: React.FC<ApartListItemProps> = (props) => {
             className={styles.rate}>{item.total_rating} / 5</AppText>
           <AppText
             fontType={"regular"}
-            className={styles.price}>{item.price}</AppText>
+            className={styles.price}>{numberWithCommas(Number(item.price))}</AppText>
         </div>
       </div>
     </div>
