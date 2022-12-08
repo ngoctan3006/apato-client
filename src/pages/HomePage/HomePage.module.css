@@ -19,10 +19,8 @@
 .listContainerGrid {
     height: 100vh;
     display: grid;
-    grid-template-columns: auto auto auto auto;
-    align-self: center;
-    justify-content: center;
-    align-items: center;
+    grid-template-columns: repeat(4, 200px);
+    align-items: flex-start;
     column-gap: 30px;
     row-gap: 30px;
     padding: 20px;
