@@ -43,40 +43,40 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
         <div {...attrs} className={styles.filterContainer}>
           <div className={styles.filterBar}>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-              <AppText className={styles.filterBarTitle}>Lọc</AppText>
+              <AppText className={styles.filterBarTitle}>Filter</AppText>
             </div>
-            <AppText className={styles.label}>Khoảng Giá (VND)</AppText>
+            <AppText className={styles.label}>Price (VND)</AppText>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
               <input
                 value={priceStart}
                 onChange={(e) => setPriceStart(e.target.value)}
                 className={styles.filterInput}
-                placeholder={"Tối thiểu"}/>
+                placeholder={"Minimum"}/>
               <div style={{width: "10px"}}/>
               <input
                 value={priceEnd}
                 onChange={(e) => setPriceEnd(e.target.value)}
                 className={styles.filterInput}
-                placeholder={"Tối đa"}/>
+                placeholder={"Maximum"}/>
             </div>
-            <AppText className={styles.label}>Diện tích (mét vuông)</AppText>
+            <AppText className={styles.label}>Area (square meters)</AppText>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
               <input
                 value={areaStart}
                 onChange={(e) => setAreaStart(e.target.value)}
                 className={styles.filterInput}
-                placeholder={"Tối thiểu"}/>
+                placeholder={"Minimum"}/>
               <div style={{width: "10px"}}/>
               <input
                 value={areaEnd}
                 onChange={(e) => setAreaEnd(e.target.value)}
                 className={styles.filterInput}
-                placeholder={"Tối đa"}/>
+                placeholder={"Maximum"}/>
             </div>
             <div
               onClick={filterHandler}
               className={styles.filterSubmitButton}>
-              <AppText className={styles.filterBtnText}>Lọc</AppText>
+              <AppText className={styles.filterBtnText}>Done</AppText>
             </div>
           </div>
         </div>

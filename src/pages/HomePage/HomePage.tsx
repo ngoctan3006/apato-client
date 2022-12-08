@@ -9,6 +9,7 @@ import SearchInput from "../../components/Header/components/SearchInput/SearchIn
 import {Button} from "@mui/material";
 import ProfileMenu from "./components/ProfileMenu/ProfileMenu";
 import FilterMenu from "./components/FilterMenu/FilterMenu";
+import Logo from "./components/logo1.png"
 import ApartListItem from "./components/ApartListItem";
 
 const HomePage: React.FC = () => {
@@ -103,8 +104,8 @@ const HomePage: React.FC = () => {
       justifyContent: "center"
     }}>
       <div className={styles.headerContainer}>
-        <div>
-          <AppText>Rent Apartment</AppText>
+        <div id = "logo_header">
+          <img src={Logo} alt="logo" height="60"/>
         </div>
         <SearchInput
           value={searchKey}
