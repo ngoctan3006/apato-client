@@ -1,6 +1,5 @@
-import React, {useCallback, useEffect, useMemo, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import ApartListItem from "./components/ApartListItem";
 import styles from "./HomePage.module.css";
 import {loadAllPost} from "../../api/service";
 import {ApartModel} from "../../model/ApartModel";
@@ -8,12 +7,12 @@ import useAuth from "../../hook/useAuth";
 import AppText from "../../components/AppText/AppText";
 import SearchInput from "../../components/Header/components/SearchInput/SearchInput";
 import {Button} from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
-import FilterListIcon from '@mui/icons-material/FilterList';
+import ProfileMenu from "./components/ProfileMenu/ProfileMenu";
+import FilterMenu from "./components/FilterMenu/FilterMenu";
+import ApartListItem from "./components/ApartListItem";
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate()
-  const {signOut} = useAuth()
   const auth = useAuth()
   const user = auth.user
 
@@ -24,17 +23,11 @@ const HomePage: React.FC = () => {
   const [areaEnd, setAreaEnd] = useState("")
   const [apartList, setApartList] = useState<ApartModel[]>([])
   const [showFilterBar, setShowFilterBar] = useState(false)
-
-  const showCreatePostButton: boolean = useMemo(() => {
-    return user?.role === "SELLER"
-  }, [user?.role])
+  const [showProfileMenu, setShowProfileMenu] = useState(false)
 
   const navigateToLogIn = () => {
     navigate("/login")
   }
-  const navigateToPostApart = useCallback(() => {
-    navigate("/post-apart")
-  }, [showCreatePostButton])
 
   useEffect(() => {
     loadHomePageData().finally(() => {
@@ -103,7 +96,12 @@ const HomePage: React.FC = () => {
   }, [searchKey])
 
   return (
-    <div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: "center",
+      justifyContent: "center"
+    }}>
       <div className={styles.headerContainer}>
         <div>
           <AppText>Rent Apartment</AppText>
@@ -115,23 +113,16 @@ const HomePage: React.FC = () => {
         {
           user ?
             <>
-              <div >
-                <AppText>{user.id} <Button variant="outlined" onClick={() => signOut()}>Log out</Button></AppText>
-              </div>
-              {showCreatePostButton &&
-                  <Button
-                      style={{
-                        fontSize: "14px",
-                        textTransform: "none",
-                      }}
-                      variant="outlined"
-                      onClick={navigateToPostApart}>Post</Button>}
+              <ProfileMenu
+                showProfileMenu={showProfileMenu}
+                clickMenuOutside={() => setShowProfileMenu(!showProfileMenu)}
+                setShowProfileMenu={() => setShowProfileMenu(!showProfileMenu)}/>
             </>
             : <Button
               onClick={navigateToLogIn}
               sx={{
-                borderRadius: "10px",
-                padding: "6px 10px",
+                borderRadius: "20px",
+                padding: "6px 20px",
                 alignSelf: "center"
               }}
               variant="contained"
@@ -146,77 +137,44 @@ const HomePage: React.FC = () => {
         }
       </div>
       <div className={styles.body}>
-        {showFilterBar && <div className={styles.filterBar}>
-            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-                <AppText className={styles.filterBarTitle}>Filter</AppText>
-                <div onClick={() => {
-                  setShowFilterBar(!showFilterBar)
-                }}>
-                    <CloseIcon
-                        style={{fontSize: "40px"}}/>
-                </div>
-            </div>
-            <AppText className={styles.label}>Price (VND)</AppText>
-            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-                <input
-                    value={priceStart}
-                    onChange={(e) => setPriceStart(e.target.value)}
-                    className={styles.filterInput}
-                    placeholder={"Minimum"}/>
-                <div style={{width: "10px"}}/>
-                <input
-                    value={priceEnd}
-                    onChange={(e) => setPriceEnd(e.target.value)}
-                    className={styles.filterInput}
-                    placeholder={"Maximum"}/>
-            </div>
-            <AppText className={styles.label}>Area (square meters)</AppText>
-            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-                <input
-                    value={areaStart}
-                    onChange={(e) => setAreaStart(e.target.value)}
-                    className={styles.filterInput}
-                    placeholder={"Minimum"}/>
-                <div style={{width: "10px"}}/>
-                <input
-                    value={areaEnd}
-                    onChange={(e) => setAreaEnd(e.target.value)}
-                    className={styles.filterInput}
-                    placeholder={"Maximum"}/>
-            </div>
-            <div
-                onClick={async () => {
-                  await loadHomePageData()
-                }}
-                className={styles.filterSubmitButton}>
-                <AppText className={styles.filterBtnText}>Done</AppText>
-            </div>
-        </div>}
-        <div className={styles.listContainer}>
-          <div className={styles.alignRow}>
-            <AppText className={styles.listTitle}>List of apartments</AppText>
-            <div onClick={() => {
+        <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
+          <AppText className={styles.listTitle}>Danh sách Nhà trọ</AppText>
+          <FilterMenu
+            showFilterMenu={showFilterBar}
+            clickMenuOutside={() => {
               setShowFilterBar(!showFilterBar)
-            }}>
-              {!showFilterBar && <FilterListIcon
-                  style={{
-                    fontSize: "30px",
-                    marginLeft: "100px",
-                  }}/>}
-            </div>
-          </div>
-          <div className={styles.listContainerGrid}>
-            {apartList?.map((item) => {
-              return (
-                <ApartListItem
-                  onClick={() => {
-                    navigate(`/apart-detail/${item.id}`)
-                  }}
-                  key={item.id}
-                  item={item}/>
-              )
-            })}
-          </div>
+            }}
+            setShowFilterMenu={() => {
+              setShowFilterBar(!showFilterBar)
+            }}
+            priceStart={priceStart}
+            priceEnd={priceEnd}
+            setPriceStart={setPriceStart}
+            setPriceEnd={setPriceEnd}
+            areaStart={areaStart}
+            setAreaStart={setAreaStart}
+            areaEnd={areaEnd}
+            setAreaEnd={setAreaEnd}
+            filterHandler={async () => {
+              await loadHomePageData()
+              setAreaEnd("")
+              setAreaStart("")
+              setPriceStart("")
+              setPriceEnd("")
+              setShowFilterBar(false)
+            }}/>
+        </div>
+        <div className={styles.listContainerGrid}>
+          {apartList?.map((item) => {
+            return (
+              <ApartListItem
+                onClick={() => {
+                  navigate(`/apart-detail/${item.id}`)
+                }}
+                key={item.id}
+                item={item}/>
+            )
+          })}
         </div>
       </div>
 
