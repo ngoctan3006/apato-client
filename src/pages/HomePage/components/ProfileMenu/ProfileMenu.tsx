@@ -22,6 +22,13 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
     return user?.role === "SELLER"
   }, [user?.role])
 
+  const profileMenu = useMemo(() => {
+    if (!showCreatePostButton) {
+      return PROFILE_OPTIONS.filter(item => item.id !== 2)
+    }
+    return PROFILE_OPTIONS
+  }, [showCreatePostButton])
+
   const navigateToPostApart = useCallback(() => {
     navigate("/post-apart")
   }, [showCreatePostButton])
@@ -61,7 +68,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
             </div>
           </div>
           <div className={styles.optionList}>
-            {PROFILE_OPTIONS.map(item => {
+            {profileMenu.map(item => {
               return (
                 <div
                   onClick={() => navigateHandler(item.optionTitle)}
