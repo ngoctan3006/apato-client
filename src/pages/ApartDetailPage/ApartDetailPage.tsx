@@ -112,7 +112,7 @@ const ApartDetailPage: React.FC = () => {
                   <AppText fontType={"semi"} className={styles.detail}>Name: </AppText>
                   <AppText className={styles.value}>{apartDetail?.title}</AppText>
                 </div>
-                <AppText className={styles.rate}>{apartDetail?.total_rating}/5</AppText>
+                <AppText className={styles.rate}>{Math.round(Number(apartDetail?.total_rating))}/5</AppText>
               </div>
               <AppText fontType={"semi"} className={styles.detail}>Address: </AppText>
               <AppText className={styles.value}>{apartDetail?.address}</AppText>

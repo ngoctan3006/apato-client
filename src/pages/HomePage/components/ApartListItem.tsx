@@ -23,7 +23,7 @@ const ApartListItem: React.FC<ApartListItemProps> = (props) => {
         <div className={styles.itemFooter}>
           <AppText
             fontType={"regular"}
-            className={styles.rate}>{item.total_rating} / 5</AppText>
+            className={styles.rate}>{Math.round(item.total_rating)} / 5</AppText>
           <AppText
             fontType={"regular"}
             className={styles.price}>{numberWithCommas(Number(item.price))}</AppText>
