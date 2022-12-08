@@ -19,7 +19,7 @@ const SearchInput: React.FunctionComponent<SearchInputProps> = (props) => {
         value={value}
         onChange={onChange}
         className={styles.input}
-        placeholder={"Tìm kiếm"}
+        placeholder={"Search"}
         type={"text"} />
     </div>
   )

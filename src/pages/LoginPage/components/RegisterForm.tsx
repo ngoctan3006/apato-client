@@ -26,7 +26,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           required: true,
         })}
         name={"name"}
-        placeholder={"Tên của bạn"}
+        placeholder={"Your name"}
         type={"text"}/>
       {errors.name?.type === 'required' && <AppText
           className={styles.errorText}
@@ -37,7 +37,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           required: true,
         })}
         name={"address"}
-        placeholder={"Địa chỉ của bạn"}
+        placeholder={"Your address"}
         type={"text"}/>
       {errors.address?.type === 'required' && <AppText
           className={styles.errorText}
@@ -48,7 +48,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           required: true,
         })}
         name={"phone"}
-        placeholder={"SĐT của bạn"}
+        placeholder={"Your phone"}
         type={"phone"}/>
       {errors.phone?.type === 'required' && <AppText
           className={styles.errorText}
@@ -60,7 +60,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           pattern: EMAIL_REGEX
         })}
         name={"email"}
-        placeholder={"Email của bạn"}
+        placeholder={"Your email"}
         type={"email"}/>
       {errors.email?.type === 'required' && <AppText
           className={styles.errorText}
@@ -70,7 +70,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
         {...register("password", {required: true, minLength: 8})}
         type={"password"}
         name={"password"}
-        placeholder={"Mật khẩu của bạn"}/>
+        placeholder={"Your password"}/>
       {errors.password?.type === 'required' && <AppText
           className={styles.errorText}
           role="alert">Password is required</AppText>}
@@ -80,7 +80,7 @@ const RegisterForm: React.FC<RegisterFormProps> = (props) => {
           name={"seller"}
           type={"checkbox"}
         />
-        <AppText>Bạn là chủ trọ?</AppText>
+        <AppText>Are you an landlord?</AppText>
       </div>
       <Button
         sx={{

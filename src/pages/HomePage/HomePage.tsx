@@ -115,8 +115,8 @@ const HomePage: React.FC = () => {
         {
           user ?
             <>
-              <div onClick={() => signOut()}>
-                <AppText>{user.id}</AppText>
+              <div >
+                <AppText>{user.id} <Button variant="outlined" onClick={() => signOut()}>Log out</Button></AppText>
               </div>
               {showCreatePostButton &&
                   <Button
@@ -125,7 +125,7 @@ const HomePage: React.FC = () => {
                         textTransform: "none",
                       }}
                       variant="outlined"
-                      onClick={navigateToPostApart}>Đăng bài</Button>}
+                      onClick={navigateToPostApart}>Post</Button>}
             </>
             : <Button
               onClick={navigateToLogIn}
@@ -141,14 +141,14 @@ const HomePage: React.FC = () => {
                 textTransform: "none",
                 justifySelf: "flex-end"
               }}>
-              Đăng nhập
+              Log in
             </Button>
         }
       </div>
       <div className={styles.body}>
         {showFilterBar && <div className={styles.filterBar}>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-                <AppText className={styles.filterBarTitle}>Lọc</AppText>
+                <AppText className={styles.filterBarTitle}>Filter</AppText>
                 <div onClick={() => {
                   setShowFilterBar(!showFilterBar)
                 }}>
@@ -156,45 +156,45 @@ const HomePage: React.FC = () => {
                         style={{fontSize: "40px"}}/>
                 </div>
             </div>
-            <AppText className={styles.label}>Khoảng Giá (VND)</AppText>
+            <AppText className={styles.label}>Price (VND)</AppText>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
                 <input
                     value={priceStart}
                     onChange={(e) => setPriceStart(e.target.value)}
                     className={styles.filterInput}
-                    placeholder={"Tối thiểu"}/>
+                    placeholder={"Minimum"}/>
                 <div style={{width: "10px"}}/>
                 <input
                     value={priceEnd}
                     onChange={(e) => setPriceEnd(e.target.value)}
                     className={styles.filterInput}
-                    placeholder={"Tối đa"}/>
+                    placeholder={"Maximum"}/>
             </div>
-            <AppText className={styles.label}>Diện tích (mét vuông)</AppText>
+            <AppText className={styles.label}>Area (square meters)</AppText>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
                 <input
                     value={areaStart}
                     onChange={(e) => setAreaStart(e.target.value)}
                     className={styles.filterInput}
-                    placeholder={"Tối thiểu"}/>
+                    placeholder={"Minimum"}/>
                 <div style={{width: "10px"}}/>
                 <input
                     value={areaEnd}
                     onChange={(e) => setAreaEnd(e.target.value)}
                     className={styles.filterInput}
-                    placeholder={"Tối đa"}/>
+                    placeholder={"Maximum"}/>
             </div>
             <div
                 onClick={async () => {
                   await loadHomePageData()
                 }}
                 className={styles.filterSubmitButton}>
-                <AppText className={styles.filterBtnText}>Lọc</AppText>
+                <AppText className={styles.filterBtnText}>Done</AppText>
             </div>
         </div>}
         <div className={styles.listContainer}>
           <div className={styles.alignRow}>
-            <AppText className={styles.listTitle}>Danh sách Nhà trọ</AppText>
+            <AppText className={styles.listTitle}>List of apartments</AppText>
             <div onClick={() => {
               setShowFilterBar(!showFilterBar)
             }}>
