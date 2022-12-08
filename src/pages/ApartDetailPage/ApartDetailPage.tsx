@@ -19,6 +19,7 @@ const ApartDetailPage: React.FC = () => {
   const [comment, setComment] = useState("")
   const [rating, setRating] = useState<number | null | undefined>(null)
   const [needRefresh, setNeedRefresh] = useState(false)
+  const [canEdit, setCanEdit] = useState(false)
 
   const loadApartDetailPageData = async () => {
     try {
@@ -31,6 +32,9 @@ const ApartDetailPage: React.FC = () => {
           ...res.data,
           image: [...newImageData]
         })
+        if (res.data?.creator?.email === user?.email){
+          setCanEdit(true)
+        }
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message)
@@ -78,7 +82,7 @@ const ApartDetailPage: React.FC = () => {
         <div className={styles.contentContainer}>
           <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
             <AppText fontType={"bold"} className={styles.detailBlockTitle}>Apartment Detail</AppText>
-            <div className={styles.alignRow}>
+            {canEdit && <div className={styles.alignRow}>
               <Button
                 variant={"outlined"}
                 onClick={() => {
@@ -89,7 +93,7 @@ const ApartDetailPage: React.FC = () => {
                 onClick={async () => {
                   await deletePost()
                 }}>Delete</Button>
-            </div>
+            </div>}
           </div>
           <div className={styles.detailBlock}>
             <div className={styles.imageContainer} id="apart_image">
