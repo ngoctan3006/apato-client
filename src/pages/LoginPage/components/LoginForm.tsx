@@ -27,7 +27,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
           pattern: EMAIL_REGEX
         })}
         name={"email"}
-        placeholder={"Email của bạn"}
+        placeholder={"Your email"}
         type={"email"}/>
       {errors.email?.type === 'required' && <AppText
           className={styles.errorText}
@@ -37,7 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
         {...register("password", {required: true, minLength: 8})}
         type={"password"}
         name={"password"}
-        placeholder={"Mật khẩu của bạn"}/>
+        placeholder={"Your password"}/>
       {errors.password?.type === 'required' && <AppText
           className={styles.errorText}
           role="alert">Password is required</AppText>}
@@ -54,7 +54,7 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
           fontSize: "16px",
           margin: "40px 0"
         }}>
-        Đăng nhập
+        Log in
       </Button>
     </form>
   )
