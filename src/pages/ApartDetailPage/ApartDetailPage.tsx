@@ -92,23 +92,14 @@ const ApartDetailPage: React.FC = () => {
             </div>
           </div>
           <div className={styles.detailBlock}>
-            <div className={styles.imageContainer}>
+            <div className={styles.imageContainer} id="apart_image">
               <img
                 alt=""
                 className={styles.image}
-                src={apartDetail?.image[0]}/>
-              <img
-                alt=""
-                className={styles.image}
-                src={apartDetail?.image[1]}/>
-              <img
-                alt=""
-                className={styles.image}
-                src={apartDetail?.image[2]}/>
-              <img
-                alt=""
-                className={styles.image}
-                src={apartDetail?.image[3]}/>
+                src={apartDetail?.image[0]}
+                height = "500"
+                width="500"
+                />
             </div>
             <div className={styles.info}>
               <div className={styles.infoHeader}>

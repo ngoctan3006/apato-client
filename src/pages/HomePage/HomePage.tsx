@@ -8,8 +8,15 @@ import useAuth from "../../hook/useAuth";
 import AppText from "../../components/AppText/AppText";
 import SearchInput from "../../components/Header/components/SearchInput/SearchInput";
 import {Button} from "@mui/material";
+<<<<<<< Updated upstream
 import CloseIcon from '@mui/icons-material/Close';
 import FilterListIcon from '@mui/icons-material/FilterList';
+=======
+import ProfileMenu from "./components/ProfileMenu/ProfileMenu";
+import FilterMenu from "./components/FilterMenu/FilterMenu";
+import ApartListItem from "./components/ApartListItem";
+import Logo from "./components/logo1.png"
+>>>>>>> Stashed changes
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate()
@@ -105,8 +112,8 @@ const HomePage: React.FC = () => {
   return (
     <div>
       <div className={styles.headerContainer}>
-        <div>
-          <AppText>Rent Apartment</AppText>
+        <div id = "logo_header">
+          <img src={Logo} alt="logo" height="60"/>
         </div>
         <SearchInput
           value={searchKey}
@@ -146,6 +153,7 @@ const HomePage: React.FC = () => {
         }
       </div>
       <div className={styles.body}>
+<<<<<<< Updated upstream
         {showFilterBar && <div className={styles.filterBar}>
             <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
                 <AppText className={styles.filterBarTitle}>Filter</AppText>
@@ -187,6 +195,41 @@ const HomePage: React.FC = () => {
             <div
                 onClick={async () => {
                   await loadHomePageData()
+=======
+        <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
+          <AppText className={styles.listTitle}>List of Apartment</AppText>
+          <FilterMenu
+            showFilterMenu={showFilterBar}
+            clickMenuOutside={() => {
+              setShowFilterBar(!showFilterBar)
+            }}
+            setShowFilterMenu={() => {
+              setShowFilterBar(!showFilterBar)
+            }}
+            priceStart={priceStart}
+            priceEnd={priceEnd}
+            setPriceStart={setPriceStart}
+            setPriceEnd={setPriceEnd}
+            areaStart={areaStart}
+            setAreaStart={setAreaStart}
+            areaEnd={areaEnd}
+            setAreaEnd={setAreaEnd}
+            filterHandler={async () => {
+              await loadHomePageData()
+              setAreaEnd("")
+              setAreaStart("")
+              setPriceStart("")
+              setPriceEnd("")
+              setShowFilterBar(false)
+            }}/>
+        </div>
+        <div className={styles.listContainerGrid}>
+          {apartList?.map((item) => {
+            return (
+              <ApartListItem
+                onClick={() => {
+                  navigate(`/apart-detail/${item.id}`)
+>>>>>>> Stashed changes
                 }}
                 className={styles.filterSubmitButton}>
                 <AppText className={styles.filterBtnText}>Done</AppText>
@@ -219,7 +262,6 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
-
     </div>
   )
 }
