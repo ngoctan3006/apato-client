@@ -171,7 +171,6 @@ const ApartDetailPage: React.FC = () => {
                             })}
                         </div>
                     </div>
-
                     <Modal
                         open={showConfirmDelete}
                         onClose={() => setShowConfirmDelete(false)}
@@ -228,7 +227,6 @@ const ApartDetailPage: React.FC = () => {
                 </div>
             </div>
         </DefaultLayout>
-
     )
 }
 export default ApartDetailPage;
