@@ -17,13 +17,14 @@
 }
 
 .listContainerGrid {
-    height: 100vh;
+    min-height: 100vh;
     display: grid;
     grid-template-columns: repeat(4, 200px);
     align-items: flex-start;
     column-gap: 30px;
     row-gap: 30px;
     padding: 20px;
+    position: relative;
 }
 
 .listTitle{

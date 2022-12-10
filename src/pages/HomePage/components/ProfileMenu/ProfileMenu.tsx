@@ -63,7 +63,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
             <div className={styles.headerContent}>
               <AppText
                 fontType={"semi"}
-                className={styles.fullName}>{user?.id}</AppText>
+                className={styles.fullName}>{user?.name}</AppText>
               <AppText className={styles.username}>@{user?.id}</AppText>
             </div>
           </div>
