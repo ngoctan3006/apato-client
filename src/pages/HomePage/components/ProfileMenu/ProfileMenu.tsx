@@ -63,12 +63,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
       render={(attrs) => (
         <div {...attrs} className={styles.profileContainer}>
           <div className={styles.headerContainer}>
-            <Avatar sx={{bgcolor: deepPurple[500]}}>{user?.id.slice(0, 2).toUpperCase()}</Avatar>
+            <Avatar sx={{bgcolor: deepPurple[500]}}>{user?.name.slice(0, 2).toUpperCase()}</Avatar>
             <div className={styles.headerContent}>
               <AppText
                 font={"semi"}
                 className={styles.fullName}>{user?.name}</AppText>
-              <AppText className={styles.username}>@{user?.id}</AppText>
+              <AppText className={styles.username}>@{user?.email}</AppText>
             </div>
           </div>
           <div className={styles.optionList}>
@@ -89,7 +89,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
       <div
         onClick={() => setShowProfileMenu(!showProfileMenu)}
         className={styles.imageContainer}>
-        <Avatar sx={{bgcolor: deepPurple[500]}}>{user?.id.slice(0, 2).toUpperCase()}</Avatar>
+        <Avatar sx={{bgcolor: deepPurple[500]}}>{user?.name.slice(0, 2).toUpperCase()}</Avatar>
       </div>
     </Tippy>
   )

@@ -10,7 +10,7 @@ const DefaultLayout: React.FC<LayoutProps> = ({children}) => {
         <div>
             <main>
                 {children}
-                <Footer/>
+                {/*<Footer/>*/}
             </main>
         </div>
     )

@@ -83,3 +83,39 @@ export const postReviewApart = (apatoId: string, data: any, token: string) => {
     }
   })
 }
+
+export const getAllReport = (token: string) => {
+  return apiClient.get('report', {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
+export const getReportDetail = (reportId: string, token: string) => {
+  return apiClient.get(`report/${reportId}`, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
+export const reportCommentAPI = (commentId: number, token: string) => {
+  return apiClient.post(`report`,
+    {
+      commentId: commentId
+    },
+    {
+      headers: {
+        "Authorization": `Bearer ${token}`
+      }
+    })
+}
+
+export const blockUserHandlerAPI = (userId: string, token?: string) => {
+  return apiClient.put(`/admin/block/${userId}`, {}, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}

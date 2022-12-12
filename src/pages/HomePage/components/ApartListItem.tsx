@@ -3,6 +3,7 @@ import AppText from "../../../components/AppText/AppText";
 import styles from "./ApartListItem.module.css";
 import {ApartModel} from "../../../model/ApartModel";
 import {numberWithCommas} from "../../../utils/utils";
+import StarIcon from '@mui/icons-material/Star';
 
 interface ApartListItemProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   item: ApartModel
@@ -21,9 +22,15 @@ const ApartListItem: React.FC<ApartListItemProps> = (props) => {
           font={"regular"}
           className={styles.address}>{item.address}</AppText>
         <div className={styles.itemFooter}>
-          <AppText
-            font={"regular"}
-            className={styles.rate}>{Math.round(item.total_rating)} / 5</AppText>
+          <div className={styles.alignRow}>
+            <AppText
+              font={"semi"}
+              className={styles.rate}>{Math.round(item.total_rating)} / 5</AppText>
+            <StarIcon style={{
+              fontSize: "25px",
+              color: "orange"
+            }}/>
+          </div>
           <AppText
             font={"regular"}
             className={styles.price}>{numberWithCommas(Number(item.price))}</AppText>

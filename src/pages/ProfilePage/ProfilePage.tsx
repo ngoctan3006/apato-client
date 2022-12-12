@@ -11,6 +11,8 @@ import {ApartModel} from "../../model/ApartModel";
 import ProfileInfoItem from "./components/ProfileInfoItem/ProfileInfoItem";
 import MyPostItem from "./components/MyPostItem/MyPostItem";
 import {useNavigate} from "react-router-dom";
+import useScreenState from "../../hook/useScreenState";
+import AppLoading from "../../components/AppLoading/AppLoading";
 
 
 export const FAKE_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlXVon19r-Jyb2zyJhuRGCC6CFHBdk8iaHAA&usqp=CAU"
@@ -18,6 +20,8 @@ const ProfilePage = () => {
     const {user} = useAuth()
     const navigate = useNavigate()
     const [dataList, setDataList] = useState<ApartModel[]>([])
+    const {setLoading, loading, error, setError} = useScreenState()
+
     const userRole = useMemo(() => {
         switch (user?.role) {
             case "SELLER": {
@@ -34,6 +38,7 @@ const ProfilePage = () => {
 
     const fetchData: () => Promise<void> = async () => {
         try {
+            setLoading(true)
             const res = await loadAllPost({})
             if (res.status === 201) {
                 const newApartList = res.data.map((item) => {
@@ -50,7 +55,7 @@ const ProfilePage = () => {
         } catch (e: any) {
             console.log(e?.response?.data?.message)
         } finally {
-
+            setLoading(false)
         }
     }
 
@@ -58,6 +63,10 @@ const ProfilePage = () => {
         fetchData().finally(() => {
         })
     }, [])
+
+    if (loading) {
+        return <AppLoading/>
+    }
 
     return (
         <div className={styles.profileContainer}>

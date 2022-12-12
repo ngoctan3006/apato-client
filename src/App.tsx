@@ -7,6 +7,8 @@ import PostApartPage from "./pages/PostApartPage/PostApartPage";
 import EditPostPage from "./pages/EditPostPage/EditPostPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const App: React.FC = () => {
@@ -41,7 +43,10 @@ const App: React.FC = () => {
     }
   ]);
 
-  return <RouterProvider router={router}/>
+  return <>
+    <RouterProvider router={router}/>
+    <ToastContainer />
+    </>
 }
 
 export default App

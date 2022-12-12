@@ -24,7 +24,7 @@ const LoginPage: React.FC = () => {
         signIn({
           user: {
             ...resData?.user_info,
-            id: resData?.user_info?.email,
+            // id: resData?.user_info?.email,
             token: resData?.access_token
           }
         })

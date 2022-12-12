@@ -41,19 +41,25 @@
 
 .info{
     margin-left: 30px;
+    flex-grow: 1;
+    /*background: #999999;*/
 }
 
 .infoHeader{
     display: flex;
-    flex-grow: 1;
+    /*flex-grow: 1;*/
     flex-direction: row;
+    width: 100%;
     justify-content: space-between;
+    align-items: flex-start !important;
+}
+.noMargin{
+    margin-top: 0 !important;
 }
 
-
 .detail{
-    font-style: italic;
-    color: darkgray;
+    /*font-style: italic;*/
+    color: black;
     font-size: 1.8rem;
     margin-top: 15px;
 }
@@ -87,7 +93,8 @@
 }
 
 .rate{
-    margin-top: 15px;
+    /*margin-top: 15px;*/
+    margin-right: 8px;
 }
 #apart_image{
     height: 600px;

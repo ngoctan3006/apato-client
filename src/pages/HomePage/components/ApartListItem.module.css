@@ -29,10 +29,16 @@
     margin-top: 12px;
     justify-content: space-between;
 }
-
+.alignRow{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
 .rate{
    font-size: 1.4rem;
     color: grey;
+    /*font-weight: 600;*/
+    /*margin-right: 4px;*/
 }
 
 

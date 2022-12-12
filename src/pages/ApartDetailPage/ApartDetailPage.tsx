@@ -9,6 +9,10 @@ import {Button, Modal, Rating} from "@mui/material";
 import useAuth from "../../hook/useAuth";
 import {numberWithCommas} from "../../utils/utils";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
+import StarIcon from "@mui/icons-material/Star";
+import useScreenState from "../../hook/useScreenState";
+import AppLoading from "../../components/AppLoading/AppLoading";
+import {toast} from "react-toastify";
 
 export const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
@@ -23,9 +27,11 @@ const ApartDetailPage: React.FC = () => {
     const [needRefresh, setNeedRefresh] = useState(false)
     const [canEdit, setCanEdit] = useState(false)
     const [showConfirmDelete, setShowConfirmDelete] = useState(false)
+    const {setLoading, loading, error, setError} = useScreenState()
 
     const loadApartDetailPageData = async () => {
         try {
+            setLoading(true)
             const res = await getApartDetail(Number(params.apartId))
             if (res.status === 200) {
                 const newImageData = res.data.image.map((item) => {
@@ -42,7 +48,7 @@ const ApartDetailPage: React.FC = () => {
         } catch (e: any) {
             console.log(e?.response?.data?.message)
         } finally {
-
+            setLoading(false)
         }
     }
 
@@ -53,30 +59,70 @@ const ApartDetailPage: React.FC = () => {
 
     const submitReview = async () => {
         try {
+            setLoading(true)
             const res = await postReviewApart(params.apartId!, {
                 comment: comment,
                 rating: rating
             }, user?.token!)
             if (res.status === 201) {
                 setNeedRefresh(!needRefresh)
+                toast.success("Commented successfully", {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             }
         } catch (e: any) {
             console.log(e?.response?.data?.message)
+            toast.error(e?.response?.data?.message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+        }finally {
+            setLoading(false)
         }
     }
 
     const deletePost = async () => {
         try {
+            setLoading(true)
             console.log(user?.token)
             const res = await deletePostAPI(params.apartId!, user?.token!)
             console.log(res)
             if (res.status === 200) {
                 console.log("Deleted successfully")
                 navigate("/")
+                toast.success("Deleted successfully", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             }
         } catch (e: any) {
             console.log(e)
+        }finally {
+            setLoading(false)
         }
+    }
+
+    if (loading) {
+        return <AppLoading/>
     }
 
     return (
@@ -113,11 +159,18 @@ const ApartDetailPage: React.FC = () => {
                             <div className={styles.info}>
                                 <div className={styles.infoHeader}>
                                     <div>
-                                        <AppText font={"semi"} className={styles.detail}>Name: </AppText>
+                                        <AppText font={"semi"} className={`${styles.detail} ${styles.noMargin}`}>Name: </AppText>
                                         <AppText className={styles.value}>{apartDetail?.title}</AppText>
                                     </div>
-                                    <AppText
-                                        className={styles.rate}>{Math.round(Number(apartDetail?.total_rating))}/5</AppText>
+                                    <div className={styles.alignRow}>
+                                        <AppText
+                                          font={"semi"}
+                                          className={styles.rate}>{Math.round(apartDetail?.total_rating!)} / 5</AppText>
+                                        <StarIcon style={{
+                                            fontSize: "25px",
+                                            color: "orange"
+                                        }}/>
+                                    </div>
                                 </div>
                                 <AppText font={"semi"} className={styles.detail}>Address: </AppText>
                                 <AppText className={styles.value}>{apartDetail?.address}</AppText>
@@ -126,8 +179,10 @@ const ApartDetailPage: React.FC = () => {
                                 <AppText font={"semi"} className={styles.detail}>Price: </AppText>
                                 <AppText
                                     className={styles.value}>{numberWithCommas(Number(apartDetail?.price))} VND</AppText>
-                                <AppText font={"semi"} className={styles.detail}>Created
+                                <div onClick={() => navigate("/profile")}>
+                                    <AppText font={"semi"} className={styles.detail}>Created
                                     by {apartDetail?.creator.name}</AppText>
+                                </div>
                             </div>
                         </div>
                     </div>
