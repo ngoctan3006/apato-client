@@ -122,7 +122,7 @@ const CommentItem: React.FC<CommentItemProps> = (props) => {
           flexDirection: "row",
           alignItems: 'flex-start',
           marginTop: "20px",
-        background: "red",
+        background: "whitesmoke",
         padding: "10px",
         borderRadius: "8px"
         }}>
