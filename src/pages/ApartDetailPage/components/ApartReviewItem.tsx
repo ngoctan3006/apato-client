@@ -7,6 +7,7 @@ import useAuth from "../../../hook/useAuth";
 import {reportCommentAPI} from "../../../api/service";
 import useScreenState from "../../../hook/useScreenState";
 import AppLoading from "../../../components/AppLoading/AppLoading";
+import {toast} from "react-toastify";
 
 interface ApartReviewItemProps {
   item: Comment
@@ -30,9 +31,29 @@ const ApartReviewItem: React.FC<ApartReviewItemProps> = ({item}) => {
       const res = await reportCommentAPI(item.id, token!)
       if (res.status === 201) {
         console.log(res)
+        toast.success("Reported successfully", {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }catch (e: any) {
       console.log(e?.response?.data?.message)
+      toast.error(e?.response?.data?.message, {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }finally {
       setLoading(false)
     }

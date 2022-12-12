@@ -3,7 +3,7 @@ import styles from "./AdminPage.module.css";
 import {useNavigate} from "react-router-dom";
 import useAuth from "../../hook/useAuth";
 import {ApartModel} from "../../model/ApartModel";
-import {getAllReport, getReportDetail, loadAllPost} from "../../api/service";
+import {deletePostAPI, getAllReport, getReportDetail, loadAllPost} from "../../api/service";
 import Logo from "../HomePage/components/logo1.png";
 import SearchInput from "../../components/Header/components/SearchInput/SearchInput";
 import ProfileMenu from "../HomePage/components/ProfileMenu/ProfileMenu";
@@ -14,6 +14,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CommentItem from "./components/CommentItem/CommentItem";
 import useScreenState from "../../hook/useScreenState";
 import AppLoading from "../../components/AppLoading/AppLoading";
+import {toast} from "react-toastify";
 
 
 const AdminPage: React.FC = () => {
@@ -78,7 +79,7 @@ const AdminPage: React.FC = () => {
     // loadHomePageData().finally(() => {
     // })
     // fetchAllReports().finally(() => {})
-  }, [])
+  }, [needRefresh])
 
   const loadHomePageData: () => Promise<void> = async () => {
     try {
@@ -106,6 +107,30 @@ const AdminPage: React.FC = () => {
       console.log(e?.response?.data?.message)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const deletePost = async (postId: string) => {
+    try {
+      console.log(user?.token)
+      const res = await deletePostAPI(postId, user?.token!)
+      console.log(res)
+      if (res.status === 200) {
+        console.log("Deleted successfully")
+        toast.success("Deleted successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        // navigate("/admin")
+      }
+    } catch (e: any) {
+      console.log(e)
     }
   }
 
@@ -215,7 +240,10 @@ const AdminPage: React.FC = () => {
               {apartList?.map((item) => {
                 return (
                   <AdminPageItem
-                    setNeedRefresh={setNeedRefresh}
+                    onDelete={async () => {
+                      await deletePost(item.id.toString())
+                      setNeedRefresh(prev => !prev)
+                    }}
                     key={item.id}
                     item={item}/>
                 )

@@ -6,16 +6,15 @@ import StarIcon from '@mui/icons-material/Star';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import DeleteIcon from '@mui/icons-material/Delete';
 import {useNavigate} from "react-router-dom";
-import {deletePostAPI} from "../../../../api/service";
 import useAuth from "../../../../hook/useAuth";
 
 interface AdminPageItemProps {
   item: ApartModel,
-  setNeedRefresh: (needRefresh: boolean) => void
+  onDelete: () => void
 }
 
 const AdminPageItem: React.FunctionComponent<AdminPageItemProps> = (props) => {
-  const {item, setNeedRefresh} = props
+  const {item, onDelete} = props
   const {user} = useAuth()
   const navigate = useNavigate()
 
@@ -23,20 +22,6 @@ const AdminPageItem: React.FunctionComponent<AdminPageItemProps> = (props) => {
     navigate(`/apart-detail/${item.id}`)
   }
 
-  const deletePost = async (postId: string) => {
-    try {
-      console.log(user?.token)
-      const res = await deletePostAPI(postId, user?.token!)
-      console.log(res)
-      if (res.status === 200) {
-        console.log("Deleted successfully")
-        setNeedRefresh(true)
-        // navigate("/admin")
-      }
-    } catch (e: any) {
-      console.log(e)
-    }
-  }
 
   return (
     <div className={styles.itemContainer}>
@@ -66,9 +51,7 @@ const AdminPageItem: React.FunctionComponent<AdminPageItemProps> = (props) => {
             marginRight: "16px"
           }}/>
         </div>
-        <div onClick={ async () => {
-          await deletePost(item.id.toString())
-        }}>
+        <div onClick={onDelete}>
           <DeleteIcon style={{
             fontSize: "25px",
             color: "red"

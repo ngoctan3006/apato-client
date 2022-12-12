@@ -12,6 +12,7 @@ import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import StarIcon from "@mui/icons-material/Star";
 import useScreenState from "../../hook/useScreenState";
 import AppLoading from "../../components/AppLoading/AppLoading";
+import {toast} from "react-toastify";
 
 export const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
@@ -65,9 +66,29 @@ const ApartDetailPage: React.FC = () => {
             }, user?.token!)
             if (res.status === 201) {
                 setNeedRefresh(!needRefresh)
+                toast.success("Commented successfully", {
+                    position: "bottom-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             }
         } catch (e: any) {
             console.log(e?.response?.data?.message)
+            toast.error(e?.response?.data?.message, {
+                position: "bottom-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
         }finally {
             setLoading(false)
         }
@@ -82,6 +103,16 @@ const ApartDetailPage: React.FC = () => {
             if (res.status === 200) {
                 console.log("Deleted successfully")
                 navigate("/")
+                toast.success("Deleted successfully", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "light",
+                });
             }
         } catch (e: any) {
             console.log(e)
