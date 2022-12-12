@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage/HomePage";
 import ApartDetailPage from "./pages/ApartDetailPage/ApartDetailPage";
 import PostApartPage from "./pages/PostApartPage/PostApartPage";
 import EditPostPage from "./pages/EditPostPage/EditPostPage";
+import ProfilePage from "./pages/ProfilePage/ProfilePage";
 
 
 const App: React.FC = () => {
@@ -20,6 +21,10 @@ const App: React.FC = () => {
     {
       path: "/post-apart",
       element: <PostApartPage/>
+    },
+    {
+      path: "/profile",
+      element: <ProfilePage/>
     },
     {
       path: "/edit-post/:apartId",

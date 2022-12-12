@@ -62,7 +62,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
             <Avatar sx={{bgcolor: deepPurple[500]}}>{user?.id.slice(0, 2).toUpperCase()}</Avatar>
             <div className={styles.headerContent}>
               <AppText
-                fontType={"semi"}
+                font={"semi"}
                 className={styles.fullName}>{user?.name}</AppText>
               <AppText className={styles.username}>@{user?.id}</AppText>
             </div>

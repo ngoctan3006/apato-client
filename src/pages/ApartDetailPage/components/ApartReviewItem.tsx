@@ -17,7 +17,7 @@ const ApartReviewItem: React.FC<ApartReviewItemProps> = ({item}) => {
         src={FAKE_URL}/>
       <div>
         <AppText
-          fontType={"semi"}
+          font={"semi"}
           className={styles.name}>{item.userId}</AppText>
         <AppText
           className={styles.content}>{item.comment}</AppText>

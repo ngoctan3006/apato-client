@@ -86,7 +86,7 @@ const ApartDetailPage: React.FC = () => {
                 <div className={styles.container}>
                     <div className={styles.contentContainer}>
                         <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-                            <AppText fontType={"bold"} className={styles.detailBlockTitle}>Apartment Detail</AppText>
+                            <AppText font={"bold"} className={styles.detailBlockTitle}>Apartment Detail</AppText>
                             {canEdit && <div className={styles.alignRow}>
                                 <Button
                                     variant={"outlined"}
@@ -113,20 +113,20 @@ const ApartDetailPage: React.FC = () => {
                             <div className={styles.info}>
                                 <div className={styles.infoHeader}>
                                     <div>
-                                        <AppText fontType={"semi"} className={styles.detail}>Name: </AppText>
+                                        <AppText font={"semi"} className={styles.detail}>Name: </AppText>
                                         <AppText className={styles.value}>{apartDetail?.title}</AppText>
                                     </div>
                                     <AppText
                                         className={styles.rate}>{Math.round(Number(apartDetail?.total_rating))}/5</AppText>
                                 </div>
-                                <AppText fontType={"semi"} className={styles.detail}>Address: </AppText>
+                                <AppText font={"semi"} className={styles.detail}>Address: </AppText>
                                 <AppText className={styles.value}>{apartDetail?.address}</AppText>
-                                <AppText fontType={"semi"} className={styles.detail}>Description: </AppText>
+                                <AppText font={"semi"} className={styles.detail}>Description: </AppText>
                                 <AppText className={styles.value}>{apartDetail?.detail}</AppText>
-                                <AppText fontType={"semi"} className={styles.detail}>Price: </AppText>
+                                <AppText font={"semi"} className={styles.detail}>Price: </AppText>
                                 <AppText
                                     className={styles.value}>{numberWithCommas(Number(apartDetail?.price))} VND</AppText>
-                                <AppText fontType={"semi"} className={styles.detail}>Created
+                                <AppText font={"semi"} className={styles.detail}>Created
                                     by {apartDetail?.creator.name}</AppText>
                             </div>
                         </div>
@@ -134,7 +134,7 @@ const ApartDetailPage: React.FC = () => {
 
                     <div className={styles.reviewContainer}>
                         {/*//Comment*/}
-                        <AppText fontType={"bold"} className={styles.detailBlockTitle}>Reviews</AppText>
+                        <AppText font={"bold"} className={styles.detailBlockTitle}>Reviews</AppText>
                         <Rating
                             name="simple-controlled"
                             style={{
