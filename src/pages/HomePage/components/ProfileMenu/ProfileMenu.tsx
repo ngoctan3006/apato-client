@@ -19,12 +19,12 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
   const navigate = useNavigate()
 
   const showCreatePostButton = useMemo(() => {
-    return user?.role === "SELLER"
+    return user?.role === "SELLER" || user?.role === "ADMIN"
   }, [user?.role])
 
   const profileMenu = useMemo(() => {
     if (!showCreatePostButton) {
-      return PROFILE_OPTIONS.filter(item => item.id !== 2)
+      return PROFILE_OPTIONS.filter(item => (item.id !== 2 && item.id !== 3))
     }
     return PROFILE_OPTIONS
   }, [showCreatePostButton])
@@ -37,6 +37,10 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
     switch (option) {
       case "Trang cá nhân": {
         navigate(`/profile`)
+        break
+      }
+      case "Admin": {
+        navigate(`/admin`)
         break
       }
       case "Đăng bài": {
@@ -73,7 +77,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
                 <div
                   onClick={() => navigateHandler(item.optionTitle)}
                   className={
-                    item.id !== 3 ? `${styles.optionContainer} ${styles.optionBorder}`
+                    (item.id !== 4) ? `${styles.optionContainer} ${styles.optionBorder}`
                       : styles.optionContainer}>
                   <AppText className={styles.optionTitle}>{item.optionTitle}</AppText>
                 </div>
@@ -107,6 +111,11 @@ const PROFILE_OPTIONS = [
   },
   {
     id: 3,
+    optionTitle: "Admin",
+    link: "/admin"
+  },
+  {
+    id: 4,
     optionTitle: "Đăng xuất",
     link: "/"
   }
