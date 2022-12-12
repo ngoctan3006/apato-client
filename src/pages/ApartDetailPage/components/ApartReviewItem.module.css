@@ -6,6 +6,7 @@
     background: #f5f5f3;
     padding: 15px;
     border-radius: 10px;
+    position: relative;
 }
 
 .image{
@@ -29,4 +30,10 @@
     font-size: 1.4rem;
     color: darkgray;
     margin-top: 6px;
+}
+
+.report{
+    position: absolute;
+    bottom: 5px;
+    right: 10px;
 }

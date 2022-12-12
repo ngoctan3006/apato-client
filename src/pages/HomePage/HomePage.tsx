@@ -12,6 +12,8 @@ import FilterMenu from "./components/FilterMenu/FilterMenu";
 import Logo from "./components/logo1.png"
 import ApartListItem from "./components/ApartListItem";
 import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
+import useScreenState from "../../hook/useScreenState";
+import AppLoading from "../../components/AppLoading/AppLoading";
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate()
@@ -26,6 +28,7 @@ const HomePage: React.FC = () => {
     const [apartList, setApartList] = useState<ApartModel[]>([])
     const [showFilterBar, setShowFilterBar] = useState(false)
     const [showProfileMenu, setShowProfileMenu] = useState(false)
+    const {setLoading, loading, error, setError} = useScreenState()
 
     const navigateToLogIn = () => {
         navigate("/login")
@@ -38,6 +41,7 @@ const HomePage: React.FC = () => {
 
     const loadHomePageData: () => Promise<void> = async () => {
         try {
+            setLoading(true)
             const res = await loadAllPost({
                 searchValue: searchKey,
                 priceStart: Number(priceStart),
@@ -60,7 +64,7 @@ const HomePage: React.FC = () => {
         } catch (e: any) {
             console.log(e?.response?.data?.message)
         } finally {
-
+            setLoading(false)
         }
     }
 
@@ -96,6 +100,10 @@ const HomePage: React.FC = () => {
 
         return () => clearTimeout(timer)
     }, [searchKey])
+
+    if (loading) {
+        return <AppLoading/>
+    }
 
     return (
         <DefaultLayout>
