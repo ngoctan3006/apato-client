@@ -7,7 +7,7 @@ const Footer: React.FunctionComponent = () => {
       <footer className={styles.footerContainer}>
           <AppText
               className={styles.text}
-              fontType={"semi"}>This is footer</AppText>
+              font={"semi"}>This is footer</AppText>
       </footer>
   )
 }

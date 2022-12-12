@@ -70,7 +70,7 @@ const LoginPage: React.FC = () => {
         <div className={styles.modalContainer}>
           <AppText
             className={styles.loginLogo}
-            fontType={"bold"}>
+            font={"bold"}>
             {!showRegisterForm ? "Log in" : "Sign up"}
           </AppText>
 

@@ -15,17 +15,17 @@ const ApartListItem: React.FC<ApartListItemProps> = (props) => {
       <img alt="" className={styles.image} src={item.image[0]}/>
       <div className={styles.content}>
         <AppText
-          fontType={"semi"}
+          font={"semi"}
           className={styles.name}>{item.title}</AppText>
         <AppText
-          fontType={"regular"}
+          font={"regular"}
           className={styles.address}>{item.address}</AppText>
         <div className={styles.itemFooter}>
           <AppText
-            fontType={"regular"}
+            font={"regular"}
             className={styles.rate}>{Math.round(item.total_rating)} / 5</AppText>
           <AppText
-            fontType={"regular"}
+            font={"regular"}
             className={styles.price}>{numberWithCommas(Number(item.price))}</AppText>
         </div>
       </div>
