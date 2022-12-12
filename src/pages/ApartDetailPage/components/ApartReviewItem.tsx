@@ -6,8 +6,8 @@ import {FAKE_URL} from "../ApartDetailPage";
 import useAuth from "../../../hook/useAuth";
 import {reportCommentAPI} from "../../../api/service";
 import useScreenState from "../../../hook/useScreenState";
-import AppLoading from "../../../components/AppLoading/AppLoading";
 import {toast} from "react-toastify";
+import AppLoading from "../../../components/AppLoading/AppLoading";
 
 interface ApartReviewItemProps {
   item: Comment
