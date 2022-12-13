@@ -47,6 +47,16 @@ const CommentItem: React.FC<CommentItemProps> = (props) => {
       const res = await blockUserHandlerAPI(userId, user?.token!)
       if (res.status === 200) {
         console.log(res)
+        toast.success("Blocked user successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
       }
     }catch (e: any) {
       console.log(e?.response?.data?.message)

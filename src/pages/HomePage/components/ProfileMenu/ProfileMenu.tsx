@@ -75,6 +75,7 @@ const ProfileMenu: React.FC<ProfileMenuProps> = (props) => {
             {profileMenu.map(item => {
               return (
                 <div
+                  key={item.id}
                   onClick={() => navigateHandler(item.optionTitle)}
                   className={
                     (item.id !== 4) ? `${styles.optionContainer} ${styles.optionBorder}`
