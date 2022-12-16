@@ -13,6 +13,14 @@ export const logInAPI = (email: string, password: string) => {
   })
 }
 
+export const updateProfile = (data: any, token: string) => {
+  return apiClient.post('user/update', data, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
 export const createPost = (data: any, token: string) => {
   let myHeaders = new Headers();
   myHeaders.append("Authorization", `Bearer ${token}`);
@@ -33,7 +41,7 @@ export const createPost = (data: any, token: string) => {
   };
 
   return fetch("http://localhost:4000/posts/", requestOptions)
-    .then(response => response)
+    .then(response => response.json())
     .catch(error => console.log('error', error));
 }
 
@@ -56,7 +64,7 @@ export const editPost = (postId: string, data: any, token: string) => {
   };
 
   return fetch(`http://localhost:4000/posts/${postId}`, requestOptions)
-    .then(response => response)
+    .then(response => response.json())
     .catch(error => console.log('error', error));
 }
 
@@ -113,7 +121,24 @@ export const reportCommentAPI = (commentId: number, token: string) => {
 }
 
 export const blockUserHandlerAPI = (userId: string, token?: string) => {
-  return apiClient.put(`/admin/block/${userId}`, {}, {
+  return apiClient.put(`admin/block/${userId}`, {}, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
+
+export const getAllUsersAPI = (data: any,token: string) => {
+  return apiClient.post('admin/all-user', data, {
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  })
+}
+
+export const deleteCommentAPI = (commentId: string, token: string) => {
+  return apiClient.put(`admin/delete-comment/${commentId}`, {}, {
     headers: {
       "Authorization": `Bearer ${token}`
     }

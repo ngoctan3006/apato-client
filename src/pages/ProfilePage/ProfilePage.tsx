@@ -6,7 +6,7 @@ import GroupIcon from '@mui/icons-material/Group';
 import {Avatar, Button} from "@mui/material";
 import {deepOrange} from "@mui/material/colors";
 import useAuth from "../../hook/useAuth";
-import {loadAllPost} from "../../api/service";
+import {loadAllPost, updateProfile} from "../../api/service";
 import {ApartModel} from "../../model/ApartModel";
 import ProfileInfoItem from "./components/ProfileInfoItem/ProfileInfoItem";
 import MyPostItem from "./components/MyPostItem/MyPostItem";
@@ -14,11 +14,12 @@ import {useNavigate} from "react-router-dom";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import useScreenState from "../../hook/useScreenState";
 import AppLoading from "../../components/AppLoading/AppLoading";
+import {showErrorToast, showSuccessToast} from "../../components/Toast/Toast";
 
 
 export const FAKE_URL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQlXVon19r-Jyb2zyJhuRGCC6CFHBdk8iaHAA&usqp=CAU"
 const ProfilePage = () => {
-  const {user} = useAuth()
+  const {user, saveNewProfile} = useAuth()
   const navigate = useNavigate()
   const [dataList, setDataList] = useState<ApartModel[]>([])
   const {setLoading, loading, error, setError} = useScreenState()
@@ -40,6 +41,24 @@ const ProfilePage = () => {
       }
     }
   }, [user?.role])
+
+
+  async function updateProfileUser(newInfo: any) {
+    const token = user?.token
+    try {
+      setLoading(true)
+      const res = await updateProfile(newInfo, token!)
+      if (res.status === 201) {
+        console.log(res)
+        saveNewProfile(res.data)
+        showSuccessToast('Updated profile successfully!');
+      }
+    }catch (e: any) {
+      showErrorToast(e?.response?.data?.message)
+    }finally {
+      setLoading(false)
+    }
+  }
 
   const fetchData: () => Promise<void> = async () => {
     try {
@@ -93,7 +112,7 @@ const ProfilePage = () => {
               width: 162,
               height: 162,
               fontSize: 50
-            }}>{user?.name.toUpperCase().slice(0, 2)}</Avatar>
+            }}>{user?.name?.toUpperCase().slice(0, 2)}</Avatar>
           <AppText
             font={"semi"}
             className={styles.fullName}>{user?.name}</AppText>
@@ -140,7 +159,7 @@ const ProfilePage = () => {
             <div style={{
               background: "#F2F3F4",
               padding: "20px",
-              borderRadius: "20px",
+              borderRadius: "10px",
             }}>
               <ProfileInfoItem
                 onChangeInput={(e) => setName(e.target.value)}
@@ -188,22 +207,27 @@ const ProfilePage = () => {
                         style={{
                           fontSize: "1.4rem",
                           textTransform: "capitalize",
-                          borderRadius: "12px",
+                          borderRadius: "8px",
                           marginRight: "10px"
                         }}
                         color={"warning"}
-                        variant={"contained"}>Cancel</Button>
+                        variant={"outlined"}>Cancel</Button>
                     <Button
-                        onClick={() => {
+                        onClick={async () => {
                           //TODO call API
                           setEditing(false)
+                          await updateProfileUser({
+                            name: name,
+                            phone: phone,
+                            address: address
+                          })
                         }}
                         style={{
                           fontSize: "1.4rem",
                           textTransform: "capitalize",
-                          borderRadius: "12px",
+                          borderRadius: "8px",
                         }}
-                        variant={"contained"}>Save changes</Button>
+                        variant={"outlined"}>Save changes</Button>
                 </div>
             }
 

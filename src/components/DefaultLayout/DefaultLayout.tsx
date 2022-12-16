@@ -1,5 +1,5 @@
 import React from "react";
-import Footer from "../Footer/Footer";
+import styles from "./DefaultLayout.module.css";
 
 interface LayoutProps {
     children: React.ReactNode
@@ -7,9 +7,10 @@ interface LayoutProps {
 
 const DefaultLayout: React.FC<LayoutProps> = ({children}) => {
     return (
-        <div>
+        <div className={styles.layoutContainer}>
             <main>
                 {children}
+                {/*<HomeNavBar/>*/}
                 {/*<Footer/>*/}
             </main>
         </div>

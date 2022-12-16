@@ -8,11 +8,10 @@ import {deletePostAPI, getApartDetail, postReviewApart} from "../../api/service"
 import {Button, Modal, Rating} from "@mui/material";
 import useAuth from "../../hook/useAuth";
 import {numberWithCommas} from "../../utils/utils";
-import DefaultLayout from "../../components/DefaultLayout/DefaultLayout";
 import StarIcon from "@mui/icons-material/Star";
 import useScreenState from "../../hook/useScreenState";
 import AppLoading from "../../components/AppLoading/AppLoading";
-import {toast} from "react-toastify";
+import {showErrorToast, showSuccessToast} from "../../components/Toast/Toast";
 
 export const FAKE_URL = "https://cdn.vietnambiz.vn/2020/2/26/cd-15826897012081215793790.jpg"
 
@@ -33,6 +32,7 @@ const ApartDetailPage: React.FC = () => {
         try {
             setLoading(true)
             const res = await getApartDetail(Number(params.apartId))
+            console.log(res)
             if (res.status === 200) {
                 const newImageData = res.data.image.map((item) => {
                     return "http://" + item
@@ -66,29 +66,11 @@ const ApartDetailPage: React.FC = () => {
             }, user?.token!)
             if (res.status === 201) {
                 setNeedRefresh(!needRefresh)
-                toast.success("Commented successfully", {
-                    position: "bottom-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                showSuccessToast('Commented successfully!')
             }
         } catch (e: any) {
             console.log(e?.response?.data?.message)
-            toast.error(e?.response?.data?.message, {
-                position: "bottom-right",
-                autoClose: 5000,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: "light",
-            });
+            showErrorToast(e?.response?.data?.message)
         }finally {
             setLoading(false)
         }
@@ -103,19 +85,11 @@ const ApartDetailPage: React.FC = () => {
             if (res.status === 200) {
                 console.log("Deleted successfully")
                 navigate("/")
-                toast.success("Deleted successfully", {
-                    position: "top-right",
-                    autoClose: 5000,
-                    hideProgressBar: false,
-                    closeOnClick: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    progress: undefined,
-                    theme: "light",
-                });
+                showSuccessToast('Deleted successfully!')
             }
         } catch (e: any) {
             console.log(e)
+            showErrorToast(e?.response?.data?.message)
         }finally {
             setLoading(false)
         }
@@ -126,7 +100,7 @@ const ApartDetailPage: React.FC = () => {
     }
 
     return (
-        <DefaultLayout>
+        // <DefaultLayout>
             <div>
                 {/*<Header/>*/}
                 <div className={styles.container}>
@@ -141,8 +115,8 @@ const ApartDetailPage: React.FC = () => {
                                     }}>Edit</Button>
                                 <Button
                                     variant={"outlined"}
-                                    onClick={async () => {
-                                        await deletePost()
+                                    onClick={() => {
+                                        setShowConfirmDelete(true)
                                     }}>Delete</Button>
                             </div>}
                         </div>
@@ -152,8 +126,6 @@ const ApartDetailPage: React.FC = () => {
                                     alt=""
                                     className={styles.image}
                                     src={apartDetail?.image[0]}
-                                    height="500"
-                                    width="500"
                                 />
                             </div>
                             <div className={styles.info}>
@@ -179,7 +151,11 @@ const ApartDetailPage: React.FC = () => {
                                 <AppText font={"semi"} className={styles.detail}>Price: </AppText>
                                 <AppText
                                     className={styles.value}>{numberWithCommas(Number(apartDetail?.price))} VND</AppText>
-                                <div onClick={() => navigate("/profile")}>
+                                <div
+                                    style={{
+                                        cursor: "pointer"
+                                    }}
+                                    onClick={() => navigate("/profile")}>
                                     <AppText font={"semi"} className={styles.detail}>Created
                                     by {apartDetail?.creator.name}</AppText>
                                 </div>
@@ -281,7 +257,7 @@ const ApartDetailPage: React.FC = () => {
                     </Modal>
                 </div>
             </div>
-        </DefaultLayout>
+        // </DefaultLayout>
     )
 }
 export default ApartDetailPage;
