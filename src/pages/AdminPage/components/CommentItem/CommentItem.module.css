@@ -23,8 +23,16 @@
     color: black;
 }
 .alignRow{
-
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
+
+.cursor{
+    cursor: pointer;
+}
+
+
 .marginView{
 
 }
