@@ -30,7 +30,7 @@ export const createPost = (data: any, token: string) => {
   formData.append("title", data.title);
   formData.append("address", data.address);
   formData.append("price", data.price);
-  formData.append("detail", data.description);
+  formData.append("detail", data.detail);
   formData.append("area", data.area);
 
   let requestOptions: RequestInit = {
@@ -53,7 +53,7 @@ export const editPost = (postId: string, data: any, token: string) => {
   formData.append("title", data.title);
   formData.append("address", data.address);
   formData.append("price", data.price);
-  formData.append("detail", data.description);
+  formData.append("detail", data.detail);
   formData.append("area", data.area);
 
   let requestOptions: RequestInit = {
