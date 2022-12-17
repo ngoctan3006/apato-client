@@ -103,10 +103,10 @@ const PostApartPage: React.FC = () => {
                     role="alert">Price is required</AppText>}
                 <textarea
                     className={styles.textArea}
-                    {...register("description", {required: true, minLength: 8})}
-                    name={"description"}
+                    {...register("detail", {required: true, minLength: 8})}
+                    name={"detail"}
                     placeholder={"Mô tả"}/>
-                {errors.description?.type === 'required' && <AppText
+                {errors.detail?.type === 'required' && <AppText
                     className={styles.errorText}
                     role="alert">description is required</AppText>}
                 <Button
