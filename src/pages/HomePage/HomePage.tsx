@@ -52,7 +52,7 @@ const HomePage: React.FC = () => {
             if (res.status === 201) {
                 const newApartList = res.data.map((item) => {
                     const newImage = item.image.map((_imageLink) => {
-                        return ("http://" + _imageLink)
+                        return (_imageLink)
                     })
                     return {
                         ...item,
@@ -77,7 +77,7 @@ const HomePage: React.FC = () => {
             if (res.status === 201) {
                 const newApartList = res.data.map((item) => {
                     const newImage = item.image.map((_imageLink) => {
-                        return ("http://" + _imageLink)
+                        return (_imageLink)
                     })
                     return {
                         ...item,
