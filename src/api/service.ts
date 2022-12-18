@@ -1,6 +1,7 @@
 import apiClient from "./client";
 import {ApartModel} from "../model/ApartModel";
 import {ApartDetailModel} from "../model/ApartDetailModel";
+import {AppConfig} from "./AppConfig";
 
 export const signUpAPI = (data: any) => {
   return apiClient.post("auth/register", data)
@@ -40,7 +41,7 @@ export const createPost = (data: any, token: string) => {
     redirect: 'follow'
   };
 
-  return fetch("http://localhost:4000/posts/", requestOptions)
+  return fetch(`${AppConfig.baseURL}posts/`, requestOptions)
     .then(response => response.json())
     .catch(error => console.log('error', error));
 }
@@ -63,7 +64,7 @@ export const editPost = (postId: string, data: any, token: string) => {
     redirect: 'follow'
   };
 
-  return fetch(`http://localhost:4000/posts/${postId}`, requestOptions)
+  return fetch(`${AppConfig.baseURL}posts/${postId}`, requestOptions)
     .then(response => response.json())
     .catch(error => console.log('error', error));
 }
