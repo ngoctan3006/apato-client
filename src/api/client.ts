@@ -1,7 +1,8 @@
 import axios from 'axios';
+import {AppConfig} from "./AppConfig";
 
 const apiClient = axios.create({
-  baseURL: "https://apato-server.herokuapp.com/",
+  baseURL: AppConfig.baseURL,
   headers: {
     'Access-Control-Allow-Origin' : '*',
     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',

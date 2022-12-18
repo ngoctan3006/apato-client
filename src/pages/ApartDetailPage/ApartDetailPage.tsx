@@ -35,7 +35,7 @@ const ApartDetailPage: React.FC = () => {
             console.log(res)
             if (res.status === 200) {
                 const newImageData = res.data.image.map((item) => {
-                    return "http://" + item
+                    return item
                 })
                 setApartDetail({
                     ...res.data,
