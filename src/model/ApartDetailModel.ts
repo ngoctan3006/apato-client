@@ -13,6 +13,9 @@ export interface Comment {
   id: number;
   apatoId: number;
   userId: number;
+  user: {
+    name: string
+  }
   comment: string;
   rating: number;
   created_at: Date;
