@@ -59,7 +59,7 @@ const ApartReviewItem: React.FC<ApartReviewItemProps> = ({item}) => {
             <div>
                 <AppText
                     font={"semi"}
-                    className={styles.name}>{user?.name}</AppText>
+                    className={styles.name}>{item?.user?.name}</AppText>
 
                 {
                     reportedComment ?
