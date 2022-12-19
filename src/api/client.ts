@@ -7,7 +7,7 @@ const apiClient = axios.create({
     'Access-Control-Allow-Origin' : '*',
     'Access-Control-Allow-Methods':'GET,PUT,POST,DELETE,PATCH,OPTIONS',
   },
-  // withCredentials: true,
+  withCredentials: true,
   responseType: "json",
   timeout: 20000,
 })
