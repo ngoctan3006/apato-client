@@ -1,5 +1,12 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Box, IconButton, InputAdornment, Typography } from '@mui/material';
+import {
+  Box,
+  Checkbox,
+  IconButton,
+  InputAdornment,
+  Typography,
+} from '@mui/material';
+import { purple } from '@mui/material/colors';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
@@ -201,6 +208,7 @@ const Login: React.FC = () => {
               errors.email?.type === 'required' && 'Email is required'
             }
           />
+
           <Label>Password</Label>
           <Input
             size="small"
@@ -240,6 +248,7 @@ const Login: React.FC = () => {
                   errors.name?.type === 'required' && 'Full name is required'
                 }
               />
+
               <Label>Address</Label>
               <Input
                 size="small"
@@ -251,6 +260,7 @@ const Login: React.FC = () => {
                   errors.address?.type === 'required' && 'Address is required'
                 }
               />
+
               <Label>Phone Number</Label>
               <Input
                 size="small"
@@ -262,6 +272,20 @@ const Login: React.FC = () => {
                   errors.phone?.type === 'required' &&
                   'Phone number is required'
                 }
+              />
+
+              <Label sx={{ display: 'inline-block' }}>
+                Are you a landlord?
+              </Label>
+              <Checkbox
+                {...register('seller')}
+                size="small"
+                sx={{
+                  color: purple[600],
+                  '&.Mui-checked': {
+                    color: purple[400],
+                  },
+                }}
               />
             </>
           )}
