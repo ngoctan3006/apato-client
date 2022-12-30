@@ -16,13 +16,14 @@ import {
 } from '@mui/material';
 import { deepPurple } from '@mui/material/colors';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/imgs/logo.png';
 import useAuth from '../../hook/useAuth';
 
 const Header: React.FC = () => {
   const { user, signOut } = useAuth();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -176,7 +177,7 @@ const Header: React.FC = () => {
               </>
             ) : (
               <Button
-                href="/login"
+                onClick={() => navigate('/login')}
                 variant="contained"
                 color="secondary"
                 sx={{
