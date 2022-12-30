@@ -6,7 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { logInAPI, signUpAPI } from '../../api/service';
 import BgLogin from '../../assets/imgs/bglogin.jpg';
-import Logo from '../../assets/imgs/logo1.png';
+import Logo from '../../assets/imgs/logo.png';
 import useAuth from '../../hook/useAuth';
 import { EMAIL_REGEX } from '../../utils/utils';
 import {

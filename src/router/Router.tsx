@@ -6,7 +6,6 @@ import ApartDetailPage from '../pages/ApartDetailPage/ApartDetailPage';
 import EditPostPage from '../pages/EditPostPage/EditPostPage';
 import HomePage from '../pages/HomePage/HomePage';
 import Login from '../pages/LoginPage/Login';
-import LoginPage from '../pages/LoginPage/LoginPage';
 import PostApartPage from '../pages/PostApartPage/PostApartPage';
 import ProfilePage from '../pages/ProfilePage/ProfilePage';
 
@@ -23,7 +22,6 @@ const Router: React.FC = () => {
           <Route path="edit-post/:apartId" element={<EditPostPage />} />
         </Route>
         <Route path="/login" element={<Login />} />
-        <Route path="/login1" element={<LoginPage />} />
       </Routes>
     </BrowserRouter>
   );
