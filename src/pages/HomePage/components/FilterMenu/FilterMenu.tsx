@@ -20,6 +20,18 @@ export interface TagData {
   label: string;
 }
 
+const DistrictList = [
+  { value: 'all', label: 'All' },
+  { value: 'CG', label: 'Cầu Giấy' },
+  { value: 'HBT', label: 'Hai Bà Trưng' },
+];
+
+const UniversityList = [
+  { value: 'all', label: 'All' },
+  { value: 'HUST', label: 'Hanoi University of Science and Technology' },
+  { value: 'VNUH', label: 'Vietnam National University - Hanoi' },
+];
+
 const tagsList = [
   { id: 1, label: 'Tiện nghi' },
   { id: 2, label: 'Giá rẻ' },
@@ -51,16 +63,17 @@ const Input = styled(TextField)({
 });
 
 const FilterMenu: React.FC = () => {
-  const [tags, setTags] = React.useState<TagData[]>([]);
+  const [tags, setTags] = React.useState<TagData[]>(tagsList);
+  const [selectedTags, setSelectedTags] = React.useState<TagData[]>([]);
 
   const handleAdd = (tag: TagData) => () => {
-    setTags((tags) => [...tags, tag]);
-    tagsList.splice(tagsList.indexOf(tag), 1);
+    setSelectedTags((tags) => [...tags, tag]);
+    setTags((tags) => tags.filter((t) => t.id !== tag.id));
   };
 
   const handleDelete = (tag: TagData) => () => {
-    setTags((tags) => tags.filter((t) => t.id !== tag.id));
-    tagsList.push(tag);
+    setSelectedTags((tags) => tags.filter((t) => t.id !== tag.id));
+    setTags((tags) => [...tags, tag]);
   };
 
   return (
@@ -154,28 +167,18 @@ const FilterMenu: React.FC = () => {
         <Typography fontSize={12} variant="h6" fontWeight={400}>
           District
         </Typography>
-        <Input fullWidth select size="small">
-          <MenuItem
-            sx={{
-              fontSize: 12,
-            }}
-          >
-            All
-          </MenuItem>
-          <MenuItem
-            sx={{
-              fontSize: 12,
-            }}
-          >
-            Hai Ba Trung
-          </MenuItem>
-          <MenuItem
-            sx={{
-              fontSize: 12,
-            }}
-          >
-            Cau Giay
-          </MenuItem>
+        <Input fullWidth select size="small" defaultValue="all">
+          {DistrictList.map((district) => (
+            <MenuItem
+              key={district.value}
+              sx={{
+                fontSize: 12,
+              }}
+              value={district.value}
+            >
+              {district.label}
+            </MenuItem>
+          ))}
         </Input>
       </Box>
 
@@ -183,28 +186,18 @@ const FilterMenu: React.FC = () => {
         <Typography fontSize={14} variant="h6">
           University
         </Typography>
-        <Input fullWidth select size="small">
-          <MenuItem
-            sx={{
-              fontSize: 12,
-            }}
-          >
-            All
-          </MenuItem>
-          <MenuItem
-            sx={{
-              fontSize: 12,
-            }}
-          >
-            Hanoi University of Science and Technology
-          </MenuItem>
-          <MenuItem
-            sx={{
-              fontSize: 12,
-            }}
-          >
-            Vietnam National University - Hanoi
-          </MenuItem>
+        <Input fullWidth select size="small" defaultValue="all">
+          {UniversityList.map((university) => (
+            <MenuItem
+              key={university.value}
+              sx={{
+                fontSize: 12,
+              }}
+              value={university.value}
+            >
+              {university.label}
+            </MenuItem>
+          ))}
         </Input>
       </Box>
 
@@ -214,7 +207,7 @@ const FilterMenu: React.FC = () => {
         </Typography>
         <Paper
           sx={{
-            display: tags.length ? 'flex' : 'none',
+            display: selectedTags.length ? 'flex' : 'none',
             justifyContent: 'center',
             flexWrap: 'wrap',
             listStyle: 'none',
@@ -224,7 +217,7 @@ const FilterMenu: React.FC = () => {
           }}
           component="ul"
         >
-          {tags.map((tag) => {
+          {selectedTags.map((tag) => {
             return (
               <ListItem key={tag.id}>
                 <Chip
@@ -239,11 +232,12 @@ const FilterMenu: React.FC = () => {
           })}
         </Paper>
         <Stack direction="row" flexWrap="wrap" mt={1}>
-          {tagsList.map((tag) => (
+          {tags.map((tag) => (
             <Button
               onClick={handleAdd(tag)}
               key={tag.id}
               variant="outlined"
+              size="small"
               sx={{
                 textTransform: 'none',
                 fontSize: 12,

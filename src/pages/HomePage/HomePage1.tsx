@@ -8,7 +8,7 @@ import AppText from '../../components/AppText/AppText';
 import SearchInput from '../../components/Header/components/SearchInput/SearchInput';
 import { Button } from '@mui/material';
 import ProfileMenu from './components/ProfileMenu/ProfileMenu';
-import FilterMenu from './components/FilterMenu/FilterMenu';
+import FilterMenu from './components/FilterMenu/FilterMenu1';
 import Logo from '../../assets/imgs/logo.png';
 import ApartListItem from './components/ApartListItem';
 import DefaultLayout from '../../components/DefaultLayout/DefaultLayout';
@@ -114,7 +114,7 @@ const HomePage: React.FC = () => {
           justifyContent: 'center',
         }}
       >
-        {/* <div className={styles.headerContainer}>
+        <div className={styles.headerContainer}>
           <div id="logo_header">
             <img src={Logo} alt="logo" height="60" />
           </div>
@@ -149,7 +149,7 @@ const HomePage: React.FC = () => {
               Log in
             </Button>
           )}
-        </div> */}
+        </div>
         <div className={styles.body}>
           <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
             <AppText className={styles.listTitle}>Danh sách Nhà trọ</AppText>
