@@ -1,97 +1,264 @@
-import React from "react";
-import FilterListIcon from "@mui/icons-material/FilterList";
-import styles from "./FilterMenu.module.css";
-import AppText from "../../../../components/AppText/AppText";
-import Tippy from "@tippyjs/react/headless";
+import { FilterAltOutlined } from '@mui/icons-material';
+import {
+  Box,
+  Button,
+  Chip,
+  Divider,
+  Grid,
+  ListItem,
+  MenuItem,
+  Paper,
+  Stack,
+  styled,
+  TextField,
+  Typography,
+} from '@mui/material';
+import React from 'react';
 
-interface FilterMenuProps {
-  showFilterMenu: boolean,
-  clickMenuOutside: () => void,
-  setShowFilterMenu: (showFilterMenu: boolean) => void,
-  priceStart: string,
-  priceEnd: string,
-  setPriceStart: (priceStart: string) => void,
-  setPriceEnd: (priceEnd: string) => void,
-  areaStart: string,
-  setAreaStart: (areaStart: string) => void,
-  areaEnd: string,
-  setAreaEnd: (areaEnd: string) => void,
-  filterHandler: () => Promise<void>
+export interface TagData {
+  id: number;
+  label: string;
 }
 
-const FilterMenu: React.FC<FilterMenuProps> = (props) => {
-  const {
-    showFilterMenu,
-    clickMenuOutside,
-    setShowFilterMenu,
-    priceStart, priceEnd,
-    setPriceStart,
-    setPriceEnd,
-    areaStart, setAreaStart,
-    areaEnd, setAreaEnd,
-    filterHandler
-  } = props
+const tagsList = [
+  { id: 1, label: 'Tiện nghi' },
+  { id: 2, label: 'Giá rẻ' },
+  { id: 3, label: 'Tối giản' },
+  { id: 4, label: 'Cho phép thú nuôi' },
+  { id: 5, label: 'Yên Tĩnh' },
+  { id: 6, label: 'Có nơi để xe' },
+  { id: 7, label: 'Hiện đại' },
+  { id: 8, label: 'Phòng mới' },
+  { id: 9, label: 'Phòng nhiều người' },
+  { id: 10, label: 'Phòng đơn' },
+];
+
+const Input = styled(TextField)({
+  '& .MuiInputBase-input': {
+    fontSize: 12,
+  },
+  '& label.Mui-focused': {
+    color: '#b772ff',
+  },
+  '& .MuiOutlinedInput-root': {
+    '&:hover fieldset': {
+      borderColor: '#9854df',
+    },
+    '&.Mui-focused fieldset': {
+      borderColor: '#b772ff',
+    },
+  },
+});
+
+const FilterMenu: React.FC = () => {
+  const [tags, setTags] = React.useState<TagData[]>([]);
+
+  const handleAdd = (tag: TagData) => () => {
+    setTags((tags) => [...tags, tag]);
+    tagsList.splice(tagsList.indexOf(tag), 1);
+  };
+
+  const handleDelete = (tag: TagData) => () => {
+    setTags((tags) => tags.filter((t) => t.id !== tag.id));
+    tagsList.push(tag);
+  };
+
   return (
-    <Tippy
-      onClickOutside={clickMenuOutside}
-      visible={showFilterMenu}
-      placement="bottom-end"
-      allowHTML={true}
-      zIndex={99999}
-      interactive={true}
-      render={(attrs) => (
-        <div {...attrs} className={styles.filterContainer}>
-          <div className={styles.filterBar}>
-            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-              <AppText className={styles.filterBarTitle}>Filter</AppText>
-            </div>
-            <AppText className={styles.label}>Price (VND)</AppText>
-            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-              <input
-                value={priceStart}
-                onChange={(e) => setPriceStart(e.target.value)}
-                className={styles.filterInput}
-                placeholder={"Minimum"}/>
-              <div style={{width: "10px"}}/>
-              <input
-                value={priceEnd}
-                onChange={(e) => setPriceEnd(e.target.value)}
-                className={styles.filterInput}
-                placeholder={"Maximum"}/>
-            </div>
-            <AppText className={styles.label}>Area (square meters)</AppText>
-            <div className={`${styles.alignRow} ${styles.spaceBetween}`}>
-              <input
-                value={areaStart}
-                onChange={(e) => setAreaStart(e.target.value)}
-                className={styles.filterInput}
-                placeholder={"Minimum"}/>
-              <div style={{width: "10px"}}/>
-              <input
-                value={areaEnd}
-                onChange={(e) => setAreaEnd(e.target.value)}
-                className={styles.filterInput}
-                placeholder={"Maximum"}/>
-            </div>
-            <div
-              onClick={filterHandler}
-              className={styles.filterSubmitButton}>
-              <AppText className={styles.filterBtnText}>Done</AppText>
-            </div>
-          </div>
-        </div>
-      )}>
-      <div onClick={() => {
-        setShowFilterMenu(!showFilterMenu)
-      }}>
-        <FilterListIcon
-          style={{
-            fontSize: "30px",
-            marginLeft: "100px",
-          }}/>
-      </div>
-    </Tippy>
-  )
-}
+    <Stack>
+      <Stack direction="row" justifyContent="space-between">
+        <Stack direction="row" alignItems="center">
+          <FilterAltOutlined
+            sx={{
+              fontSize: 16,
+              color: '#ccc',
+              mr: 1,
+            }}
+          />
+          <Typography variant="h6">Filter</Typography>
+        </Stack>
+        <Button
+          variant="outlined"
+          sx={{
+            textTransform: 'none',
+          }}
+          color="secondary"
+        >
+          Apply
+        </Button>
+      </Stack>
 
-export default FilterMenu
+      <Divider sx={{ mt: 1, mb: 1 }} />
+
+      <Box>
+        <Typography fontSize={14} variant="h6">
+          Room area (m2)
+        </Typography>
+        <Grid container alignItems="center">
+          <Grid item xs={7}>
+            <Typography fontSize={12} variant="h6" fontWeight={400}>
+              Min
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography fontSize={12} variant="h6" fontWeight={400}>
+              Max
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Input type="number" size="small" />
+          </Grid>
+          <Grid item xs={2}>
+            <Typography textAlign="center" fontSize={16} variant="h6">
+              ~
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Input type="number" size="small" />
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box mt={2}>
+        <Typography fontSize={14} variant="h6">
+          Price (VND)
+        </Typography>
+        <Grid container alignItems="center">
+          <Grid item xs={7}>
+            <Typography fontSize={12} variant="h6" fontWeight={400}>
+              Min
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Typography fontSize={12} variant="h6" fontWeight={400}>
+              Max
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Input type="number" size="small" />
+          </Grid>
+          <Grid item xs={2}>
+            <Typography textAlign="center" fontSize={16} variant="h6">
+              ~
+            </Typography>
+          </Grid>
+          <Grid item xs={5}>
+            <Input type="number" size="small" />
+          </Grid>
+        </Grid>
+      </Box>
+
+      <Box mt={2}>
+        <Typography fontSize={14} variant="h6">
+          Location
+        </Typography>
+        <Typography fontSize={12} variant="h6" fontWeight={400}>
+          District
+        </Typography>
+        <Input fullWidth select size="small">
+          <MenuItem
+            sx={{
+              fontSize: 12,
+            }}
+          >
+            All
+          </MenuItem>
+          <MenuItem
+            sx={{
+              fontSize: 12,
+            }}
+          >
+            Hai Ba Trung
+          </MenuItem>
+          <MenuItem
+            sx={{
+              fontSize: 12,
+            }}
+          >
+            Cau Giay
+          </MenuItem>
+        </Input>
+      </Box>
+
+      <Box mt={2}>
+        <Typography fontSize={14} variant="h6">
+          University
+        </Typography>
+        <Input fullWidth select size="small">
+          <MenuItem
+            sx={{
+              fontSize: 12,
+            }}
+          >
+            All
+          </MenuItem>
+          <MenuItem
+            sx={{
+              fontSize: 12,
+            }}
+          >
+            Hanoi University of Science and Technology
+          </MenuItem>
+          <MenuItem
+            sx={{
+              fontSize: 12,
+            }}
+          >
+            Vietnam National University - Hanoi
+          </MenuItem>
+        </Input>
+      </Box>
+
+      <Box mt={2}>
+        <Typography fontSize={14} variant="h6">
+          Tags
+        </Typography>
+        <Paper
+          sx={{
+            display: tags.length ? 'flex' : 'none',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+            listStyle: 'none',
+            border: '1px solid #e2e8f0',
+            p: 0.5,
+            m: 0,
+          }}
+          component="ul"
+        >
+          {tags.map((tag) => {
+            return (
+              <ListItem key={tag.id}>
+                <Chip
+                  label={tag.label}
+                  variant="outlined"
+                  size="small"
+                  color="secondary"
+                  onDelete={handleDelete(tag)}
+                />
+              </ListItem>
+            );
+          })}
+        </Paper>
+        <Stack direction="row" flexWrap="wrap" mt={1}>
+          {tagsList.map((tag) => (
+            <Button
+              onClick={handleAdd(tag)}
+              key={tag.id}
+              variant="outlined"
+              sx={{
+                textTransform: 'none',
+                fontSize: 12,
+                mr: 1,
+                mb: 1,
+              }}
+              color="secondary"
+            >
+              {tag.label}
+            </Button>
+          ))}
+        </Stack>
+      </Box>
+    </Stack>
+  );
+};
+
+export default FilterMenu;
