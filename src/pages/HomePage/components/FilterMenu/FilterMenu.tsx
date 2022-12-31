@@ -45,7 +45,7 @@ const tagsList = [
   { id: 10, label: 'Phòng đơn' },
 ];
 
-const Input = styled(TextField)({
+export const Input = styled(TextField)({
   '& .MuiInputBase-input': {
     fontSize: 12,
   },
@@ -62,7 +62,19 @@ const Input = styled(TextField)({
   },
 });
 
-const FilterMenu: React.FC = () => {
+interface FilterMenuProps {
+  priceStart: string;
+  priceEnd: string;
+  setPriceStart: (priceStart: string) => void;
+  setPriceEnd: (priceEnd: string) => void;
+  areaStart: string;
+  setAreaStart: (areaStart: string) => void;
+  areaEnd: string;
+  setAreaEnd: (areaEnd: string) => void;
+  filterHandler: () => Promise<void>;
+}
+
+const FilterMenu: React.FC<FilterMenuProps> = (props) => {
   const [tags, setTags] = React.useState<TagData[]>(tagsList);
   const [selectedTags, setSelectedTags] = React.useState<TagData[]>([]);
 
@@ -90,6 +102,7 @@ const FilterMenu: React.FC = () => {
           <Typography variant="h6">Filter</Typography>
         </Stack>
         <Button
+          onClick={props.filterHandler}
           variant="outlined"
           sx={{
             textTransform: 'none',
@@ -118,7 +131,12 @@ const FilterMenu: React.FC = () => {
             </Typography>
           </Grid>
           <Grid item xs={5}>
-            <Input type="number" size="small" />
+            <Input
+              value={props.areaStart}
+              onChange={(e) => props.setAreaStart(e.target.value)}
+              type="number"
+              size="small"
+            />
           </Grid>
           <Grid item xs={2}>
             <Typography textAlign="center" fontSize={16} variant="h6">
@@ -126,7 +144,12 @@ const FilterMenu: React.FC = () => {
             </Typography>
           </Grid>
           <Grid item xs={5}>
-            <Input type="number" size="small" />
+            <Input
+              value={props.areaEnd}
+              onChange={(e) => props.setAreaEnd(e.target.value)}
+              type="number"
+              size="small"
+            />
           </Grid>
         </Grid>
       </Box>
@@ -147,7 +170,12 @@ const FilterMenu: React.FC = () => {
             </Typography>
           </Grid>
           <Grid item xs={5}>
-            <Input type="number" size="small" />
+            <Input
+              value={props.priceStart}
+              onChange={(e) => props.setPriceStart(e.target.value)}
+              type="number"
+              size="small"
+            />
           </Grid>
           <Grid item xs={2}>
             <Typography textAlign="center" fontSize={16} variant="h6">
@@ -155,7 +183,12 @@ const FilterMenu: React.FC = () => {
             </Typography>
           </Grid>
           <Grid item xs={5}>
-            <Input type="number" size="small" />
+            <Input
+              value={props.priceEnd}
+              onChange={(e) => props.setPriceEnd(e.target.value)}
+              type="number"
+              size="small"
+            />
           </Grid>
         </Grid>
       </Box>
