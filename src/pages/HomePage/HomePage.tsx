@@ -5,6 +5,8 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  Pagination,
+  Stack,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { loadAllPost } from '../../api/service';
@@ -12,8 +14,8 @@ import ApartList from '../../components/ApartPost/ApartList';
 import AppLoading from '../../components/AppLoading/AppLoading';
 import useScreenState from '../../hook/useScreenState';
 import { ApartModel } from '../../model/ApartModel';
-import { Input } from '../LoginPage/components/CustomComponent';
-import FilterMenu from './components/FilterMenu/FilterMenu';
+import { Input } from '../LoginPage/styled';
+import FilterMenu from '../../components/FilterMenu/FilterMenu';
 
 const HomePage: React.FC = () => {
   const [searchKey, setSearchKey] = useState('');
@@ -22,7 +24,14 @@ const HomePage: React.FC = () => {
   const [areaStart, setAreaStart] = useState('');
   const [areaEnd, setAreaEnd] = useState('');
   const [apartList, setApartList] = useState<ApartModel[]>([]);
+  const [page, setPage] = React.useState<number>(1);
   const { setLoading, loading, error, setError } = useScreenState();
+  const handleChangePagination = (
+    event: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setPage(value);
+  };
 
   const loadHomePageData: () => Promise<void> = async () => {
     try {
@@ -102,7 +111,12 @@ const HomePage: React.FC = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container
+      sx={{
+        marginTop: '85px',
+      }}
+      maxWidth="xl"
+    >
       <Grid container padding="40px 0 0">
         <Grid item xs={2}>
           <FilterMenu
@@ -138,6 +152,14 @@ const HomePage: React.FC = () => {
             />
           </Box>
 
+          <Stack mt={5} justifyContent="center" alignItems="flex-end">
+            <Pagination
+              count={10}
+              page={page}
+              onChange={handleChangePagination}
+              color="secondary"
+            />
+          </Stack>
           <ApartList data={apartList} />
         </Grid>
       </Grid>

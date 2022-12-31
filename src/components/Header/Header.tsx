@@ -33,7 +33,12 @@ const Header: React.FC = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar
+      sx={{
+        backgroundColor: '#fff',
+      }}
+      position="fixed"
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box
@@ -49,7 +54,35 @@ const Header: React.FC = () => {
             </Link>
           </Box>
 
-          <Box sx={{ marginLeft: 'auto' }}>
+          <Stack flexGrow={1} ml={10}>
+            <Typography variant="h6" component="div">
+              <Link
+                to="/"
+                style={{
+                  textDecoration: 'none',
+                  color: '#000',
+                }}
+              >
+                Apartment List
+              </Link>
+            </Typography>
+
+            {user?.role === 'SELLER' && (
+              <Typography variant="h6" component="div">
+                <Link
+                  to="/"
+                  style={{
+                    textDecoration: 'none',
+                    color: '#000',
+                  }}
+                >
+                  Apartment Management
+                </Link>
+              </Typography>
+            )}
+          </Stack>
+
+          <Box>
             {user ? (
               <>
                 <Box
@@ -150,22 +183,26 @@ const Header: React.FC = () => {
                   </MenuItem>
                   <Divider variant="middle" />
 
-                  <MenuItem>
-                    <Link
-                      to="/post-apart"
-                      style={{
-                        textDecoration: 'none',
-                      }}
-                    >
-                      <Stack direction="row" alignItems="center">
-                        <ListItemIcon>
-                          <PostAdd />
-                        </ListItemIcon>
-                        <Typography color="#757575">Create post</Typography>
-                      </Stack>
-                    </Link>
-                  </MenuItem>
-                  <Divider variant="middle" />
+                  {user?.role === 'SELLER' && (
+                    <>
+                      <MenuItem>
+                        <Link
+                          to="/post-apart"
+                          style={{
+                            textDecoration: 'none',
+                          }}
+                        >
+                          <Stack direction="row" alignItems="center">
+                            <ListItemIcon>
+                              <PostAdd />
+                            </ListItemIcon>
+                            <Typography color="#757575">Create post</Typography>
+                          </Stack>
+                        </Link>
+                      </MenuItem>
+                      <Divider variant="middle" />
+                    </>
+                  )}
 
                   <MenuItem onClick={() => signOut()}>
                     <ListItemIcon>

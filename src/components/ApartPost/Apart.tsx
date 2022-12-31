@@ -28,7 +28,7 @@ const Apart: React.FC<ApartListItemProps> = (props) => {
   const navigate = useNavigate();
 
   return (
-    <Grid item xl={3} md={4} xs={6} height="100%">
+    <Grid item xl={3} md={4} xs={6}>
       <Card
         sx={{
           maxWidth: 345,

@@ -16,12 +16,7 @@ import BgLogin from '../../assets/imgs/bglogin.jpg';
 import Logo from '../../assets/imgs/logo.png';
 import useAuth from '../../hook/useAuth';
 import { EMAIL_REGEX } from '../../utils/utils';
-import {
-  CustomButton,
-  Input,
-  Label,
-  SubmitBtn,
-} from './components/CustomComponent';
+import { CustomButton, Input, Label, SubmitBtn } from './styled';
 
 const Login: React.FC = () => {
   const { signIn } = useAuth();
@@ -55,7 +50,6 @@ const Login: React.FC = () => {
         signIn({
           user: {
             ...resData?.user_info,
-            // id: resData?.user_info?.email,
             token: resData?.access_token,
           },
         });
@@ -108,7 +102,6 @@ const Login: React.FC = () => {
         signIn({
           user: {
             ...resData?.user_info,
-            // id: resData?.user_info?.email,
             token: resData?.access_token,
           },
         });
