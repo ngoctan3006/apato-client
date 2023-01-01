@@ -1,4 +1,9 @@
-import { Logout, PersonOutline, PostAdd } from '@mui/icons-material';
+import {
+  AdminPanelSettingsOutlined,
+  Logout,
+  PersonOutline,
+  PostAdd,
+} from '@mui/icons-material';
 import {
   AppBar,
   Avatar,
@@ -197,6 +202,27 @@ const Header: React.FC = () => {
                               <PostAdd />
                             </ListItemIcon>
                             <Typography color="#757575">Create post</Typography>
+                          </Stack>
+                        </Link>
+                      </MenuItem>
+                      <Divider variant="middle" />
+                    </>
+                  )}
+
+                  {user?.role === 'ADMIN' && (
+                    <>
+                      <MenuItem>
+                        <Link
+                          to="/admin"
+                          style={{
+                            textDecoration: 'none',
+                          }}
+                        >
+                          <Stack direction="row" alignItems="center">
+                            <ListItemIcon>
+                              <AdminPanelSettingsOutlined />
+                            </ListItemIcon>
+                            <Typography color="#757575">Admin Page</Typography>
                           </Stack>
                         </Link>
                       </MenuItem>
