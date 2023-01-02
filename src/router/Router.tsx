@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Layout from '../layout/Layout';
 import AdminPage from '../pages/AdminPage/AdminPage';
-import ApartDetailPage from '../pages/ApartDetailPage/ApartDetailPage';
+import ApartDetail from '../pages/ApartDetailPage/ApartDetail';
 import EditPostPage from '../pages/EditPostPage/EditPostPage';
 import HomePage from '../pages/HomePage/HomePage';
 import Login from '../pages/LoginPage/Login';
@@ -15,7 +15,7 @@ const Router: React.FC = () => {
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<HomePage />} />
-          <Route path="apart-detail/:apartId" element={<ApartDetailPage />} />
+          <Route path="apart-detail/:apartId" element={<ApartDetail />} />
           <Route path="post-apart" element={<PostApartPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="admin" element={<AdminPage />} />

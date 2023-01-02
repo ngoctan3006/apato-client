@@ -6,7 +6,6 @@ import Router from './router/Router';
 const App: React.FC = () => {
   return (
     <>
-      {/* <RouterProvider router={router}/> */}
       <Router />
       <ToastContainer />
     </>
