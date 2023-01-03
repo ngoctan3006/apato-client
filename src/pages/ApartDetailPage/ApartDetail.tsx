@@ -52,10 +52,30 @@ const ApartDetail: React.FC = () => {
                   navigation
                   pagination={{ clickable: true, dynamicBullets: true }}
                 >
-                  <SwiperSlide>Slide 1</SwiperSlide>
-                  <SwiperSlide>Slide 2</SwiperSlide>
-                  <SwiperSlide>Slide 3</SwiperSlide>
-                  <SwiperSlide>Slide 4</SwiperSlide>
+                  <SwiperSlide>
+                    <img
+                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-12.jpg"
+                      alt=""
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <img
+                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-14.jpg"
+                      alt=""
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <img
+                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-16.jpg"
+                      alt=""
+                    />
+                  </SwiperSlide>
+                  <SwiperSlide>
+                    <img
+                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-19.jpg"
+                      alt=""
+                    />
+                  </SwiperSlide>
                 </Swiper>
               </Grid>
               <Grid item xs={4}>

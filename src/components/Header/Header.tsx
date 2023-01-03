@@ -59,31 +59,39 @@ const Header: React.FC = () => {
             </Link>
           </Box>
 
-          <Stack flexGrow={1} ml={10}>
-            <Typography variant="h6" component="div">
-              <Link
-                to="/"
-                style={{
-                  textDecoration: 'none',
-                  color: '#000',
-                }}
-              >
-                Apartment List
-              </Link>
-            </Typography>
+          <Stack flexGrow={1} ml={10} direction="row" spacing={4}>
+            <Button
+              href="/"
+              sx={{
+                color: '#000',
+                fontWeight: 600,
+                fontSize: 16,
+                textTransform: 'none',
+                '&:hover': {
+                  color: '#b772ff',
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
+              Apartment List
+            </Button>
 
             {user?.role === 'SELLER' && (
-              <Typography variant="h6" component="div">
-                <Link
-                  to="/"
-                  style={{
-                    textDecoration: 'none',
-                    color: '#000',
-                  }}
-                >
-                  Apartment Management
-                </Link>
-              </Typography>
+              <Button
+                href="/apart-management"
+                sx={{
+                  color: '#000',
+                  fontWeight: 600,
+                  fontSize: 16,
+                  textTransform: 'none',
+                  '&:hover': {
+                    color: '#b772ff',
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              >
+                Apartment Management
+              </Button>
             )}
           </Stack>
 
