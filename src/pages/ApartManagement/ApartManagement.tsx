@@ -88,6 +88,7 @@ const ApartManagement: React.FC = () => {
             variant="outlined"
             color="secondary"
             startIcon={<Add />}
+            href="/post-apart"
           >
             Create Apart
           </Button>
