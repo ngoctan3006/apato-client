@@ -69,7 +69,7 @@ const PostApartPage: React.FC = () => {
           </AppText>
         )}
         </div>
-        <h3>Thông tin phòng</h3>
+        <h3>Thông tin căn hộ</h3>
         
         <div>
         <label htmlFor="address">Địa chỉ <span>*</span></label>
