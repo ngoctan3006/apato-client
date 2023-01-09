@@ -24,6 +24,7 @@ import { ApartDetailModel } from '../../model/ApartDetailModel';
 import useScreenState from '../../hook/useScreenState';
 import { getApartDetail } from '../../api/service';
 import { numberWithCommas } from '../../utils/utils';
+import AppLoading from '../../components/AppLoading/AppLoading';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
@@ -65,6 +66,10 @@ const ApartDetail: React.FC = () => {
   useEffect(() => {
     loadApartDetailPageData().finally(() => {});
   }, [needRefresh]);
+
+  if (loading) {
+    return <AppLoading />;
+  }
 
   return (
     <Container

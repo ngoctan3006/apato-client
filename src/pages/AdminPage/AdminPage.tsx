@@ -98,7 +98,7 @@ const AdminPage: React.FC = () => {
       });
       if (res.status === 201) {
         const newApartList = res.data.map((item) => {
-          const newImage = item.image.map((_imageLink) => {
+          const newImage = item.image.map((_imageLink: any) => {
             return 'http://' + _imageLink;
           });
           return {
@@ -147,7 +147,7 @@ const AdminPage: React.FC = () => {
 
       if (res.status === 201) {
         const newApartList = res.data.map((item) => {
-          const newImage = item.image.map((_imageLink) => {
+          const newImage = item.image.map((_imageLink: any) => {
             return 'http://' + _imageLink;
           });
           return {
