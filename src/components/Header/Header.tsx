@@ -73,7 +73,7 @@ const Header: React.FC = () => {
                 },
               }}
             >
-              Apartment List
+              Danh sách căn hộ
             </Button>
 
             {user?.role === 'SELLER' && (
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
                   },
                 }}
               >
-                Apartment Management
+                Quản lý căn hộ
               </Button>
             )}
           </Stack>
@@ -111,7 +111,7 @@ const Header: React.FC = () => {
                     component="div"
                     sx={{ flexGrow: 1 }}
                   >
-                    Welcome, {user?.name?.split(' ').slice(-1)[0]}
+                    Xin chào, {user?.name?.split(' ').slice(-1)[0]}
                   </Typography>
                   <IconButton
                     onClick={handleClick}
@@ -190,7 +190,7 @@ const Header: React.FC = () => {
                         <ListItemIcon>
                           <PersonOutline />
                         </ListItemIcon>
-                        <Typography color="#757575">Profile</Typography>
+                        <Typography color="#757575">Hồ sơ</Typography>
                       </Stack>
                     </Link>
                   </MenuItem>
@@ -209,7 +209,7 @@ const Header: React.FC = () => {
                             <ListItemIcon>
                               <PostAdd />
                             </ListItemIcon>
-                            <Typography color="#757575">Create post</Typography>
+                            <Typography color="#757575">Thêm căn hộ</Typography>
                           </Stack>
                         </Link>
                       </MenuItem>
@@ -230,7 +230,7 @@ const Header: React.FC = () => {
                             <ListItemIcon>
                               <AdminPanelSettingsOutlined />
                             </ListItemIcon>
-                            <Typography color="#757575">Admin Page</Typography>
+                            <Typography color="#757575">Trang quản trị</Typography>
                           </Stack>
                         </Link>
                       </MenuItem>
@@ -242,7 +242,7 @@ const Header: React.FC = () => {
                     <ListItemIcon>
                       <Logout />
                     </ListItemIcon>
-                    <Typography color="#757575">Logout</Typography>
+                    <Typography color="#757575">Đăng xuất</Typography>
                   </MenuItem>
                 </Menu>
               </>
@@ -257,7 +257,7 @@ const Header: React.FC = () => {
                   fontSize: 16,
                 }}
               >
-                Login
+                Đăng nhập
               </Button>
             )}
           </Box>

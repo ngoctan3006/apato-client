@@ -27,7 +27,7 @@ const CreateApartModal: React.FC = () => {
     >
       <Box sx={style}>
         <Typography id="modal-modal-title" variant="h6" component="h2">
-          Create New Apartment
+          Thêm căn hộ mới
         </Typography>
       </Box>
     </Modal>

@@ -47,7 +47,7 @@ const tagsList = [
 
 export const Input = styled(TextField)({
   '& .MuiInputBase-input': {
-    fontSize: 12,
+    fontSize: 10,
   },
   '& label.Mui-focused': {
     color: '#b772ff',
@@ -99,7 +99,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
               mr: 1,
             }}
           />
-          <Typography variant="h6">Filter</Typography>
+          <Typography variant="h6">Lọc</Typography>
         </Stack>
         <Button
           onClick={props.filterHandler}
@@ -109,7 +109,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           }}
           color="secondary"
         >
-          Apply
+          Xác nhận
         </Button>
       </Stack>
 
@@ -117,7 +117,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
 
       <Box>
         <Typography fontSize={14} variant="h6">
-          Room area (m2)
+          Diện tích phòng (m2)
         </Typography>
         <Grid container alignItems="center">
           <Grid item xs={7}>
@@ -156,7 +156,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
 
       <Box mt={2}>
         <Typography fontSize={14} variant="h6">
-          Price (VND)
+          Giá (VND)
         </Typography>
         <Grid container alignItems="center">
           <Grid item xs={7}>
@@ -195,10 +195,10 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
 
       <Box mt={2}>
         <Typography fontSize={14} variant="h6">
-          Location
+          Vị trí
         </Typography>
-        <Typography fontSize={12} variant="h6" fontWeight={400}>
-          District
+        <Typography fontSize={14} variant="h6" fontWeight={400}>
+          Quận
         </Typography>
         <Input fullWidth select size="small" defaultValue="all">
           {DistrictList.map((district) => (
@@ -217,7 +217,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
 
       <Box mt={2}>
         <Typography fontSize={14} variant="h6">
-          University
+          Trường học
         </Typography>
         <Input fullWidth select size="small" defaultValue="all">
           {UniversityList.map((university) => (
