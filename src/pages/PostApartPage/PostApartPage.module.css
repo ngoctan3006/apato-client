@@ -23,7 +23,7 @@
   grid-template-columns: 450px 450px;
   width: 900px;
 }
-form div:first-child, form div:nth-child(3){
+form>div:first-child, form>div:nth-child(3){
   width: 55%;
 }
 h3,textarea, h4, button, form div:first-child, form div:nth-child(3),form div:nth-child(8), form div:last-child{
