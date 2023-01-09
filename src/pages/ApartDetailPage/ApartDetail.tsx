@@ -143,12 +143,15 @@ const ApartDetail: React.FC = () => {
                 >
                   <Typography variant="h6" component="div">
                     {apartDetail?.total_rating}/5{' '}
-                    {Array.from(
-                      { length: apartDetail?.total_rating || 0 },
-                      (_) => (
-                        <SvgIcon component={Star} sx={{ color: yellow[500] }} />
-                      )
-                    )}
+                    {Array.from({
+                      length: Math.round(Number(apartDetail?.total_rating)),
+                    }).map((item, index) => (
+                      <SvgIcon
+                        key={index}
+                        component={Star}
+                        sx={{ color: yellow[500] }}
+                      />
+                    ))}
                   </Typography>
                 </Stack>
               </Grid>
