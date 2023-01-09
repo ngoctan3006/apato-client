@@ -137,7 +137,7 @@ const HomePage: React.FC = () => {
             <Input
               size="small"
               fullWidth
-              label="Search"
+              label="Tìm kiếm"
               value={searchKey}
               onChange={(e) => setSearchKey(e.target.value)}
               InputProps={{
