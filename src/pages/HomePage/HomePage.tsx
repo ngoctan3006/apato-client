@@ -42,6 +42,8 @@ const HomePage: React.FC = () => {
         priceEnd: Number(priceEnd),
         areaStart: Number(areaStart),
         areaEnd: Number(areaEnd),
+        pageIndex: 1,
+        pageSize: 10,
       });
       if (res.status === 201) {
         const newApartList = res.data.map((item) => {

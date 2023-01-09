@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
@@ -7,7 +7,6 @@ import {
   Rating,
   Stack,
   SvgIcon,
-  TextField,
   Typography,
 } from '@mui/material';
 import { Navigation, Pagination } from 'swiper';
@@ -19,8 +18,54 @@ import './apart-detail.css';
 import { Star } from '@mui/icons-material';
 import { deepPurple, yellow } from '@mui/material/colors';
 import { Input } from '../LoginPage/styled';
+import { useNavigate, useParams } from 'react-router-dom';
+import useAuth from '../../hook/useAuth';
+import { ApartDetailModel } from '../../model/ApartDetailModel';
+import useScreenState from '../../hook/useScreenState';
+import { getApartDetail } from '../../api/service';
+import { numberWithCommas } from '../../utils/utils';
 
 const ApartDetail: React.FC = () => {
+  const params = useParams();
+  const navigate = useNavigate();
+  const auth = useAuth();
+  const user = auth.user;
+  const [apartDetail, setApartDetail] = useState<ApartDetailModel>();
+  const [comment, setComment] = useState('');
+  const [rating, setRating] = useState<number | null | undefined>(null);
+  const [needRefresh, setNeedRefresh] = useState(false);
+  const [canEdit, setCanEdit] = useState(false);
+  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const { setLoading, loading, error, setError } = useScreenState();
+
+  const loadApartDetailPageData = async () => {
+    try {
+      setLoading(true);
+      const res = await getApartDetail(Number(params.apartId));
+      console.log(res);
+      if (res.status === 200) {
+        const newImageData = res.data.image.map((item) => {
+          return item;
+        });
+        setApartDetail({
+          ...res.data,
+          image: [...newImageData],
+        });
+        if (res.data?.creator?.email === user?.email) {
+          setCanEdit(true);
+        }
+      }
+    } catch (e: any) {
+      console.log(e?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadApartDetailPageData().finally(() => {});
+  }, [needRefresh]);
+
   return (
     <Container
       sx={{
@@ -29,7 +74,7 @@ const ApartDetail: React.FC = () => {
       maxWidth="xl"
     >
       <Typography fontWeight={600} variant="h6" component="div" pt={3}>
-        Chung cu A12 Tan Mai
+        {apartDetail?.title}
       </Typography>
       <Grid mt={0.5} container spacing={2}>
         <Grid item xs={10}>
@@ -45,37 +90,16 @@ const ApartDetail: React.FC = () => {
                 <Swiper
                   style={{
                     height: '300px',
-                    '--swiper-navigation-color': '#b772ff',
-                    '--swiper-pagination-color': '#b772ff',
                   }}
                   modules={[Navigation, Pagination]}
                   navigation
                   pagination={{ clickable: true, dynamicBullets: true }}
                 >
-                  <SwiperSlide>
-                    <img
-                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-12.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-14.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-16.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
-                  <SwiperSlide>
-                    <img
-                      src="https://bandon.vn/uploads/thiet-ke-nha-tro-dep-2020-bandon-19.jpg"
-                      alt=""
-                    />
-                  </SwiperSlide>
+                  {apartDetail?.image.map((item) => (
+                    <SwiperSlide>
+                      <img src={item} alt="" />
+                    </SwiperSlide>
+                  ))}
                 </Swiper>
               </Grid>
               <Grid item xs={4}>
@@ -84,7 +108,7 @@ const ApartDetail: React.FC = () => {
                     Area
                   </Typography>
                   <Typography variant="h6" component="div">
-                    20 m2
+                    {apartDetail?.area} m2
                   </Typography>
                 </Stack>
 
@@ -93,7 +117,7 @@ const ApartDetail: React.FC = () => {
                     Price
                   </Typography>
                   <Typography variant="h6" component="div">
-                    20.000.000 VND
+                    {numberWithCommas(Number(apartDetail?.price))} VND
                   </Typography>
                 </Stack>
 
@@ -102,7 +126,7 @@ const ApartDetail: React.FC = () => {
                     Address
                   </Typography>
                   <Typography variant="h6" component="div">
-                    Cau Giay, Ha Noi
+                    {apartDetail?.address}
                   </Typography>
                 </Stack>
 
@@ -113,9 +137,13 @@ const ApartDetail: React.FC = () => {
                   alignItems="center"
                 >
                   <Typography variant="h6" component="div">
-                    3/5 <SvgIcon component={Star} sx={{ color: yellow[500] }} />
-                    <SvgIcon component={Star} sx={{ color: yellow[500] }} />
-                    <SvgIcon component={Star} sx={{ color: yellow[500] }} />
+                    {apartDetail?.total_rating}/5{' '}
+                    {Array.from(
+                      { length: apartDetail?.total_rating || 0 },
+                      (_) => (
+                        <SvgIcon component={Star} sx={{ color: yellow[500] }} />
+                      )
+                    )}
                   </Typography>
                 </Stack>
               </Grid>
@@ -126,10 +154,7 @@ const ApartDetail: React.FC = () => {
                 Description
               </Typography>
               <Typography variant="body1" component="div">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Quisquam quae, voluptatum, quod, voluptas quibusdam voluptates
-                quidem voluptatibus quos quia quas nesciunt. Quisquam, quae.
-                Quisquam
+                {apartDetail?.detail}
               </Typography>
             </Box>
           </Box>
@@ -137,7 +162,7 @@ const ApartDetail: React.FC = () => {
           <Box mt={3}>
             <Stack direction="row" spacing={2}>
               <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
-                TA
+                {apartDetail?.creator?.name[0]}
               </Avatar>
               <Box flexGrow={1}>
                 <Input
@@ -288,10 +313,12 @@ const ApartDetail: React.FC = () => {
               Landlord
             </Typography>
             <Stack alignItems="center">
-              <Avatar sx={{ width: 40, height: 40 }} />
+              <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
+                {apartDetail?.creator?.name[0]}
+              </Avatar>
             </Stack>
             <Typography textAlign="center" variant="h6" component="div">
-              Nguyen Van A
+              {apartDetail?.creator?.name}
             </Typography>
             <Stack
               direction="row"
@@ -302,7 +329,7 @@ const ApartDetail: React.FC = () => {
                 Email
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
-                abc@gmail.com
+                {apartDetail?.creator?.email || 'No information'}
               </Typography>
             </Stack>
             <Stack
@@ -314,7 +341,7 @@ const ApartDetail: React.FC = () => {
                 Phone
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
-                0123456789
+                {apartDetail?.creator?.phone || 'No information'}
               </Typography>
             </Stack>
           </Stack>
