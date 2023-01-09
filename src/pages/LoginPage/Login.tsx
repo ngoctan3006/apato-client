@@ -135,12 +135,14 @@ const Login: React.FC = () => {
 
   return (
     <Box
+      style={{
+        backgroundImage: `url(${BgLogin})`,
+      }}
       sx={{
         height: '100vh',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundImage: `url(${BgLogin})`,
         backgroundSize: 'cover',
       }}
     >

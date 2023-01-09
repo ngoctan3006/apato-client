@@ -63,14 +63,14 @@ export const Input = styled(TextField)({
 });
 
 interface FilterMenuProps {
-  priceStart: string;
-  priceEnd: string;
-  setPriceStart: (priceStart: string) => void;
-  setPriceEnd: (priceEnd: string) => void;
-  areaStart: string;
-  setAreaStart: (areaStart: string) => void;
-  areaEnd: string;
-  setAreaEnd: (areaEnd: string) => void;
+  priceStart: string | null;
+  priceEnd: string |null;
+  setPriceStart: (priceStart: string|null) => void;
+  setPriceEnd: (priceEnd: string|null) => void;
+  areaStart: string|null;
+  setAreaStart: (areaStart: string|null) => void;
+  areaEnd: string|null;
+  setAreaEnd: (areaEnd: string|null) => void;
   filterHandler: () => Promise<void>;
 }
 

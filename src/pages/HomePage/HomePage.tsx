@@ -18,11 +18,12 @@ import { Input } from '../LoginPage/styled';
 import FilterMenu from '../../components/FilterMenu/FilterMenu';
 
 const HomePage: React.FC = () => {
-  const [searchKey, setSearchKey] = useState('');
-  const [priceStart, setPriceStart] = useState('');
-  const [priceEnd, setPriceEnd] = useState('');
-  const [areaStart, setAreaStart] = useState('');
-  const [areaEnd, setAreaEnd] = useState('');
+  const [searchKey, setSearchKey] = useState<string | null>(null);
+  const [priceStart, setPriceStart] = useState<string | null>(null);
+  const [priceEnd, setPriceEnd] = useState<string | null>(null);
+  const [areaStart, setAreaStart] = useState<string | null>(null);
+  const [areaEnd, setAreaEnd] = useState<string | null>(null);
+  const [district, setDistrict] = useState<string | null>(null);
   const [apartList, setApartList] = useState<ApartModel[]>([]);
   const [page, setPage] = React.useState<number>(1);
   const { setLoading, loading, error, setError } = useScreenState();
@@ -42,18 +43,22 @@ const HomePage: React.FC = () => {
         priceEnd: Number(priceEnd),
         areaStart: Number(areaStart),
         areaEnd: Number(areaEnd),
+        district: district,
+        pageIndex: 1,
+        pageSize: 10
       });
       if (res.status === 201) {
-        const newApartList = res.data.map((item) => {
-          const newImage = item.image.map((_imageLink) => {
-            return _imageLink;
-          });
-          return {
-            ...item,
-            image: [...newImage],
-          };
-        });
-        setApartList(newApartList);
+        console.log(res.data)
+        // const newApartList = res.data.map((item) => {
+        //   const newImage = item.image.map((_imageLink) => {
+        //     return _imageLink;
+        //   });
+        //   return {
+        //     ...item,
+        //     image: [...newImage],
+        //   };
+        // });
+        setApartList(res.data);
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message);
@@ -73,16 +78,16 @@ const HomePage: React.FC = () => {
       });
 
       if (res.status === 201) {
-        const newApartList = res.data.map((item) => {
-          const newImage = item.image.map((_imageLink) => {
-            return _imageLink;
-          });
-          return {
-            ...item,
-            image: [...newImage],
-          };
-        });
-        setApartList(newApartList);
+        // const newApartList = res.data.map((item) => {
+        //   const newImage = item.image.map((_imageLink) => {
+        //     return _imageLink;
+        //   });
+        //   return {
+        //     ...item,
+        //     image: [...newImage],
+        //   };
+        // });
+        setApartList(res.data);
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message);
@@ -92,10 +97,11 @@ const HomePage: React.FC = () => {
 
   const filterHandler = async () => {
     await loadHomePageData();
-    setAreaEnd('');
-    setAreaStart('');
-    setPriceStart('');
-    setPriceEnd('');
+    setAreaEnd(null);
+    setAreaStart(null);
+    setPriceStart(null);
+    setPriceEnd(null);
+    setDistrict(null)
   };
 
   useEffect(() => {

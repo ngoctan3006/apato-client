@@ -204,7 +204,7 @@ const ApartManagement: React.FC = () => {
         </TabPanel>
       </Box>
 
-      <CreateApartModal />
+      {/*<CreateApartModal />*/}
     </>
   );
 };

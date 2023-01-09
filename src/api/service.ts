@@ -78,7 +78,7 @@ export const deletePostAPI = (postId: string, token: string) => {
 }
 
 export const loadAllPost = (data: any) => {
-  return apiClient.post<ApartModel[]>("posts/all", data)
+  return apiClient.post<any[]>("posts/all", data)
 }
 
 export const getApartDetail = (apatoId: number) => {
