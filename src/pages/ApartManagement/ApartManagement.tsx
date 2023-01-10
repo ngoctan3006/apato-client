@@ -16,8 +16,14 @@ import {
   Tabs,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
-import CreateApartModal from '../../components/Modal/CreateApartModal';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { loadAllPostByUser } from '../../api/service';
+import AppLoading from '../../components/AppLoading/AppLoading';
+import useAuth from '../../hook/useAuth';
+import useScreenState from '../../hook/useScreenState';
+import { ApartModel } from '../../model/ApartModel';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,30 +58,46 @@ function a11yProps(index: number) {
   };
 }
 
-function createData(
-  no: number,
-  name: string,
-  address: string,
-  time: string,
-  rating: string
-) {
-  return { no, name, address, time, rating };
-}
-
-const rows = [
-  createData(1, 'Chung cu A', 'Cau Giay, Ha Noi', '20/12/2022', '4/5'),
-  createData(2, 'Chung cu A', 'Cau Giay, Ha Noi', '20/12/2022', '3/5'),
-  createData(3, 'Chung cu A', 'Cau Giay, Ha Noi', '20/12/2022', '3/5'),
-  createData(4, 'Chung cu A', 'Cau Giay, Ha Noi', '20/12/2022', '4/5'),
-  createData(5, 'Chung cu A', 'Cau Giay, Ha Noi', '20/12/2022', '2/5'),
-];
-
 const ApartManagement: React.FC = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState(1);
+  const navigate = useNavigate();
+  const { setLoading, loading, error, setError } = useScreenState();
+  const [apartList, setApartList] = useState<ApartModel[]>([]);
+  const auth = useAuth();
+  const user = auth.user;
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const loadPosts: () => Promise<void> = async () => {
+    try {
+      setLoading(true);
+      const res = await loadAllPostByUser(
+        {
+          pageIndex: 1,
+          pageSize: 10,
+        },
+        user?.token!,
+        value
+      );
+      if (res.status === 201) {
+        setApartList(res.data);
+      }
+    } catch (e: any) {
+      console.log(e?.response?.data?.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadPosts().finally(() => {});
+  }, [value]);
+
+  if (loading) {
+    return <AppLoading />;
+  }
 
   return (
     <>
@@ -88,9 +110,9 @@ const ApartManagement: React.FC = () => {
             variant="outlined"
             color="secondary"
             startIcon={<Add />}
-            href="/post-apart"
+            onClick={() => navigate('/post-apart')}
           >
-            Create Apart
+            Đăng phòng trọ
           </Button>
         </Stack>
         <Stack pt={1} alignItems="center">
@@ -108,7 +130,7 @@ const ApartManagement: React.FC = () => {
                 fontSize: 16,
               }}
               label="Phòng đã đăng"
-              {...a11yProps(0)}
+              {...a11yProps(1)}
             />
             <Tab
               sx={{
@@ -117,51 +139,11 @@ const ApartManagement: React.FC = () => {
                 fontSize: 16,
               }}
               label="Đang duyệt"
-              {...a11yProps(1)}
+              {...a11yProps(0)}
             />
           </Tabs>
         </Stack>
 
-        <TabPanel value={value} index={0}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>No.</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>Time Created</TableCell>
-                  <TableCell>Rating</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows.map((row) => (
-                  <TableRow
-                    key={row.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell>{row.no}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.address}</TableCell>
-                    <TableCell>{row.time}</TableCell>
-                    <TableCell>{row.rating}</TableCell>
-                    <TableCell>
-                      <Stack direction="row" spacing={2}>
-                        <IconButton>
-                          <SvgIcon component={Edit} color="primary" />
-                        </IconButton>
-                        <IconButton>
-                          <SvgIcon component={Delete} color="error" />
-                        </IconButton>
-                      </Stack>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </TabPanel>
         <TabPanel value={value} index={1}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="table">
@@ -176,28 +158,102 @@ const ApartManagement: React.FC = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {apartList.length == 0 ? (
                   <TableRow
-                    key={row.name}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      height: 100,
+                    }}
                   >
-                    <TableCell>{row.no}</TableCell>
-                    <TableCell>{row.name}</TableCell>
-                    <TableCell>{row.address}</TableCell>
-                    <TableCell>{row.time}</TableCell>
-                    <TableCell>{row.rating}</TableCell>
-                    <TableCell>
-                      <Stack direction="row" spacing={2}>
-                        <IconButton>
-                          <SvgIcon component={Edit} color="primary" />
-                        </IconButton>
-                        <IconButton>
-                          <SvgIcon component={Delete} color="error" />
-                        </IconButton>
-                      </Stack>
+                    <TableCell colSpan={6} align="center">
+                      <Typography variant="h6" color="text.secondary">
+                        Không có dữ liệu
+                      </Typography>
                     </TableCell>
                   </TableRow>
-                ))}
+                ) : (
+                  apartList.map((apart, index) => (
+                    <TableRow
+                      key={apart.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{apart.title}</TableCell>
+                      <TableCell>{apart.address}</TableCell>
+                      <TableCell>
+                        {moment(apart.created_at).format('DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell>{apart.total_rating}/5</TableCell>
+                      <TableCell>
+                        <Stack direction="row" spacing={2}>
+                          <IconButton>
+                            <SvgIcon component={Edit} color="primary" />
+                          </IconButton>
+                          <IconButton>
+                            <SvgIcon component={Delete} color="error" />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </TabPanel>
+        <TabPanel value={value} index={0}>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} aria-label="table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>No.</TableCell>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Address</TableCell>
+                  <TableCell>Time Created</TableCell>
+                  <TableCell>Rating</TableCell>
+                  <TableCell>Action</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {apartList.length == 0 ? (
+                  <TableRow
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      height: 100,
+                    }}
+                  >
+                    <TableCell colSpan={6} align="center">
+                      <Typography variant="h6" color="text.secondary">
+                        Không có dữ liệu
+                      </Typography>
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  apartList.map((apart, index) => (
+                    <TableRow
+                      key={apart.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>{apart.title}</TableCell>
+                      <TableCell>{apart.address}</TableCell>
+                      <TableCell>
+                        {moment(apart.created_at).format('DD/MM/YYYY')}
+                      </TableCell>
+                      <TableCell>{apart.total_rating}/5</TableCell>
+                      <TableCell>
+                        <Stack direction="row" spacing={2}>
+                          <IconButton>
+                            <SvgIcon component={Edit} color="primary" />
+                          </IconButton>
+                          <IconButton>
+                            <SvgIcon component={Delete} color="error" />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
               </TableBody>
             </Table>
           </TableContainer>

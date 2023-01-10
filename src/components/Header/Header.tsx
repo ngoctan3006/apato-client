@@ -61,7 +61,7 @@ const Header: React.FC = () => {
 
           <Stack flexGrow={1} ml={10} direction="row" spacing={4}>
             <Button
-              href="/"
+              onClick={() => navigate('/')}
               sx={{
                 color: '#000',
                 fontWeight: 600,
@@ -78,7 +78,7 @@ const Header: React.FC = () => {
 
             {user?.role === 'SELLER' && (
               <Button
-                href="/apart-management"
+                onClick={() => navigate('/apart-management')}
                 sx={{
                   color: '#000',
                   fontWeight: 600,
@@ -230,7 +230,9 @@ const Header: React.FC = () => {
                             <ListItemIcon>
                               <AdminPanelSettingsOutlined />
                             </ListItemIcon>
-                            <Typography color="#757575">Trang quản trị</Typography>
+                            <Typography color="#757575">
+                              Trang quản trị
+                            </Typography>
                           </Stack>
                         </Link>
                       </MenuItem>

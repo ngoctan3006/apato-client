@@ -24,6 +24,7 @@ import { ApartDetailModel } from '../../model/ApartDetailModel';
 import useScreenState from '../../hook/useScreenState';
 import { getApartDetail } from '../../api/service';
 import { numberWithCommas } from '../../utils/utils';
+import AppLoading from '../../components/AppLoading/AppLoading';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
@@ -65,6 +66,10 @@ const ApartDetail: React.FC = () => {
   useEffect(() => {
     loadApartDetailPageData().finally(() => {});
   }, [needRefresh]);
+
+  if (loading) {
+    return <AppLoading />;
+  }
 
   return (
     <Container
@@ -138,12 +143,15 @@ const ApartDetail: React.FC = () => {
                 >
                   <Typography variant="h6" component="div">
                     {apartDetail?.total_rating}/5{' '}
-                    {Array.from(
-                      { length: apartDetail?.total_rating || 0 },
-                      (_) => (
-                        <SvgIcon component={Star} sx={{ color: yellow[500] }} />
-                      )
-                    )}
+                    {Array.from({
+                      length: Math.round(Number(apartDetail?.total_rating)),
+                    }).map((item, index) => (
+                      <SvgIcon
+                        key={index}
+                        component={Star}
+                        sx={{ color: yellow[500] }}
+                      />
+                    ))}
                   </Typography>
                 </Stack>
               </Grid>
