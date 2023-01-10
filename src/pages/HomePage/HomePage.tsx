@@ -75,6 +75,13 @@ const HomePage: React.FC = () => {
     try {
       const res = await loadAllPost({
         searchValue: searchKey,
+        priceStart: Number(priceStart),
+        priceEnd: Number(priceEnd),
+        areaStart: Number(areaStart),
+        areaEnd: Number(areaEnd),
+        district: district,
+        pageIndex: 1,
+        pageSize: 10
       });
 
       if (res.status === 201) {
