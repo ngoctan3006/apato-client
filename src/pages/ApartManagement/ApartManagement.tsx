@@ -149,12 +149,12 @@ const ApartManagement: React.FC = () => {
             <Table sx={{ minWidth: 650 }} aria-label="table">
               <TableHead>
                 <TableRow>
-                  <TableCell>No.</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>Time Created</TableCell>
-                  <TableCell>Rating</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableCell>STT.</TableCell>
+                  <TableCell>Tên</TableCell>
+                  <TableCell>Địa chỉ</TableCell>
+                  <TableCell>Thời gian tạo</TableCell>
+                  <TableCell>Đánh giá</TableCell>
+                  <TableCell>Hành động</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -206,12 +206,12 @@ const ApartManagement: React.FC = () => {
             <Table sx={{ minWidth: 650 }} aria-label="table">
               <TableHead>
                 <TableRow>
-                  <TableCell>No.</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Address</TableCell>
-                  <TableCell>Time Created</TableCell>
-                  <TableCell>Rating</TableCell>
-                  <TableCell>Action</TableCell>
+                  <TableCell>STT.</TableCell>
+                  <TableCell>Tên</TableCell>
+                  <TableCell>Địa chỉ</TableCell>
+                  <TableCell>Thời gian tạo</TableCell>
+                  <TableCell>Đánh giá</TableCell>
+                  <TableCell>Hành động</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>

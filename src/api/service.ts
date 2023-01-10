@@ -27,16 +27,26 @@ export const createPost = (data: any, token: string) => {
   myHeaders.append('Authorization', `Bearer ${token}`);
   // let formData = new FormData()
   let formData = new FormData();
-  formData.append('file', data.image[0], data.image[0].name);
+  formData.append('file', data.file[0], "Ảnh 1");
+  formData.append('file', data.file[1], "Ảnh 2");
+  formData.append('file', data.file[2], "Ảnh 3");
+  formData.append('file', data.file[3], "Ảnh 4");
   formData.append('title', data.title);
   formData.append('address', data.address);
   formData.append('price', data.price);
   formData.append('detail', data.detail);
   formData.append('area', data.area);
+  formData.append("district", "Hai Ba Trung");
+  formData.append("university", "HUST");
+  formData.append("room_count", "4");
 
   let requestOptions: RequestInit = {
     method: 'POST',
-    headers: myHeaders,
+    headers: {
+      ...myHeaders,
+      'Access-Control-Allow-Origin':'*',
+      'Content-Type': 'multipart/form-data'
+    },
     body: formData,
     redirect: 'follow',
   };

@@ -1,32 +1,40 @@
-import React, { useEffect } from 'react';
+import React, {useEffect} from 'react';
 import styles from './PostApartPage.module.css';
 import AppText from '../../components/AppText/AppText';
-import { Button, colors } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import { createPost } from '../../api/service';
-import { AccessToken } from '../../api/AccessToken';
+import {Button} from '@mui/material';
+import {useForm} from 'react-hook-form';
+import {createPost} from '../../api/service';
+import {AccessToken} from '../../api/AccessToken';
 import useAuth from '../../hook/useAuth';
-import { useNavigate } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import usePost from '../../hook/usePost';
-import { showErrorToast, showSuccessToast } from '../../components/Toast/Toast';
+import {showErrorToast, showSuccessToast} from '../../components/Toast/Toast';
 
 const PostApartPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: {errors},
   } = useForm();
   const auth = useAuth();
   const user = auth.user;
   const navigate = useNavigate();
-  const { savePost } = usePost();
+  const {savePost} = usePost();
 
   useEffect(() => {
     AccessToken.value = user?.token!;
   }, []);
 
   const submitPost = (data: any) => {
-    createPost(data, AccessToken.value!)
+    console.log("HTD", data)
+    const newData = {
+      ...data,
+      file: [data.image[0], data.CMND[0], data.imgApart[0], data["land-use"][0]],
+    }
+
+    console.log("NEW DATA", newData)
+
+    createPost(newData, AccessToken.value!)
       .then((res) => {
         console.log(res);
         savePost(res);
@@ -144,14 +152,14 @@ const PostApartPage: React.FC = () => {
             </AppText>
           )}
         </div>
-        <img src="" alt="" />
+        <img src="" alt=""/>
         <div>
           <label htmlFor="detail">
             Mô tả <span>*</span>
           </label>
           <textarea
             className={styles.textArea}
-            {...register('detail', { required: true, minLength: 8 })}
+            {...register('detail', {required: true, minLength: 8})}
             name={'detail'}
           />
           {errors.detail?.type === 'required' && (
@@ -169,7 +177,10 @@ const PostApartPage: React.FC = () => {
           <label htmlFor="CMND">
             Chứng minh nhân dân <span>*</span>
           </label>
-          <input className={styles.inputImage} name="CMND" type="file" />
+          <input
+            {...register('CMND', {
+              required: true,
+            })} className={styles.inputImage} name="CMND" type="file"/>
           {/* {errors.image?.type === 'required' && (
                 <AppText className={styles.errorText} role="alert">
                   Image is required
@@ -180,7 +191,11 @@ const PostApartPage: React.FC = () => {
           <label htmlFor="img-apart-">
             Ảnh chụp mặt tiền căn nhà, kèm biển địa chỉ <span>*</span>
           </label>
-          <input className={styles.inputImage} name="img-apart" type="file" />
+          <input
+            {...register('imgApart', {
+              required: true,
+            })}
+            className={styles.inputImage} name="imgApart" type="file"/>
           {/* {errors.image?.type === 'required' && (
                 <AppText className={styles.errorText} role="alert">
                   Image is required
@@ -191,7 +206,11 @@ const PostApartPage: React.FC = () => {
           <label htmlFor="land-use">
             Giấy sở hữu nhà đất <span>*</span>
           </label>
-          <input className={styles.inputImage} name="land-use" type="file" />
+          <input
+            {...register("land-use", {
+              required: true,
+            })}
+            className={styles.inputImage} name="land-use" type="file"/>
           {/* {errors.image?.type === 'required' && (
                 <AppText className={styles.errorText} role="alert">
                   Image is required
