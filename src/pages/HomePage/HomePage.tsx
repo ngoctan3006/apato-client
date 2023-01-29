@@ -17,6 +17,24 @@ import { ApartModel } from '../../model/ApartModel';
 import { Input } from '../LoginPage/styled';
 import FilterMenu from '../../components/FilterMenu/FilterMenu';
 
+export interface TagData {
+  id: number;
+  label: string;
+}
+
+const tagsList = [
+  { id: 1, label: 'Tiện nghi' },
+  { id: 2, label: 'Giá rẻ' },
+  { id: 3, label: 'Tối giản' },
+  { id: 4, label: 'Cho phép thú nuôi' },
+  { id: 5, label: 'Yên Tĩnh' },
+  { id: 6, label: 'Có nơi để xe' },
+  { id: 7, label: 'Hiện đại' },
+  { id: 8, label: 'Phòng mới' },
+  { id: 9, label: 'Phòng nhiều người' },
+  { id: 10, label: 'Phòng đơn' },
+];
+
 const HomePage: React.FC = () => {
   const [searchKey, setSearchKey] = useState<string | null>(null);
   const [priceStart, setPriceStart] = useState<string | null>(null);
@@ -27,6 +45,8 @@ const HomePage: React.FC = () => {
   const [apartList, setApartList] = useState<ApartModel[]>([]);
   const [university, setUniversity] = useState<string | null>(null);
   const [page, setPage] = React.useState<number>(1);
+  const [tags, setTags] = React.useState<TagData[]>(tagsList);
+  const [selectedTags, setSelectedTags] = React.useState<TagData[]>([]);
   const { setLoading, loading, error, setError } = useScreenState();
   const handleChangePagination = (
     event: React.ChangeEvent<unknown>,
@@ -48,18 +68,10 @@ const HomePage: React.FC = () => {
         university: university,
         pageIndex: 1,
         pageSize: 10,
+        tags: selectedTags.map((item) => item.id.toString()),
       });
       if (res.status === 201) {
         console.log(res.data);
-        // const newApartList = res.data.map((item) => {
-        //   const newImage = item.image.map((_imageLink) => {
-        //     return _imageLink;
-        //   });
-        //   return {
-        //     ...item,
-        //     image: [...newImage],
-        //   };
-        // });
         setApartList(res.data);
       }
     } catch (e: any) {
@@ -75,6 +87,7 @@ const HomePage: React.FC = () => {
 
   const searchApart = async () => {
     try {
+      // setLoading(true);
       const res = await loadAllPost({
         searchValue: searchKey,
         priceStart: Number(priceStart),
@@ -88,20 +101,12 @@ const HomePage: React.FC = () => {
       });
 
       if (res.status === 201) {
-        // const newApartList = res.data.map((item) => {
-        //   const newImage = item.image.map((_imageLink) => {
-        //     return _imageLink;
-        //   });
-        //   return {
-        //     ...item,
-        //     image: [...newImage],
-        //   };
-        // });
         setApartList(res.data);
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message);
     } finally {
+      // setLoading(false);
     }
   };
 
@@ -150,6 +155,10 @@ const HomePage: React.FC = () => {
             university={university}
             setUniversity={setUniversity}
             filterHandler={filterHandler}
+            tags={tags}
+            setTags={setTags}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
           />
         </Grid>
 

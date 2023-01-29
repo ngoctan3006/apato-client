@@ -13,12 +13,8 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import React from 'react';
-
-export interface TagData {
-  id: number;
-  label: string;
-}
+import React, { Dispatch, SetStateAction } from 'react';
+import { TagData } from '../../pages/HomePage/HomePage';
 
 const DistrictList = [
   { value: 'all', label: 'Tất cả' },
@@ -30,19 +26,6 @@ const UniversityList = [
   { value: 'all', label: 'Tất cả' },
   { value: 'HUST', label: 'Đại học Bách khoa Hà Nội' },
   { value: 'VNU', label: 'Đại học Quốc Gia Hà Nội' },
-];
-
-const tagsList = [
-  { id: 1, label: 'Tiện nghi' },
-  { id: 2, label: 'Giá rẻ' },
-  { id: 3, label: 'Tối giản' },
-  { id: 4, label: 'Cho phép thú nuôi' },
-  { id: 5, label: 'Yên Tĩnh' },
-  { id: 6, label: 'Có nơi để xe' },
-  { id: 7, label: 'Hiện đại' },
-  { id: 8, label: 'Phòng mới' },
-  { id: 9, label: 'Phòng nhiều người' },
-  { id: 10, label: 'Phòng đơn' },
 ];
 
 export const Input = styled(TextField)({
@@ -76,20 +59,23 @@ interface FilterMenuProps {
   university: string | null;
   setUniversity: (university: string) => void;
   filterHandler: () => Promise<void>;
+  tags: TagData[];
+  setTags: Dispatch<SetStateAction<TagData[]>>;
+  selectedTags: TagData[];
+  setSelectedTags: Dispatch<SetStateAction<TagData[]>>;
 }
 
 const FilterMenu: React.FC<FilterMenuProps> = (props) => {
-  const [tags, setTags] = React.useState<TagData[]>(tagsList);
-  const [selectedTags, setSelectedTags] = React.useState<TagData[]>([]);
-
   const handleAdd = (tag: TagData) => () => {
-    setSelectedTags((tags) => [...tags, tag]);
-    setTags((tags) => tags.filter((t) => t.id !== tag.id));
+    props.setSelectedTags((prev: TagData[]) => [...prev, tag]);
+    props.setTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
   };
 
   const handleDelete = (tag: TagData) => () => {
-    setSelectedTags((tags) => tags.filter((t) => t.id !== tag.id));
-    setTags((tags) => [...tags, tag]);
+    props.setSelectedTags((tags: TagData[]) =>
+      tags.filter((t) => t.id !== tag.id)
+    );
+    props.setTags((prev: TagData[]) => [...prev, tag]);
   };
 
   return (
@@ -258,7 +244,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
         </Typography>
         <Paper
           sx={{
-            display: selectedTags.length ? 'flex' : 'none',
+            display: props.selectedTags.length ? 'flex' : 'none',
             justifyContent: 'center',
             flexWrap: 'wrap',
             listStyle: 'none',
@@ -268,7 +254,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           }}
           component="ul"
         >
-          {selectedTags.map((tag) => {
+          {props.selectedTags.map((tag) => {
             return (
               <ListItem key={tag.id}>
                 <Chip
@@ -283,7 +269,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           })}
         </Paper>
         <Stack direction="row" flexWrap="wrap" mt={1}>
-          {tags.map((tag) => (
+          {props.tags.map((tag) => (
             <Button
               onClick={handleAdd(tag)}
               key={tag.id}

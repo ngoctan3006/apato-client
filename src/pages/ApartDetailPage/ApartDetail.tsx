@@ -18,8 +18,7 @@ import './apart-detail.css';
 import { Star } from '@mui/icons-material';
 import { deepPurple, yellow } from '@mui/material/colors';
 import { Input } from '../LoginPage/styled';
-import { useNavigate, useParams } from 'react-router-dom';
-import useAuth from '../../hook/useAuth';
+import { useParams } from 'react-router-dom';
 import { ApartDetailModel } from '../../model/ApartDetailModel';
 import useScreenState from '../../hook/useScreenState';
 import { getApartDetail } from '../../api/service';
@@ -28,15 +27,10 @@ import AppLoading from '../../components/AppLoading/AppLoading';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
-  const navigate = useNavigate();
-  const auth = useAuth();
-  const user = auth.user;
   const [apartDetail, setApartDetail] = useState<ApartDetailModel>();
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number | null | undefined>(null);
   const [needRefresh, setNeedRefresh] = useState(false);
-  const [canEdit, setCanEdit] = useState(false);
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const { setLoading, loading, error, setError } = useScreenState();
 
   const loadApartDetailPageData = async () => {
@@ -52,9 +46,6 @@ const ApartDetail: React.FC = () => {
           ...res.data,
           image: [...newImageData],
         });
-        if (res.data?.creator?.email === user?.email) {
-          setCanEdit(true);
-        }
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message);
@@ -119,7 +110,7 @@ const ApartDetail: React.FC = () => {
 
                 <Stack mt={3} direction="row" justifyContent="space-between">
                   <Typography variant="h6" component="div">
-                    Gía
+                    Giá
                   </Typography>
                   <Typography variant="h6" component="div">
                     {numberWithCommas(Number(apartDetail?.price))} VND
@@ -168,28 +159,19 @@ const ApartDetail: React.FC = () => {
           </Box>
 
           <Box mt={3}>
-            <Stack
-              direction="row"
-              spacing={2}
-              sx={{
-                width: '70rem',
-              }}
-            >
+            <Stack direction="row" spacing={2}>
               <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
                 {apartDetail?.creator?.name[0]}
               </Avatar>
               <Box flexGrow={1}>
                 <Input
                   size="small"
-<<<<<<< HEAD
                   fullWidth
                   label="Đánh giá"
-=======
-                  // fullWidth
-                  label="Comment"
->>>>>>> master
                   multiline
                   maxRows={3}
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
                 />
                 <Rating readOnly />
               </Box>
@@ -348,7 +330,7 @@ const ApartDetail: React.FC = () => {
                 Email
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
-                {apartDetail?.creator?.email || 'No information'}
+                {apartDetail?.creator?.email || 'Không có'}
               </Typography>
             </Stack>
             <Stack
@@ -360,7 +342,7 @@ const ApartDetail: React.FC = () => {
                 SĐT
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
-                {apartDetail?.creator?.phone || 'No information'}
+                {apartDetail?.creator?.phone || 'Không có'}
               </Typography>
             </Stack>
           </Stack>
