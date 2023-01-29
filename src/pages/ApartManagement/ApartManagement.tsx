@@ -59,7 +59,7 @@ function a11yProps(index: number) {
 }
 
 const ApartManagement: React.FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(0);
   const navigate = useNavigate();
   const { setLoading, loading, error, setError } = useScreenState();
   const [apartList, setApartList] = useState<ApartModel[]>([]);
@@ -129,7 +129,7 @@ const ApartManagement: React.FC = () => {
                 fontWeight: 600,
                 fontSize: 16,
               }}
-              label="Phòng đã đăng"
+              label="Đang duyệt"
               {...a11yProps(1)}
             />
             <Tab
@@ -138,13 +138,13 @@ const ApartManagement: React.FC = () => {
                 fontWeight: 600,
                 fontSize: 16,
               }}
-              label="Đang duyệt"
+              label="Phòng đã đăng"
               {...a11yProps(0)}
             />
           </Tabs>
         </Stack>
 
-        <TabPanel value={value} index={1}>
+        <TabPanel value={value} index={0}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="table">
               <TableHead>
@@ -201,7 +201,7 @@ const ApartManagement: React.FC = () => {
             </Table>
           </TableContainer>
         </TabPanel>
-        <TabPanel value={value} index={0}>
+        <TabPanel value={value} index={1}>
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 650 }} aria-label="table">
               <TableHead>

@@ -110,7 +110,7 @@ const ApartDetail: React.FC = () => {
               <Grid item xs={4}>
                 <Stack direction="row" justifyContent="space-between">
                   <Typography variant="h6" component="div">
-                    Area
+                    Diện tích
                   </Typography>
                   <Typography variant="h6" component="div">
                     {apartDetail?.area} m2
@@ -119,7 +119,7 @@ const ApartDetail: React.FC = () => {
 
                 <Stack mt={3} direction="row" justifyContent="space-between">
                   <Typography variant="h6" component="div">
-                    Price
+                    Gía
                   </Typography>
                   <Typography variant="h6" component="div">
                     {numberWithCommas(Number(apartDetail?.price))} VND
@@ -128,7 +128,7 @@ const ApartDetail: React.FC = () => {
 
                 <Stack mt={3} direction="row" justifyContent="space-between">
                   <Typography variant="h6" component="div">
-                    Address
+                    Địa chỉ
                   </Typography>
                   <Typography variant="h6" component="div">
                     {apartDetail?.address}
@@ -159,7 +159,7 @@ const ApartDetail: React.FC = () => {
 
             <Box mt={3}>
               <Typography variant="h6" component="div">
-                Description
+                Mô tả
               </Typography>
               <Typography variant="body1" component="div">
                 {apartDetail?.detail}
@@ -168,7 +168,13 @@ const ApartDetail: React.FC = () => {
           </Box>
 
           <Box mt={3}>
-            <Stack direction="row" spacing={2}>
+            <Stack
+              direction="row"
+              spacing={2}
+              sx={{
+                width: '70rem',
+              }}
+            >
               <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
                 {apartDetail?.creator?.name[0]}
               </Avatar>
@@ -176,7 +182,7 @@ const ApartDetail: React.FC = () => {
                 <Input
                   size="small"
                   fullWidth
-                  label="Comment"
+                  label="Đánh giá"
                   multiline
                   maxRows={3}
                 />
@@ -193,7 +199,7 @@ const ApartDetail: React.FC = () => {
                   variant="h6"
                   component="div"
                 >
-                  Comment
+                  Đánh giá
                 </Typography>
                 <Typography
                   p={1}
@@ -318,7 +324,7 @@ const ApartDetail: React.FC = () => {
             }}
           >
             <Typography textAlign="center" variant="h6" component="div">
-              Landlord
+              Chủ nhà
             </Typography>
             <Stack alignItems="center">
               <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
@@ -346,7 +352,7 @@ const ApartDetail: React.FC = () => {
               justifyContent="space-between"
             >
               <Typography fontSize={14} variant="h6" component="div">
-                Phone
+                SĐT
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
                 {apartDetail?.creator?.phone || 'No information'}

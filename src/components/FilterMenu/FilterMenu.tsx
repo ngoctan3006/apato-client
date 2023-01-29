@@ -21,15 +21,15 @@ export interface TagData {
 }
 
 const DistrictList = [
-  { value: 'all', label: 'All' },
-  { value: 'CG', label: 'Cầu Giấy' },
-  { value: 'HBT', label: 'Hai Bà Trưng' },
+  { value: 'all', label: 'Tất cả' },
+  { value: 'Cau Giay', label: 'Cầu Giấy' },
+  { value: 'Hai Ba Trung', label: 'Hai Bà Trưng' },
 ];
 
 const UniversityList = [
-  { value: 'all', label: 'All' },
-  { value: 'HUST', label: 'Hanoi University of Science and Technology' },
-  { value: 'VNUH', label: 'Vietnam National University - Hanoi' },
+  { value: 'all', label: 'Tất cả' },
+  { value: 'HUST', label: 'Đại học Bách khoa Hà Nội' },
+  { value: 'VNU', label: 'Đại học Quốc Gia Hà Nội' },
 ];
 
 const tagsList = [
@@ -64,13 +64,17 @@ export const Input = styled(TextField)({
 
 interface FilterMenuProps {
   priceStart: string | null;
-  priceEnd: string |null;
-  setPriceStart: (priceStart: string|null) => void;
-  setPriceEnd: (priceEnd: string|null) => void;
-  areaStart: string|null;
-  setAreaStart: (areaStart: string|null) => void;
-  areaEnd: string|null;
-  setAreaEnd: (areaEnd: string|null) => void;
+  priceEnd: string | null;
+  setPriceStart: (priceStart: string | null) => void;
+  setPriceEnd: (priceEnd: string | null) => void;
+  areaStart: string | null;
+  setAreaStart: (areaStart: string | null) => void;
+  areaEnd: string | null;
+  setAreaEnd: (areaEnd: string | null) => void;
+  district: string | null;
+  setDistrict: (district: string) => void;
+  university: string | null;
+  setUniversity: (university: string) => void;
   filterHandler: () => Promise<void>;
 }
 
@@ -200,7 +204,14 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
         <Typography fontSize={14} variant="h6" fontWeight={400}>
           Quận
         </Typography>
-        <Input fullWidth select size="small" defaultValue="all">
+        <Input
+          fullWidth
+          select
+          size="small"
+          defaultValue="all"
+          value={props.district}
+          onChange={(e) => props.setDistrict(e.target.value)}
+        >
           {DistrictList.map((district) => (
             <MenuItem
               key={district.value}
@@ -219,7 +230,14 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
         <Typography fontSize={14} variant="h6">
           Trường học
         </Typography>
-        <Input fullWidth select size="small" defaultValue="all">
+        <Input
+          fullWidth
+          select
+          size="small"
+          defaultValue="all"
+          value={props.university}
+          onChange={(e) => props.setUniversity(e.target.value)}
+        >
           {UniversityList.map((university) => (
             <MenuItem
               key={university.value}

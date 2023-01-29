@@ -25,6 +25,7 @@ const HomePage: React.FC = () => {
   const [areaEnd, setAreaEnd] = useState<string | null>(null);
   const [district, setDistrict] = useState<string | null>(null);
   const [apartList, setApartList] = useState<ApartModel[]>([]);
+  const [university, setUniversity] = useState<string | null>(null);
   const [page, setPage] = React.useState<number>(1);
   const { setLoading, loading, error, setError } = useScreenState();
   const handleChangePagination = (
@@ -44,11 +45,12 @@ const HomePage: React.FC = () => {
         areaStart: Number(areaStart),
         areaEnd: Number(areaEnd),
         district: district,
+        university: university,
         pageIndex: 1,
-        pageSize: 10
+        pageSize: 10,
       });
       if (res.status === 201) {
-        console.log(res.data)
+        console.log(res.data);
         // const newApartList = res.data.map((item) => {
         //   const newImage = item.image.map((_imageLink) => {
         //     return _imageLink;
@@ -80,8 +82,9 @@ const HomePage: React.FC = () => {
         areaStart: Number(areaStart),
         areaEnd: Number(areaEnd),
         district: district,
+        university: university,
         pageIndex: 1,
-        pageSize: 10
+        pageSize: 10,
       });
 
       if (res.status === 201) {
@@ -108,7 +111,8 @@ const HomePage: React.FC = () => {
     setAreaStart(null);
     setPriceStart(null);
     setPriceEnd(null);
-    setDistrict(null)
+    setDistrict(null);
+    setUniversity(null);
   };
 
   useEffect(() => {
@@ -141,6 +145,10 @@ const HomePage: React.FC = () => {
             setAreaStart={setAreaStart}
             areaEnd={areaEnd}
             setAreaEnd={setAreaEnd}
+            district={district}
+            setDistrict={setDistrict}
+            university={university}
+            setUniversity={setUniversity}
             filterHandler={filterHandler}
           />
         </Grid>
@@ -167,7 +175,7 @@ const HomePage: React.FC = () => {
 
           <Stack mt={5} justifyContent="center" alignItems="flex-end">
             <Pagination
-              count={10}
+              count={1}
               page={page}
               onChange={handleChangePagination}
               color="secondary"
