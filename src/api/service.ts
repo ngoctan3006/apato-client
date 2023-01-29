@@ -25,6 +25,8 @@ export const updateProfile = (data: any, token: string) => {
 export const createPost = (data: any, token: string) => {
   let myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${token}`);
+  myHeaders.append('Access-Control-Allow-Origin', '*');
+  myHeaders.append('Content-Type', 'multipart/form-data');
   // let formData = new FormData()
   let formData = new FormData();
   formData.append('file', data.file[0], "Ảnh 1");
@@ -42,11 +44,7 @@ export const createPost = (data: any, token: string) => {
 
   let requestOptions: RequestInit = {
     method: 'POST',
-    headers: {
-      ...myHeaders,
-      'Access-Control-Allow-Origin':'*',
-      'Content-Type': 'multipart/form-data'
-    },
+    headers: myHeaders,
     body: formData,
     redirect: 'follow',
   };

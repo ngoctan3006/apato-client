@@ -181,12 +181,17 @@ const ApartDetail: React.FC = () => {
               <Box flexGrow={1}>
                 <Input
                   size="small"
+<<<<<<< HEAD
                   fullWidth
                   label="Đánh giá"
+=======
+                  // fullWidth
+                  label="Comment"
+>>>>>>> master
                   multiline
                   maxRows={3}
                 />
-                <Rating sx={{ mt: '10px' }} />
+                <Rating readOnly />
               </Box>
             </Stack>
 

@@ -65,16 +65,16 @@ const ProfilePage = () => {
       setLoading(true)
       const res = await loadAllPost({})
       if (res.status === 201) {
-        const newApartList = res.data.map((item) => {
-          const newImage = item.image.map((_imageLink) => {
-            return ("http://" + _imageLink)
-          })
-          return {
-            ...item,
-            image: [...newImage]
-          }
-        })
-        setDataList(newApartList)
+        // const newApartList = res.data.map((item) => {
+        //   const newImage = item.image.map((_imageLink) => {
+        //     return ("http://" + _imageLink)
+        //   })
+        //   return {
+        //     ...item,
+        //     image: [...newImage]
+        //   }
+        // })
+        setDataList(res.data)
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message)
