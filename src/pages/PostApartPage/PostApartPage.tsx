@@ -1,40 +1,39 @@
-import React, {useEffect} from 'react';
-import styles from './PostApartPage.module.css';
+import { Button } from '@mui/material';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { createPost } from '../../api/service';
 import AppText from '../../components/AppText/AppText';
-import {Button} from '@mui/material';
-import {useForm} from 'react-hook-form';
-import {createPost} from '../../api/service';
-import {AccessToken} from '../../api/AccessToken';
-import useAuth from '../../hook/useAuth';
-import {useNavigate} from 'react-router-dom';
+import { showErrorToast, showSuccessToast } from '../../components/Toast/Toast';
 import usePost from '../../hook/usePost';
-import {showErrorToast, showSuccessToast} from '../../components/Toast/Toast';
+import styles from './PostApartPage.module.css';
 
 const PostApartPage: React.FC = () => {
   const {
     register,
     handleSubmit,
-    formState: {errors},
+    formState: { errors },
   } = useForm();
-  const auth = useAuth();
-  const user = auth.user;
   const navigate = useNavigate();
-  const {savePost} = usePost();
+  const { savePost } = usePost();
 
-  useEffect(() => {
-    AccessToken.value = user?.token!;
-  }, []);
+  const token = localStorage.getItem('accessToken');
 
   const submitPost = (data: any) => {
-    console.log("HTD", data)
+    console.log('HTD', data);
     const newData = {
       ...data,
-      file: [data.image[0], data.CMND[0], data.imgApart[0], data["land-use"][0]],
-    }
+      file: [
+        data.image[0],
+        data.CMND[0],
+        data.imgApart[0],
+        data['land-use'][0],
+      ],
+    };
 
-    console.log("NEW DATA", newData)
+    console.log('NEW DATA', newData);
 
-    createPost(newData, AccessToken.value!)
+    createPost(newData, token!)
       .then((res) => {
         console.log(res);
         savePost(res);
@@ -152,14 +151,14 @@ const PostApartPage: React.FC = () => {
             </AppText>
           )}
         </div>
-        <img src="" alt=""/>
+        <img src="" alt="" />
         <div>
           <label htmlFor="detail">
             Mô tả <span>*</span>
           </label>
           <textarea
             className={styles.textArea}
-            {...register('detail', {required: true, minLength: 8})}
+            {...register('detail', { required: true, minLength: 8 })}
             name={'detail'}
           />
           {errors.detail?.type === 'required' && (
@@ -180,7 +179,11 @@ const PostApartPage: React.FC = () => {
           <input
             {...register('CMND', {
               required: true,
-            })} className={styles.inputImage} name="CMND" type="file"/>
+            })}
+            className={styles.inputImage}
+            name="CMND"
+            type="file"
+          />
           {/* {errors.image?.type === 'required' && (
                 <AppText className={styles.errorText} role="alert">
                   Image is required
@@ -195,7 +198,10 @@ const PostApartPage: React.FC = () => {
             {...register('imgApart', {
               required: true,
             })}
-            className={styles.inputImage} name="imgApart" type="file"/>
+            className={styles.inputImage}
+            name="imgApart"
+            type="file"
+          />
           {/* {errors.image?.type === 'required' && (
                 <AppText className={styles.errorText} role="alert">
                   Image is required
@@ -207,10 +213,13 @@ const PostApartPage: React.FC = () => {
             Giấy sở hữu nhà đất <span>*</span>
           </label>
           <input
-            {...register("land-use", {
+            {...register('land-use', {
               required: true,
             })}
-            className={styles.inputImage} name="land-use" type="file"/>
+            className={styles.inputImage}
+            name="land-use"
+            type="file"
+          />
           {/* {errors.image?.type === 'required' && (
                 <AppText className={styles.errorText} role="alert">
                   Image is required

@@ -21,12 +21,14 @@ import {
 } from '@mui/material';
 import { deepPurple } from '@mui/material/colors';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/imgs/logo.png';
-import useAuth from '../../hook/useAuth';
+import { selectUser, signOut } from '../../redux/slices/authSlice';
 
 const Header: React.FC = () => {
-  const { user, signOut } = useAuth();
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
@@ -240,7 +242,12 @@ const Header: React.FC = () => {
                     </>
                   )}
 
-                  <MenuItem onClick={() => signOut()}>
+                  <MenuItem
+                    onClick={() => {
+                      localStorage.removeItem('accessToken');
+                      dispatch(signOut());
+                    }}
+                  >
                     <ListItemIcon>
                       <Logout />
                     </ListItemIcon>

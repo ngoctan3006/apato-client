@@ -1,30 +1,31 @@
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import React, { useEffect, useState } from 'react';
-import styles from './AdminPage.module.css';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../../hook/useAuth';
-import { ApartModel } from '../../model/ApartModel';
+import { toast } from 'react-toastify';
 import {
   deletePostAPI,
   getAllReport,
   getAllUsersAPI,
   loadAllPost,
 } from '../../api/service';
-import AppText from '../../components/AppText/AppText';
-import AdminPageItem from './components/AdminPageItem/AdminPageItem';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CommentItem from './components/CommentItem/CommentItem';
-import useScreenState from '../../hook/useScreenState';
 import AppLoading from '../../components/AppLoading/AppLoading';
-import { toast } from 'react-toastify';
+import AppText from '../../components/AppText/AppText';
 import { showErrorToast } from '../../components/Toast/Toast';
+import useScreenState from '../../hook/useScreenState';
+import { ApartModel } from '../../model/ApartModel';
 import UserModel from '../../model/UserModel';
+import { selectUser } from '../../redux/slices/authSlice';
+import styles from './AdminPage.module.css';
+import AdminPageItem from './components/AdminPageItem/AdminPageItem';
+import CommentItem from './components/CommentItem/CommentItem';
 import UserCard from './components/UserCard/UserCard';
 
 const AdminPage: React.FC = () => {
   const navigate = useNavigate();
-  const auth = useAuth();
-  const user = auth.user;
+  const user = useSelector(selectUser);
+  const token = localStorage.getItem('accessToken');
 
   const [searchKey, setSearchKey] = useState('');
   // const [priceStart, setPriceStart] = useState("")
@@ -49,7 +50,6 @@ const AdminPage: React.FC = () => {
   const fetchAllReports = async () => {
     try {
       setLoading(true);
-      const token = user?.token;
       const res = await getAllReport(token!);
       if (res.status === 200) {
         setReports(res.data);
@@ -64,7 +64,7 @@ const AdminPage: React.FC = () => {
   const getAllUsers = async () => {
     try {
       setLoading(true);
-      const res = await getAllUsersAPI({ searchValue: '' }, user?.token!);
+      const res = await getAllUsersAPI({ searchValue: '' }, token!);
       if (res.status === 201) {
         // console.log(res)
         setUsersList(res.data);
@@ -117,8 +117,7 @@ const AdminPage: React.FC = () => {
 
   const deletePost = async (postId: string) => {
     try {
-      console.log(user?.token);
-      const res = await deletePostAPI(postId, user?.token!);
+      const res = await deletePostAPI(postId, token!);
       console.log(res);
       if (res.status === 200) {
         console.log('Deleted successfully');

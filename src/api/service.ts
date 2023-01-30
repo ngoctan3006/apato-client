@@ -1,21 +1,19 @@
-import apiClient from './client';
-import { ApartModel } from '../model/ApartModel';
+import { axiosInstance } from './axios';
 import { ApartDetailModel } from '../model/ApartDetailModel';
-import { AppConfig } from './AppConfig';
 
 export const signUpAPI = (data: any) => {
-  return apiClient.post('auth/register', data);
+  return axiosInstance.post('auth/register', data);
 };
 
 export const logInAPI = (email: string, password: string) => {
-  return apiClient.post('auth/login', {
+  return axiosInstance.post('auth/login', {
     email: email,
     password: password,
   });
 };
 
 export const updateProfile = (data: any, token: string) => {
-  return apiClient.post('user/update', data, {
+  return axiosInstance.post('user/update', data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -29,18 +27,18 @@ export const createPost = (data: any, token: string) => {
   myHeaders.append('Content-Type', 'multipart/form-data');
   // let formData = new FormData()
   let formData = new FormData();
-  formData.append('file', data.file[0], "Ảnh 1");
-  formData.append('file', data.file[1], "Ảnh 2");
-  formData.append('file', data.file[2], "Ảnh 3");
-  formData.append('file', data.file[3], "Ảnh 4");
+  formData.append('file', data.file[0], 'Ảnh 1');
+  formData.append('file', data.file[1], 'Ảnh 2');
+  formData.append('file', data.file[2], 'Ảnh 3');
+  formData.append('file', data.file[3], 'Ảnh 4');
   formData.append('title', data.title);
   formData.append('address', data.address);
   formData.append('price', data.price);
   formData.append('detail', data.detail);
   formData.append('area', data.area);
-  formData.append("district", "Hai Ba Trung");
-  formData.append("university", "HUST");
-  formData.append("room_count", "4");
+  formData.append('district', 'Hai Ba Trung');
+  formData.append('university', 'HUST');
+  formData.append('room_count', '4');
 
   let requestOptions: RequestInit = {
     method: 'POST',
@@ -49,7 +47,7 @@ export const createPost = (data: any, token: string) => {
     redirect: 'follow',
   };
 
-  return fetch(`${AppConfig.baseURL}posts/`, requestOptions)
+  return fetch(`https://apato-server.herokuapp.com/posts/`, requestOptions)
     .then((response) => response.json())
     .catch((error) => console.log('error', error));
 };
@@ -72,13 +70,16 @@ export const editPost = (postId: string, data: any, token: string) => {
     redirect: 'follow',
   };
 
-  return fetch(`${AppConfig.baseURL}posts/${postId}`, requestOptions)
+  return fetch(
+    `https://apato-server.herokuapp.com/posts/${postId}`,
+    requestOptions
+  )
     .then((response) => response.json())
     .catch((error) => console.log('error', error));
 };
 
 export const deletePostAPI = (postId: string, token: string) => {
-  return apiClient.delete(`posts/${postId}`, {
+  return axiosInstance.delete(`posts/${postId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -86,11 +87,11 @@ export const deletePostAPI = (postId: string, token: string) => {
 };
 
 export const loadAllPost = (data: any) => {
-  return apiClient.post<any[]>('posts/all', data);
+  return axiosInstance.post<any[]>('posts/all', data);
 };
 
 export const loadAllPostByUser = (data: any, token: string, status: number) => {
-  return apiClient.post<any[]>(`posts/get-my-posts/${status}`, data, {
+  return axiosInstance.post<any[]>(`posts/get-my-posts/${status}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -98,11 +99,11 @@ export const loadAllPostByUser = (data: any, token: string, status: number) => {
 };
 
 export const getApartDetail = (apatoId: number) => {
-  return apiClient.get<ApartDetailModel>(`posts/${apatoId.toString()}`);
+  return axiosInstance.get<ApartDetailModel>(`posts/${apatoId.toString()}`);
 };
 
 export const postReviewApart = (apatoId: string, data: any, token: string) => {
-  return apiClient.post(`posts/comment/${apatoId}`, data, {
+  return axiosInstance.post(`posts/comment/${apatoId}`, data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -110,7 +111,7 @@ export const postReviewApart = (apatoId: string, data: any, token: string) => {
 };
 
 export const getAllReport = (token: string) => {
-  return apiClient.get('report', {
+  return axiosInstance.get('report', {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -118,7 +119,7 @@ export const getAllReport = (token: string) => {
 };
 
 export const getReportDetail = (reportId: string, token: string) => {
-  return apiClient.get(`report/${reportId}`, {
+  return axiosInstance.get(`report/${reportId}`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -126,7 +127,7 @@ export const getReportDetail = (reportId: string, token: string) => {
 };
 
 export const reportCommentAPI = (commentId: number, token: string) => {
-  return apiClient.post(
+  return axiosInstance.post(
     `report`,
     {
       commentId: commentId,
@@ -140,7 +141,7 @@ export const reportCommentAPI = (commentId: number, token: string) => {
 };
 
 export const blockUserHandlerAPI = (userId: string, token?: string) => {
-  return apiClient.put(
+  return axiosInstance.put(
     `admin/block/${userId}`,
     {},
     {
@@ -152,7 +153,7 @@ export const blockUserHandlerAPI = (userId: string, token?: string) => {
 };
 
 export const getAllUsersAPI = (data: any, token: string) => {
-  return apiClient.post('admin/all-user', data, {
+  return axiosInstance.post('admin/all-user', data, {
     headers: {
       Authorization: `Bearer ${token}`,
     },
@@ -160,7 +161,7 @@ export const getAllUsersAPI = (data: any, token: string) => {
 };
 
 export const deleteCommentAPI = (commentId: string, token: string) => {
-  return apiClient.put(
+  return axiosInstance.put(
     `admin/delete-comment/${commentId}`,
     {},
     {

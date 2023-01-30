@@ -9,18 +9,23 @@ import {
 import { purple } from '@mui/material/colors';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { logInAPI, signUpAPI } from '../../api/service';
+import { loginAPI, signupAPI } from '../../api/auth';
 import BgLogin from '../../assets/imgs/bglogin.jpg';
 import Logo from '../../assets/imgs/logo.png';
-import useAuth from '../../hook/useAuth';
+import {
+  endLoading,
+  selectAuthLoading,
+  signIn,
+  startLoading,
+} from '../../redux/slices/authSlice';
 import { EMAIL_REGEX } from '../../utils/utils';
 import { CustomButton, Input, Label, SubmitBtn } from './styled';
 
 const Login: React.FC = () => {
-  const { signIn } = useAuth();
-  const navigate = useNavigate();
+  const loading = useSelector(selectAuthLoading);
   const {
     register,
     handleSubmit,
@@ -29,7 +34,8 @@ const Login: React.FC = () => {
   } = useForm();
   const [showPassword, setShowPassword] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -40,96 +46,45 @@ const Login: React.FC = () => {
   };
 
   const loginHandler = async (data: any) => {
+    dispatch(startLoading());
     try {
-      setIsLoading(true);
-      const res = await logInAPI(data?.email, data?.password);
-      setIsLoading(false);
-      console.log({ res });
-      const resData = res.data;
-      if (res.status === 201) {
-        signIn({
-          user: {
-            ...resData?.user_info,
-            token: resData?.access_token,
-          },
-        });
-        toast.success('Login successfully', {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+      const res = await loginAPI(data?.email, data?.password);
+      if (res) {
+        console.log(res);
+        localStorage.setItem('accessToken', res.data.access_token);
+        dispatch(signIn(res.data.user_info));
+        toast.success('Đăng nhập thành công!');
         navigate('/');
       }
-    } catch (e: any) {
-      console.log(e);
-      setIsLoading(false);
-      toast.error(e?.response?.data?.message, {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    } finally {
+      dispatch(endLoading());
     }
   };
 
   const registerHandler = async (data: any) => {
-    let role: string | undefined = undefined;
-    if (data?.seller) {
-      role = 'SELLER';
-    }
+    dispatch(startLoading());
     try {
-      setIsLoading(true);
-      const res = await signUpAPI({
+      const res = await signupAPI({
         name: data?.name,
         email: data?.email,
         password: data?.password,
-        address: data?.address,
-        phone: data?.phone,
-        role: role,
+        role: data?.seller || undefined,
       });
-      setIsLoading(false);
-      const resData = res.data;
-      if (res.status === 201) {
-        signIn({
-          user: {
-            ...resData?.user_info,
-            token: resData?.access_token,
-          },
-        });
-        toast.success('Sign up successfully', {
-          position: 'top-right',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'light',
-        });
+      if (res) {
+        console.log(res);
+        localStorage.setItem('accessToken', res.data.access_token);
+        dispatch(signIn(res.data.user_info));
+        toast.success('Đăng ký thành công!');
         navigate('/');
       }
-    } catch (e: any) {
-      console.log(e);
-      setIsLoading(false);
-      toast.error(e?.response?.data?.message, {
-        position: 'top-right',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    } finally {
+      dispatch(endLoading());
     }
   };
 
@@ -285,7 +240,7 @@ const Login: React.FC = () => {
             </>
           )}
           <SubmitBtn
-            loading={isLoading}
+            loading={loading}
             loadingIndicator="Loading..."
             type="submit"
             variant="contained"
