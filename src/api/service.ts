@@ -12,12 +12,8 @@ export const logInAPI = (email: string, password: string) => {
   });
 };
 
-export const updateProfile = (data: any, token: string) => {
-  return axiosInstance.post('user/update', data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const updateProfile = (data: any) => {
+  return axiosInstance.post('user/update', data);
 };
 
 export const createPost = (data: any, token: string) => {
@@ -78,96 +74,48 @@ export const editPost = (postId: string, data: any, token: string) => {
     .catch((error) => console.log('error', error));
 };
 
-export const deletePostAPI = (postId: string, token: string) => {
-  return axiosInstance.delete(`posts/${postId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const deletePostAPI = (postId: string) => {
+  return axiosInstance.delete(`posts/${postId}`);
 };
 
 export const loadAllPost = (data: any) => {
   return axiosInstance.post<any[]>('posts/all', data);
 };
 
-export const loadAllPostByUser = (data: any, token: string, status: number) => {
-  return axiosInstance.post<any[]>(`posts/get-my-posts/${status}`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const loadAllPostByUser = (data: any, status: number) => {
+  return axiosInstance.post<any[]>(`posts/get-my-posts/${status}`, data);
 };
 
 export const getApartDetail = (apatoId: number) => {
   return axiosInstance.get<ApartDetailModel>(`posts/${apatoId.toString()}`);
 };
 
-export const postReviewApart = (apatoId: string, data: any, token: string) => {
-  return axiosInstance.post(`posts/comment/${apatoId}`, data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const postReviewApart = (apatoId: string, data: any) => {
+  return axiosInstance.post(`posts/comment/${apatoId}`, data);
 };
 
-export const getAllReport = (token: string) => {
-  return axiosInstance.get('report', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getAllReport = () => {
+  return axiosInstance.get('report');
 };
 
-export const getReportDetail = (reportId: string, token: string) => {
-  return axiosInstance.get(`report/${reportId}`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getReportDetail = (reportId: string) => {
+  return axiosInstance.get(`report/${reportId}`);
 };
 
-export const reportCommentAPI = (commentId: number, token: string) => {
-  return axiosInstance.post(
-    `report`,
-    {
-      commentId: commentId,
-    },
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export const reportCommentAPI = (commentId: number) => {
+  return axiosInstance.post(`report`, {
+    commentId: commentId,
+  });
 };
 
 export const blockUserHandlerAPI = (userId: string, token?: string) => {
-  return axiosInstance.put(
-    `admin/block/${userId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  return axiosInstance.put(`admin/block/${userId}`, {});
 };
 
-export const getAllUsersAPI = (data: any, token: string) => {
-  return axiosInstance.post('admin/all-user', data, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
+export const getAllUsersAPI = (data: any) => {
+  return axiosInstance.post('admin/all-user', data);
 };
 
-export const deleteCommentAPI = (commentId: string, token: string) => {
-  return axiosInstance.put(
-    `admin/delete-comment/${commentId}`,
-    {},
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+export const deleteCommentAPI = (commentId: string) => {
+  return axiosInstance.put(`admin/delete-comment/${commentId}`, {});
 };

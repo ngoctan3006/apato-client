@@ -4,10 +4,11 @@ import {
 } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllUsersAPI } from '../../api/admin';
 import Title from '../../components/Title';
-import { selectUserList } from '../../redux/slices/adminSlice';
+import { selectUserList, setUsers } from '../../redux/slices/adminSlice';
 
 interface UserRoleProps {
   role: string;
@@ -22,13 +23,10 @@ const UserRole: React.FC<UserRoleProps> = (props) => {
         p: '5px',
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor: props.role === 'ADMIN' ? '#b772ff' : '#e0e0e0',
+        backgroundColor: props.role === 'SELLER' ? '#b772ff' : '#2db7f5',
         borderRadius: '4px',
       }}
     >
-      {props.role === 'ADMIN' && <AdminPanelSettingsOutlined />}
-      {props.role === 'USER' && <LockOpenOutlined />}
-
       <Typography color="#141414" sx={{ ml: '5px' }}>
         {props.role.toLowerCase()}
       </Typography>
@@ -37,8 +35,6 @@ const UserRole: React.FC<UserRoleProps> = (props) => {
 };
 
 const AdminUser: React.FC = () => {
-  const userList = useSelector(selectUserList);
-
   const columns = [
     {
       field: 'name',
@@ -60,8 +56,8 @@ const AdminUser: React.FC = () => {
       field: 'role',
       headerName: 'Role',
       flex: 1,
-      renderCell: (params: { role: string }) => {
-        return <UserRole role={params.role} />;
+      renderCell: (params: any) => {
+        return <UserRole role={params?.row?.role} />;
       },
     },
     {
@@ -73,7 +69,7 @@ const AdminUser: React.FC = () => {
       field: 'status',
       headerName: 'Trạng thái',
       flex: 1,
-      renderCell: (params: { status: boolean }) => {
+      renderCell: (params: any) => {
         return (
           <Box
             sx={{
@@ -82,18 +78,34 @@ const AdminUser: React.FC = () => {
               p: '5px',
               display: 'flex',
               justifyContent: 'center',
-              backgroundColor: params.status ? '#87d068' : '#f50',
+              backgroundColor: params?.row?.status ? '#87d068' : '#f50',
               borderRadius: '4px',
             }}
           >
             <Typography color="#141414" sx={{ ml: '5px' }}>
-              {params.status ? 'Active' : 'Blocked'}
+              {params?.row?.status ? 'Active' : 'Blocked'}
             </Typography>
           </Box>
         );
       },
     },
   ];
+  const userList = useSelector(selectUserList);
+  const dispatch = useDispatch();
+
+  const getUsers = async (data: any) => {
+    try {
+      const res = await getAllUsersAPI(data);
+      console.log(res);
+      dispatch(setUsers(res.data));
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getUsers({ searchValue: '' });
+  }, []);
 
   return (
     <Box m="20px">

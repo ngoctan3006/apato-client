@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface User {
   id: number;
@@ -21,10 +21,16 @@ const initialState = {
 export const adminSlice = createSlice({
   name: 'admin',
   initialState,
-  reducers: {},
+  reducers: {
+    setUsers: (state, action) => {
+      state.users = action.payload;
+    },
+  },
 });
 
 export const selectUserList = (state: { admin: AdminState }) =>
   state.admin.users;
+
+export const { setUsers } = adminSlice.actions;
 
 export default adminSlice.reducer;
