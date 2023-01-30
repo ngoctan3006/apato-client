@@ -12,7 +12,6 @@ import {
 } from '../../api/service';
 import AppLoading from '../../components/AppLoading/AppLoading';
 import AppText from '../../components/AppText/AppText';
-import { showErrorToast } from '../../components/Toast/Toast';
 import useScreenState from '../../hook/useScreenState';
 import { ApartModel } from '../../model/ApartModel';
 import UserModel from '../../model/UserModel';
@@ -71,7 +70,7 @@ const AdminPage: React.FC = () => {
       }
     } catch (e: any) {
       console.log(e);
-      showErrorToast(e?.response?.data?.message);
+      toast.error(e?.response?.data?.message);
     } finally {
       setLoading(false);
     }

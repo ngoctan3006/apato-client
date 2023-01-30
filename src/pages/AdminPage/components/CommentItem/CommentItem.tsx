@@ -10,10 +10,6 @@ import {
 import { deepPurple } from '@mui/material/colors';
 import { Avatar } from '@mui/material';
 import { toast } from 'react-toastify';
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '../../../../components/Toast/Toast';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -77,10 +73,10 @@ const CommentItem: React.FC<CommentItemProps> = (props) => {
     try {
       const res = await deleteCommentAPI(commentId, token!);
       if (res.status === 200) {
-        showSuccessToast('Deleted comment successfully!');
+        toast.success('Deleted comment successfully!');
       }
     } catch (e: any) {
-      showErrorToast(e?.response?.data?.message);
+      toast.error(e?.response?.data?.message);
     } finally {
     }
   };

@@ -3,6 +3,7 @@ import { Button, Modal, Rating } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import {
   deletePostAPI,
   getApartDetail,
@@ -10,7 +11,6 @@ import {
 } from '../../api/service';
 import AppLoading from '../../components/AppLoading/AppLoading';
 import AppText from '../../components/AppText/AppText';
-import { showErrorToast, showSuccessToast } from '../../components/Toast/Toast';
 import useScreenState from '../../hook/useScreenState';
 import { ApartDetailModel } from '../../model/ApartDetailModel';
 import { selectUser } from '../../redux/slices/authSlice';
@@ -76,11 +76,11 @@ const ApartDetailPage: React.FC = () => {
       );
       if (res.status === 201) {
         setNeedRefresh(!needRefresh);
-        showSuccessToast('Commented successfully!');
+        toast.success('Commented successfully!');
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message);
-      showErrorToast(e?.response?.data?.message);
+      toast.error(e?.response?.data?.message);
     } finally {
       setLoading(false);
     }
@@ -95,11 +95,11 @@ const ApartDetailPage: React.FC = () => {
       if (res.status === 200) {
         console.log('Deleted successfully');
         navigate('/');
-        showSuccessToast('Deleted successfully!');
+        toast.success('Deleted successfully!');
       }
     } catch (e: any) {
       console.log(e);
-      showErrorToast(e?.response?.data?.message);
+      toast.error(e?.response?.data?.message);
     } finally {
       setLoading(false);
     }

@@ -3,9 +3,9 @@ import React, { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { editPost } from '../../api/service';
 import AppText from '../../components/AppText/AppText';
-import { showErrorToast, showSuccessToast } from '../../components/Toast/Toast';
 import usePost from '../../hook/usePost';
 import { selectUser } from '../../redux/slices/authSlice';
 import styles from '../PostApartPage/PostApartPage.module.css';
@@ -40,12 +40,12 @@ const EditPostPage: React.FC = () => {
       .then((res) => {
         console.log(res);
         console.log('Edited Post successfully');
-        showSuccessToast('Edited Post successfully');
+        toast.success('Edited Post successfully');
         navigate('/');
       })
       .catch((e: any) => {
         console.log(e);
-        showErrorToast(e?.response?.data?.message);
+        toast.error(e?.response?.data?.message);
       });
   };
 

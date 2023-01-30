@@ -6,13 +6,10 @@ import { FAKE_URL } from '../ApartDetailPage';
 import { reportCommentAPI } from '../../../api/service';
 import useScreenState from '../../../hook/useScreenState';
 import AppLoading from '../../../components/AppLoading/AppLoading';
-import {
-  showErrorToast,
-  showSuccessToast,
-} from '../../../components/Toast/Toast';
 import ReportProblemIcon from '@mui/icons-material/ReportProblem';
 import { useSelector } from 'react-redux';
 import { selectUser } from '../../../redux/slices/authSlice';
+import { toast } from 'react-toastify';
 
 interface ApartReviewItemProps {
   item: Comment;
@@ -40,11 +37,11 @@ const ApartReviewItem: React.FC<ApartReviewItemProps> = ({ item }) => {
       const res = await reportCommentAPI(item.id, token!);
       if (res.status === 201) {
         console.log(res);
-        showSuccessToast('Reported successfully!');
+        toast.success('Reported successfully!');
       }
     } catch (e: any) {
       console.log(e?.response?.data?.message);
-      showErrorToast(e?.response?.data?.message);
+      toast.error(e?.response?.data?.message);
     } finally {
       setLoading(false);
     }

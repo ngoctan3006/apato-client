@@ -2,9 +2,9 @@ import { Button } from '@mui/material';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { createPost } from '../../api/service';
 import AppText from '../../components/AppText/AppText';
-import { showErrorToast, showSuccessToast } from '../../components/Toast/Toast';
 import usePost from '../../hook/usePost';
 import styles from './PostApartPage.module.css';
 
@@ -38,12 +38,12 @@ const PostApartPage: React.FC = () => {
         console.log(res);
         savePost(res);
         console.log('Created Post successfully');
-        showSuccessToast('Created Post successfully!');
+        toast.success('Created Post successfully!');
         navigate('/apart-management');
       })
       .catch((e) => {
         console.log(e);
-        showErrorToast(e?.response?.data?.message);
+        toast.error(e?.response?.data?.message);
       });
   };
 

@@ -18,13 +18,11 @@ import {
 } from '@mui/material';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadAllPostByUser } from '../../api/service';
 import AppLoading from '../../components/AppLoading/AppLoading';
 import useScreenState from '../../hook/useScreenState';
 import { ApartModel } from '../../model/ApartModel';
-import { selectUser } from '../../redux/slices/authSlice';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -64,7 +62,6 @@ const ApartManagement: React.FC = () => {
   const navigate = useNavigate();
   const { setLoading, loading, error, setError } = useScreenState();
   const [apartList, setApartList] = useState<ApartModel[]>([]);
-  const user = useSelector(selectUser);
 
   const token = localStorage.getItem('accessToken');
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
