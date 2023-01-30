@@ -75,7 +75,7 @@ const Header: React.FC = () => {
                 },
               }}
             >
-              Danh sách căn hộ
+              Danh sách phòng trọ
             </Button>
 
             {user?.role === 'SELLER' && (

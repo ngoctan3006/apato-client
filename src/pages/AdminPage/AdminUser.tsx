@@ -1,14 +1,17 @@
-import {
-  AdminPanelSettingsOutlined,
-  LockOpenOutlined,
-} from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsersAPI } from '../../api/admin';
+import AppLoading from '../../components/AppLoading/AppLoading';
 import Title from '../../components/Title';
-import { selectUserList, setUsers } from '../../redux/slices/adminSlice';
+import {
+  endLoading,
+  selectLoading,
+  selectUserList,
+  setUsers,
+  startLoading,
+} from '../../redux/slices/adminSlice';
 
 interface UserRoleProps {
   role: string;
@@ -91,21 +94,27 @@ const AdminUser: React.FC = () => {
     },
   ];
   const userList = useSelector(selectUserList);
+  const loading = useSelector(selectLoading);
   const dispatch = useDispatch();
 
   const getUsers = async (data: any) => {
+    dispatch(startLoading());
     try {
       const res = await getAllUsersAPI(data);
       console.log(res);
       dispatch(setUsers(res.data));
     } catch (error: any) {
       console.log(error);
+    } finally {
+      dispatch(endLoading());
     }
   };
 
   useEffect(() => {
     getUsers({ searchValue: '' });
   }, []);
+
+  if (loading) return <AppLoading />;
 
   return (
     <Box m="20px">
