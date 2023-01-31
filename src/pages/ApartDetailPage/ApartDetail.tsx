@@ -2,8 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   Avatar,
   Box,
+  Chip,
   Container,
   Grid,
+  ListItem,
+  Paper,
   Rating,
   Stack,
   SvgIcon,
@@ -24,6 +27,7 @@ import useScreenState from '../../hook/useScreenState';
 import { getApartDetail } from '../../api/service';
 import { numberWithCommas } from '../../utils/utils';
 import AppLoading from '../../components/AppLoading/AppLoading';
+import { tagsList } from '../HomePage/HomePage';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
@@ -39,12 +43,8 @@ const ApartDetail: React.FC = () => {
       const res = await getApartDetail(Number(params.apartId));
       console.log(res);
       if (res.status === 200) {
-        const newImageData = res.data.image.map((item) => {
-          return item;
-        });
         setApartDetail({
           ...res.data,
-          image: [...newImageData],
         });
       }
     } catch (e: any) {
@@ -155,6 +155,43 @@ const ApartDetail: React.FC = () => {
               <Typography variant="body1" component="div">
                 {apartDetail?.detail}
               </Typography>
+            </Box>
+
+            <Box mt={3}>
+              <Typography variant="h6" component="div">
+                Tags
+              </Typography>
+              <Paper
+                sx={{
+                  display: apartDetail?.tags.length ? 'flex' : 'none',
+                  flexWrap: 'wrap',
+                  listStyle: 'none',
+                  border: '1px solid #e2e8f0',
+                  p: '16px 4px',
+                  m: '16px 0 0',
+                  width: 'fit-content',
+                }}
+                component="ul"
+              >
+                {apartDetail?.tags.map((tag) => {
+                  return (
+                    <ListItem
+                      key={tag}
+                      sx={{
+                        width: 'fit-content',
+                        p: 1,
+                      }}
+                    >
+                      <Chip
+                        label={tagsList.find((item) => item.id === tag)?.label}
+                        variant="outlined"
+                        size="small"
+                        color="secondary"
+                      />
+                    </ListItem>
+                  );
+                })}
+              </Paper>
             </Box>
           </Box>
 
