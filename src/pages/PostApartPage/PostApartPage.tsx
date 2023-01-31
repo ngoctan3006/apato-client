@@ -239,7 +239,7 @@ const PostApartPage: React.FC = () => {
               </Button>
             ))}
           </Stack>
-          {selectedTags.length === 0 && (
+          {errorTag && (
             <AppText className={styles.errorText} role="alert">
               Bạn chưa chọn tags!
             </AppText>

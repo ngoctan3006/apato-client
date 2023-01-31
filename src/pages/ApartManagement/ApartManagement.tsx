@@ -63,7 +63,6 @@ const ApartManagement: React.FC = () => {
   const { setLoading, loading, error, setError } = useScreenState();
   const [apartList, setApartList] = useState<ApartModel[]>([]);
 
-  const token = localStorage.getItem('accessToken');
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -76,7 +75,6 @@ const ApartManagement: React.FC = () => {
           pageIndex: 1,
           pageSize: 10,
         },
-        token!,
         value
       );
       if (res.status === 201) {
