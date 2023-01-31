@@ -1,11 +1,12 @@
-import { Button } from '@mui/material';
-import React from 'react';
+import { Button, Chip, ListItem, Paper, Stack } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { createPost } from '../../api/service';
 import AppText from '../../components/AppText/AppText';
 import usePost from '../../hook/usePost';
+import { TagData, tagsList } from '../HomePage/HomePage';
 import styles from './PostApartPage.module.css';
 
 const PostApartPage: React.FC = () => {
@@ -17,10 +18,28 @@ const PostApartPage: React.FC = () => {
   const navigate = useNavigate();
   const { savePost } = usePost();
 
+  const [tags, setTags] = useState<TagData[]>(tagsList);
+  const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
+  const [errorTag, setErrorTag] = useState<boolean>(false);
+
+  const handleAdd = (tag: TagData) => () => {
+    setSelectedTags((prev: TagData[]) => [...prev, tag]);
+    setTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
+  };
+
+  const handleDelete = (tag: TagData) => () => {
+    setSelectedTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
+    setTags((prev: TagData[]) => [...prev, tag]);
+  };
+
   const token = localStorage.getItem('accessToken');
 
   const submitPost = (data: any) => {
-    console.log('HTD', data);
+    console.log(data);
+    if (selectedTags.length === 0) {
+      setErrorTag(true);
+      return;
+    }
     const newData = {
       ...data,
       file: [
@@ -30,6 +49,10 @@ const PostApartPage: React.FC = () => {
         data['land-use'][0],
       ],
     };
+
+    useEffect(() => {
+      setErrorTag(false);
+    }, [selectedTags]);
 
     console.log('NEW DATA', newData);
 
@@ -164,6 +187,61 @@ const PostApartPage: React.FC = () => {
           {errors.detail?.type === 'required' && (
             <AppText className={styles.errorText} role="alert">
               Bạn chưa nhập mô tả!
+            </AppText>
+          )}
+        </div>
+        <div>
+          <label>
+            Tags <span>*</span>
+          </label>
+          <Paper
+            sx={{
+              display: selectedTags.length ? 'flex' : 'none',
+              justifyContent: 'center',
+              flexWrap: 'wrap',
+              listStyle: 'none',
+              border: '1px solid #e2e8f0',
+              p: 0.5,
+              m: 0,
+            }}
+            component="ul"
+          >
+            {selectedTags.map((tag) => {
+              return (
+                <ListItem key={tag.id}>
+                  <Chip
+                    label={tag.label}
+                    variant="outlined"
+                    size="small"
+                    color="secondary"
+                    onDelete={handleDelete(tag)}
+                  />
+                </ListItem>
+              );
+            })}
+          </Paper>
+          <Stack direction="row" flexWrap="wrap" mt={1}>
+            {tags.map((tag) => (
+              <Button
+                onClick={handleAdd(tag)}
+                key={tag.id}
+                variant="outlined"
+                size="small"
+                sx={{
+                  textTransform: 'none',
+                  fontSize: 12,
+                  mr: 1,
+                  mb: 1,
+                }}
+                color="secondary"
+              >
+                {tag.label}
+              </Button>
+            ))}
+          </Stack>
+          {selectedTags.length === 0 && (
+            <AppText className={styles.errorText} role="alert">
+              Bạn chưa chọn tags!
             </AppText>
           )}
         </div>

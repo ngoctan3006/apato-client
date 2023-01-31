@@ -22,7 +22,7 @@ export interface TagData {
   label: string;
 }
 
-const tagsList = [
+export const tagsList = [
   { id: 1, label: 'Tiện nghi' },
   { id: 2, label: 'Giá rẻ' },
   { id: 3, label: 'Tối giản' },
