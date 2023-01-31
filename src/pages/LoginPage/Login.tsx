@@ -130,21 +130,21 @@ const Login: React.FC = () => {
           }
         >
           <Typography fontSize={30} fontWeight={600}>
-            {isSignUp ? 'Sign Up' : 'Sign In'}
+            {isSignUp ? 'Đăng ký' : 'Đăng nhập'}
           </Typography>
           <Typography fontSize={14} sx={{ marginBottom: '20px' }}>
-            {isSignUp ? 'Already have an account? ' : "Don't have an account? "}
+            {isSignUp ? 'Đã có tài khoản? ' : 'Chưa có tài khoản? '}
             <CustomButton
               onClick={() => {
                 reset();
                 setIsSignUp((prev) => !prev);
               }}
             >
-              {isSignUp ? 'Sign In' : 'Sign Up'}
+              {isSignUp ? 'Đăng nhập' : 'Đăng ký'}
             </CustomButton>
           </Typography>
 
-          <Label>Email Address</Label>
+          <Label>Địa chỉ email</Label>
           <Input
             size="small"
             error={!!errors.email}
@@ -155,11 +155,11 @@ const Login: React.FC = () => {
             })}
             fullWidth
             helperText={
-              errors.email?.type === 'required' && 'Email is required'
+              errors.email?.type === 'required' && 'Bạn chưa nhập email'
             }
           />
 
-          <Label>Password</Label>
+          <Label>Mật khẩu</Label>
           <Input
             size="small"
             {...register('password', { required: true, minLength: 8 })}
@@ -168,9 +168,9 @@ const Login: React.FC = () => {
             error={!!errors.password}
             helperText={
               errors.password?.type === 'required'
-                ? 'Password is required'
+                ? 'Bạn chưa nhập mật khẩu'
                 : errors.password?.type === 'minLength' &&
-                  'Password must be at least 8 characters'
+                  'Mật khẩu cần có tối thiêu 8 ký tự'
             }
             InputProps={{
               endAdornment: (
@@ -187,7 +187,7 @@ const Login: React.FC = () => {
           />
           {isSignUp && (
             <>
-              <Label>Full Name</Label>
+              <Label>Họ và tên</Label>
               <Input
                 size="small"
                 type="text"
@@ -195,7 +195,7 @@ const Login: React.FC = () => {
                 {...register('name', { required: true })}
                 fullWidth
                 helperText={
-                  errors.name?.type === 'required' && 'Full name is required'
+                  errors.name?.type === 'required' && 'Bạn chưa nhập họ tên'
                 }
               />
 
@@ -207,11 +207,11 @@ const Login: React.FC = () => {
                 {...register('address', { required: true })}
                 fullWidth
                 helperText={
-                  errors.address?.type === 'required' && 'Address is required'
+                  errors.address?.type === 'required' && 'Bạn chưa nhập địa chỉ'
                 }
               />
 
-              <Label>Phone Number</Label>
+              <Label>Số điện thoại</Label>
               <Input
                 size="small"
                 type="text"
@@ -220,12 +220,12 @@ const Login: React.FC = () => {
                 fullWidth
                 helperText={
                   errors.phone?.type === 'required' &&
-                  'Phone number is required'
+                  'Bạn chưa nhập số điện thoại'
                 }
               />
 
               <Label sx={{ display: 'inline-block' }}>
-                Are you a landlord?
+                Bạn có phải là chủ nhà không?
               </Label>
               <Checkbox
                 {...register('seller')}
@@ -245,7 +245,7 @@ const Login: React.FC = () => {
             type="submit"
             variant="contained"
           >
-            {isSignUp ? 'Sign Up' : 'Sign In'}
+            {isSignUp ? 'Đăng ký' : 'Đăng nhập'}
           </SubmitBtn>
           {!isSignUp && (
             <CustomButton
@@ -253,7 +253,7 @@ const Login: React.FC = () => {
                 marginTop: '20px',
               }}
             >
-              Forgot your password?
+              Quên mật khẩu?
             </CustomButton>
           )}
         </form>
