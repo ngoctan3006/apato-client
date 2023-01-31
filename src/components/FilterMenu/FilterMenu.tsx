@@ -245,7 +245,6 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
         <Paper
           sx={{
             display: props.selectedTags.length ? 'flex' : 'none',
-            justifyContent: 'center',
             flexWrap: 'wrap',
             listStyle: 'none',
             border: '1px solid #e2e8f0',
@@ -256,7 +255,13 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
         >
           {props.selectedTags.map((tag) => {
             return (
-              <ListItem key={tag.id}>
+              <ListItem
+                key={tag.id}
+                sx={{
+                  width: 'fit-content',
+                  p: 1,
+                }}
+              >
                 <Chip
                   label={tag.label}
                   variant="outlined"

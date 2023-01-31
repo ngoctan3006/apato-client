@@ -92,18 +92,23 @@ const AdminTags: React.FC = () => {
         <Paper
           sx={{
             display: tags.length ? 'flex' : 'none',
-            justifyContent: 'center',
             flexWrap: 'wrap',
             listStyle: 'none',
             border: '1px solid #e2e8f0',
-            p: 0.5,
+            p: '16px 4px',
             m: '16px 0 0',
           }}
           component="ul"
         >
           {tags.map((tag) => {
             return (
-              <ListItem key={tag.id}>
+              <ListItem
+                key={tag.id}
+                sx={{
+                  width: 'fit-content',
+                  p: 1,
+                }}
+              >
                 <Chip
                   label={tag.label}
                   variant="outlined"
