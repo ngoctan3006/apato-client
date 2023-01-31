@@ -3,9 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { createPost } from '../../api/service';
+import { createPost } from '../../api/post';
 import AppText from '../../components/AppText/AppText';
-import usePost from '../../hook/usePost';
 import { TagData, tagsList } from '../HomePage/HomePage';
 import styles from './PostApartPage.module.css';
 
@@ -16,7 +15,6 @@ const PostApartPage: React.FC = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-  const { savePost } = usePost();
 
   const [tags, setTags] = useState<TagData[]>(tagsList);
   const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
@@ -32,14 +30,14 @@ const PostApartPage: React.FC = () => {
     setTags((prev: TagData[]) => [...prev, tag]);
   };
 
-  const token = localStorage.getItem('accessToken');
+  const submitPost = async (data: any) => {
+    // if (selectedTags.length === 0) {
+    //   setErrorTag(true);
+    //   return;
+    // }
 
-  const submitPost = (data: any) => {
-    console.log(data);
-    if (selectedTags.length === 0) {
-      setErrorTag(true);
-      return;
-    }
+    console.log('DATA', data);
+
     const newData = {
       ...data,
       file: [
@@ -48,38 +46,58 @@ const PostApartPage: React.FC = () => {
         data.imgApart[0],
         data['land-use'][0],
       ],
+      tags: selectedTags.map((tag) => tag.id.toString()),
+
+      room_count: '3',
+      district: 'Cau Giay',
+      university: 'HUST',
     };
+    delete newData.image;
+    delete newData.CMND;
+    delete newData.imgApart;
+    delete newData['land-use'];
+    // const postData = new FormData();
+    // postData.append(
+    //   'tags',
+    //   selectedTags.map((tag) => tag.id.toString())
+    // );
+    // postData.append('title', newData.title);
+    // postData.append('description', newData.description);
+    // postData.append('price', newData.price);
+    // postData.append('room_count', newData.room_count);
+    // postData.append('district', newData.district);
+    // postData.append('university', newData.university);
+    // postData.append('address', newData.address);
+    // postData.append('area', newData.area);
+    // postData.append('detail', newData.detail);
+    // for (let i = 0; i < newData.file.length; i++) {
+    //   postData.append('file', newData.file[i]);
+    // }
+    // console.log('NEW DATA', newData);
+    // console.log('POST DATA', postData);
 
-    useEffect(() => {
-      setErrorTag(false);
-    }, [selectedTags]);
+    try {
+      const res = await createPost(newData);
+      console.log(res);
 
-    console.log('NEW DATA', newData);
-
-    createPost(newData, token!)
-      .then((res) => {
-        console.log(res);
-        savePost(res);
-        console.log('Created Post successfully');
-        toast.success('Created Post successfully!');
-        navigate('/apart-management');
-      })
-      .catch((e) => {
-        console.log(e);
-        toast.error(e?.response?.data?.message);
-      });
+      toast.success('Đăng tải thành công!');
+      navigate('/apart-management');
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.response.data.message);
+    }
   };
 
-  const postHandler = (data: any) => {
-    console.log(data);
-    submitPost(data);
-  };
+  useEffect(() => {
+    setErrorTag(false);
+  }, [selectedTags]);
+
   return (
     <div className={styles.container}>
       <h3>Yêu cầu đăng tải mới</h3>
       <form
         className={styles.formContainer}
-        onSubmit={handleSubmit(postHandler)}
+        onSubmit={handleSubmit(submitPost)}
       >
         <div>
           <label htmlFor="title">
@@ -181,7 +199,7 @@ const PostApartPage: React.FC = () => {
           </label>
           <textarea
             className={styles.textArea}
-            {...register('detail', { required: true, minLength: 8 })}
+            {...register('detail', { required: true, minLength: 3 })}
             name={'detail'}
           />
           {errors.detail?.type === 'required' && (
@@ -320,7 +338,7 @@ const PostApartPage: React.FC = () => {
               margin: '40px 0',
             }}
           >
-            Submit
+            Đăng
           </Button>
         </div>
       </form>
