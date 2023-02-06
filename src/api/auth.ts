@@ -14,8 +14,5 @@ export const loginAPI = (
   email: string,
   password: string
 ): Promise<AxiosResponse> => {
-  return axiosInstance.post('auth/login', {
-    email: email,
-    password: password,
-  });
+  return axiosInstance.post('auth/login', { email, password });
 };

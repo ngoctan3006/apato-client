@@ -1,18 +1,6 @@
-import { Star } from '@mui/icons-material';
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Grid,
-  Stack,
-  SvgIcon,
-  Typography,
-} from '@mui/material';
-import { yellow } from '@mui/material/colors';
+import { Grid, Typography } from '@mui/material';
 import React from 'react';
-import { ApartModel } from '../../model/ApartModel';
+import { Post } from '../../redux/slices/postSlice';
 import Apart from './Apart';
 
 interface ApartListProps
@@ -20,7 +8,7 @@ interface ApartListProps
     React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
   > {
-  data: ApartModel[];
+  data: Post[];
 }
 
 const ApartList: React.FC<ApartListProps> = (props) => {

@@ -1,11 +1,12 @@
 import { Button, Chip, ListItem, Paper, Stack } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { createPost } from '../../api/post';
 import AppText from '../../components/AppText/AppText';
-import { TagData, tagsList } from '../HomePage/HomePage';
+import { selectTags, Tag } from '../../redux/slices/postSlice';
 import styles from './PostApartPage.module.css';
 
 const PostApartPage: React.FC = () => {
@@ -15,19 +16,20 @@ const PostApartPage: React.FC = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+  const tagsList = useSelector(selectTags);
 
-  const [tags, setTags] = useState<TagData[]>(tagsList);
-  const [selectedTags, setSelectedTags] = useState<TagData[]>([]);
+  const [tags, setTags] = useState<Tag[]>(tagsList);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [errorTag, setErrorTag] = useState<boolean>(false);
 
-  const handleAdd = (tag: TagData) => () => {
-    setSelectedTags((prev: TagData[]) => [...prev, tag]);
-    setTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
+  const handleAdd = (tag: Tag) => () => {
+    setSelectedTags((prev: Tag[]) => [...prev, tag]);
+    setTags((tags: Tag[]) => tags.filter((t) => t.id !== tag.id));
   };
 
-  const handleDelete = (tag: TagData) => () => {
-    setSelectedTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
-    setTags((prev: TagData[]) => [...prev, tag]);
+  const handleDelete = (tag: Tag) => () => {
+    setSelectedTags((tags: Tag[]) => tags.filter((t) => t.id !== tag.id));
+    setTags((prev: Tag[]) => [...prev, tag]);
   };
 
   const submitPost = async (data: any) => {
@@ -74,7 +76,6 @@ const PostApartPage: React.FC = () => {
     //   postData.append('file', newData.file[i]);
     // }
     // console.log('NEW DATA', newData);
-    // console.log('POST DATA', postData);
 
     try {
       const res = await createPost(newData);
@@ -228,7 +229,7 @@ const PostApartPage: React.FC = () => {
               return (
                 <ListItem key={tag.id}>
                   <Chip
-                    label={tag.label}
+                    label={tag.tag_name}
                     variant="outlined"
                     size="small"
                     color="secondary"
@@ -253,7 +254,7 @@ const PostApartPage: React.FC = () => {
                 }}
                 color="secondary"
               >
-                {tag.label}
+                {tag.tag_name}
               </Button>
             ))}
           </Stack>

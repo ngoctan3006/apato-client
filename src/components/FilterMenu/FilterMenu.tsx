@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import React, { Dispatch, SetStateAction } from 'react';
-import { TagData } from '../../pages/HomePage/HomePage';
+import { Tag } from '../../redux/slices/postSlice';
 
 const DistrictList = [
   { value: 'all', label: 'Tất cả' },
@@ -59,23 +59,21 @@ interface FilterMenuProps {
   university: string | null;
   setUniversity: (university: string) => void;
   filterHandler: () => Promise<void>;
-  tags: TagData[];
-  setTags: Dispatch<SetStateAction<TagData[]>>;
-  selectedTags: TagData[];
-  setSelectedTags: Dispatch<SetStateAction<TagData[]>>;
+  tags: Tag[];
+  setTags: Dispatch<SetStateAction<Tag[]>>;
+  selectedTags: Tag[];
+  setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
 }
 
 const FilterMenu: React.FC<FilterMenuProps> = (props) => {
-  const handleAdd = (tag: TagData) => () => {
-    props.setSelectedTags((prev: TagData[]) => [...prev, tag]);
-    props.setTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
+  const handleAdd = (tag: Tag) => () => {
+    props.setSelectedTags((prev: Tag[]) => [...prev, tag]);
+    props.setTags((tags: Tag[]) => tags.filter((t) => t.id !== tag.id));
   };
 
-  const handleDelete = (tag: TagData) => () => {
-    props.setSelectedTags((tags: TagData[]) =>
-      tags.filter((t) => t.id !== tag.id)
-    );
-    props.setTags((prev: TagData[]) => [...prev, tag]);
+  const handleDelete = (tag: Tag) => () => {
+    props.setSelectedTags((tags: Tag[]) => tags.filter((t) => t.id !== tag.id));
+    props.setTags((prev: Tag[]) => [...prev, tag]);
   };
 
   return (
@@ -263,7 +261,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
                 }}
               >
                 <Chip
-                  label={tag.label}
+                  label={tag.tag_name}
                   variant="outlined"
                   size="small"
                   color="secondary"
@@ -288,7 +286,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
               }}
               color="secondary"
             >
-              {tag.label}
+              {tag.tag_name}
             </Button>
           ))}
         </Stack>

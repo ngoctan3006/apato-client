@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface User {
+export interface User {
   id: number;
   name: string | null;
   email: string;
@@ -10,7 +10,7 @@ interface User {
   status: boolean;
 }
 
-interface Report {
+export interface Report {
   id: number;
   apatoId: number;
   comment: string;

@@ -11,28 +11,30 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import AppText from '../../components/AppText/AppText';
 import Title from '../../components/Title';
-import { TagData, tagsList } from '../HomePage/HomePage';
-import { Input, Label } from '../LoginPage/styled';
-import { CancelButton, RowStack, SaveButton } from '../Profile';
+import { selectTags, Tag } from '../../redux/slices/postSlice';
+import { Input } from '../LoginPage/styled';
+import { RowStack, SaveButton } from '../Profile';
 
 const AdminTags: React.FC = () => {
-  const [tags, setTags] = useState<TagData[]>(tagsList);
+  const tagsList = useSelector(selectTags);
+  const [tags, setTags] = useState<Tag[]>(tagsList);
   const [open, setOpen] = useState<boolean>(false);
-  const [tag, setTag] = useState<TagData>({
+  const [tag, setTag] = useState<Tag>({
     id: NaN,
-    label: '',
+    tag_name: '',
   });
   const [errorTag, setErrorTag] = useState<boolean>(false);
 
-  const handleAdd = (tag: TagData) => () => {
-    setTags((prev: TagData[]) => [...prev, tag]);
+  const handleAdd = (tag: Tag) => () => {
+    setTags((prev: Tag[]) => [...prev, tag]);
   };
 
-  const handleDelete = (tag: TagData) => () => {
-    setTags((tags: TagData[]) => tags.filter((t) => t.id !== tag.id));
+  const handleDelete = (tag: Tag) => () => {
+    setTags((tags: Tag[]) => tags.filter((t) => t.id !== tag.id));
   };
 
   const handleClose = () => {
@@ -42,12 +44,12 @@ const AdminTags: React.FC = () => {
   const handleChange = (e: any) => {
     setTag({
       id: tags.length + 1,
-      label: e.target.value,
+      tag_name: e.target.value,
     });
   };
 
   const handleSaveTag = () => {
-    if (tag.label === '') {
+    if (tag.tag_name === '') {
       setErrorTag(true);
       return;
     }
@@ -56,7 +58,7 @@ const AdminTags: React.FC = () => {
     handleClose();
     setTag({
       id: NaN,
-      label: '',
+      tag_name: '',
     });
   };
 
@@ -110,7 +112,7 @@ const AdminTags: React.FC = () => {
                 }}
               >
                 <Chip
-                  label={tag.label}
+                  label={tag.tag_name}
                   variant="outlined"
                   size="small"
                   color="secondary"
@@ -160,7 +162,7 @@ const AdminTags: React.FC = () => {
           type="email"
           fullWidth
           placeholder="Nhập tên tag"
-          value={tag.label}
+          value={tag.tag_name}
           onChange={handleChange}
           sx={{
             my: 3,

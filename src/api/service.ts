@@ -1,28 +1,15 @@
 import { axiosInstance } from './axios';
-import { ApartDetailModel } from '../model/ApartDetailModel';
-
-export const signUpAPI = (data: any) => {
-  return axiosInstance.post('auth/register', data);
-};
-
-export const logInAPI = (email: string, password: string) => {
-  return axiosInstance.post('auth/login', {
-    email: email,
-    password: password,
-  });
-};
 
 export const updateProfile = (data: any) => {
   return axiosInstance.post('user/update', data);
 };
 
 export const createPost = (data: any, token: string) => {
-  let myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${token}`);
   myHeaders.append('Access-Control-Allow-Origin', '*');
   myHeaders.append('Content-Type', 'multipart/form-data');
-  // let formData = new FormData()
-  let formData = new FormData();
+  const formData = new FormData();
   formData.append('file', data.file[0], 'Ảnh 1');
   formData.append('file', data.file[1], 'Ảnh 2');
   formData.append('file', data.file[2], 'Ảnh 3');
@@ -36,7 +23,7 @@ export const createPost = (data: any, token: string) => {
   formData.append('university', 'HUST');
   formData.append('room_count', '4');
 
-  let requestOptions: RequestInit = {
+  const requestOptions: RequestInit = {
     method: 'POST',
     headers: myHeaders,
     body: formData,
@@ -49,9 +36,9 @@ export const createPost = (data: any, token: string) => {
 };
 
 export const editPost = (postId: string, data: any, token: string) => {
-  let myHeaders = new Headers();
+  const myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${token}`);
-  let formData = new FormData();
+  const formData = new FormData();
   formData.append('file', data.image[0], data.image[0].name);
   formData.append('title', data.title);
   formData.append('address', data.address);
@@ -59,7 +46,7 @@ export const editPost = (postId: string, data: any, token: string) => {
   formData.append('detail', data.detail);
   formData.append('area', data.area);
 
-  let requestOptions: RequestInit = {
+  const requestOptions: RequestInit = {
     method: 'PUT',
     headers: myHeaders,
     body: formData,
@@ -84,10 +71,6 @@ export const loadAllPost = (data: any) => {
 
 export const loadAllPostByUser = (data: any, status: number) => {
   return axiosInstance.post<any[]>(`posts/get-my-posts/${status}`, data);
-};
-
-export const getApartDetail = (apatoId: number) => {
-  return axiosInstance.get<ApartDetailModel>(`posts/${apatoId.toString()}`);
 };
 
 export const postReviewApart = (apatoId: string, data: any) => {

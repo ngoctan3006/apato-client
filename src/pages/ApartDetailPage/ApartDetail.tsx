@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { Star } from '@mui/icons-material';
 import {
   Avatar,
   Box,
@@ -12,51 +12,52 @@ import {
   SvgIcon,
   Typography,
 } from '@mui/material';
+import { deepPurple, yellow } from '@mui/material/colors';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import { Navigation, Pagination } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import './apart-detail.css';
-import { Star } from '@mui/icons-material';
-import { deepPurple, yellow } from '@mui/material/colors';
-import { Input } from '../LoginPage/styled';
-import { useParams } from 'react-router-dom';
-import { ApartDetailModel } from '../../model/ApartDetailModel';
-import useScreenState from '../../hook/useScreenState';
-import { getApartDetail } from '../../api/service';
-import { numberWithCommas } from '../../utils/utils';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { getApartDetail } from '../../api/post';
 import AppLoading from '../../components/AppLoading/AppLoading';
-import { tagsList } from '../HomePage/HomePage';
+import {
+  endLoading,
+  getOne,
+  selectCurPost,
+  selectPostLoading,
+  startLoading,
+  Tag,
+} from '../../redux/slices/postSlice';
+import { numberWithCommas } from '../../utils/utils';
+import { Input } from '../LoginPage/styled';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
-  const [apartDetail, setApartDetail] = useState<ApartDetailModel>();
   const [comment, setComment] = useState<string>('');
-  const [rating, setRating] = useState<number | null | undefined>(null);
-  const [needRefresh, setNeedRefresh] = useState(false);
-  const { setLoading, loading, error, setError } = useScreenState();
+  const [rating, setRating] = useState<number | null>(null);
+  const loading = useSelector(selectPostLoading);
+  const curPost = useSelector(selectCurPost);
+  const dispatch = useDispatch();
 
   const loadApartDetailPageData = async () => {
     try {
-      setLoading(true);
+      dispatch(startLoading());
       const res = await getApartDetail(Number(params.apartId));
-      console.log(res);
-      if (res.status === 200) {
-        setApartDetail({
-          ...res.data,
-        });
-      }
+      console.log(res.data);
+      dispatch(getOne(res.data));
     } catch (e: any) {
       console.log(e?.response?.data?.message);
     } finally {
-      setLoading(false);
+      dispatch(endLoading());
     }
   };
 
   useEffect(() => {
-    loadApartDetailPageData().finally(() => {});
-  }, [needRefresh]);
+    loadApartDetailPageData();
+  }, []);
 
   if (loading) {
     return <AppLoading />;
@@ -70,7 +71,7 @@ const ApartDetail: React.FC = () => {
       maxWidth="xl"
     >
       <Typography fontWeight={600} variant="h6" component="div" pt={3}>
-        {apartDetail?.title}
+        {curPost?.title}
       </Typography>
       <Grid mt={0.5} container spacing={2}>
         <Grid item xs={10}>
@@ -91,8 +92,8 @@ const ApartDetail: React.FC = () => {
                   navigation
                   pagination={{ clickable: true, dynamicBullets: true }}
                 >
-                  {apartDetail?.image.map((item) => (
-                    <SwiperSlide>
+                  {curPost?.image.map((item) => (
+                    <SwiperSlide key={item}>
                       <img src={item} alt="" />
                     </SwiperSlide>
                   ))}
@@ -104,7 +105,7 @@ const ApartDetail: React.FC = () => {
                     Diện tích
                   </Typography>
                   <Typography variant="h6" component="div">
-                    {apartDetail?.area} m2
+                    {curPost?.area} m2
                   </Typography>
                 </Stack>
 
@@ -113,7 +114,7 @@ const ApartDetail: React.FC = () => {
                     Giá
                   </Typography>
                   <Typography variant="h6" component="div">
-                    {numberWithCommas(Number(apartDetail?.price))} VND
+                    {numberWithCommas(Number(curPost?.price))} VND
                   </Typography>
                 </Stack>
 
@@ -122,7 +123,7 @@ const ApartDetail: React.FC = () => {
                     Địa chỉ
                   </Typography>
                   <Typography variant="h6" component="div">
-                    {apartDetail?.address}
+                    {curPost?.address}
                   </Typography>
                 </Stack>
 
@@ -133,9 +134,9 @@ const ApartDetail: React.FC = () => {
                   alignItems="center"
                 >
                   <Typography variant="h6" component="div">
-                    {apartDetail?.total_rating}/5{' '}
+                    {curPost?.total_rating}/5{' '}
                     {Array.from({
-                      length: Math.round(Number(apartDetail?.total_rating)),
+                      length: Math.round(Number(curPost?.total_rating)),
                     }).map((item, index) => (
                       <SvgIcon
                         key={index}
@@ -153,7 +154,7 @@ const ApartDetail: React.FC = () => {
                 Mô tả
               </Typography>
               <Typography variant="body1" component="div">
-                {apartDetail?.detail}
+                {curPost?.detail}
               </Typography>
             </Box>
 
@@ -163,7 +164,7 @@ const ApartDetail: React.FC = () => {
               </Typography>
               <Paper
                 sx={{
-                  display: apartDetail?.tags.length ? 'flex' : 'none',
+                  display: curPost?.tags?.length ? 'flex' : 'none',
                   flexWrap: 'wrap',
                   listStyle: 'none',
                   border: '1px solid #e2e8f0',
@@ -173,17 +174,17 @@ const ApartDetail: React.FC = () => {
                 }}
                 component="ul"
               >
-                {apartDetail?.tags.map((tag) => {
+                {curPost?.tags?.map((tag: Tag) => {
                   return (
                     <ListItem
-                      key={tag}
+                      key={tag.id}
                       sx={{
                         width: 'fit-content',
                         p: 1,
                       }}
                     >
                       <Chip
-                        label={tagsList.find((item) => item.id === tag)?.label}
+                        label={tag.tag_name}
                         variant="outlined"
                         size="small"
                         color="secondary"
@@ -198,7 +199,7 @@ const ApartDetail: React.FC = () => {
           <Box mt={3}>
             <Stack direction="row" spacing={2}>
               <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
-                {apartDetail?.creator?.name[0]}
+                {curPost?.creator?.name?.charAt(0)}
               </Avatar>
               <Box flexGrow={1}>
                 <Input
@@ -352,11 +353,11 @@ const ApartDetail: React.FC = () => {
             </Typography>
             <Stack alignItems="center">
               <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
-                {apartDetail?.creator?.name[0]}
+                {curPost?.creator?.name?.charAt(0)}
               </Avatar>
             </Stack>
             <Typography textAlign="center" variant="h6" component="div">
-              {apartDetail?.creator?.name}
+              {curPost?.creator?.name}
             </Typography>
             <Stack
               direction="row"
@@ -367,7 +368,7 @@ const ApartDetail: React.FC = () => {
                 Email
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
-                {apartDetail?.creator?.email || 'Không có'}
+                {curPost?.creator?.email || 'Không có'}
               </Typography>
             </Stack>
             <Stack
@@ -379,7 +380,7 @@ const ApartDetail: React.FC = () => {
                 SĐT
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
-                {apartDetail?.creator?.phone || 'Không có'}
+                {curPost?.creator?.phone || 'Không có'}
               </Typography>
             </Stack>
           </Stack>

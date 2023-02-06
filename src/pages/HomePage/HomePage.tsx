@@ -9,45 +9,39 @@ import {
   Stack,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { loadAllPost } from '../../api/service';
 import ApartList from '../../components/ApartPost/ApartList';
 import AppLoading from '../../components/AppLoading/AppLoading';
-import useScreenState from '../../hook/useScreenState';
-import { ApartModel } from '../../model/ApartModel';
 import { Input } from '../LoginPage/styled';
 import FilterMenu from '../../components/FilterMenu/FilterMenu';
-
-export interface TagData {
-  id: number;
-  label: string;
-}
-
-export const tagsList = [
-  { id: 1, label: 'Tiện nghi' },
-  { id: 2, label: 'Giá rẻ' },
-  { id: 3, label: 'Tối giản' },
-  { id: 4, label: 'Cho phép thú nuôi' },
-  { id: 5, label: 'Yên Tĩnh' },
-  { id: 6, label: 'Có nơi để xe' },
-  { id: 7, label: 'Hiện đại' },
-  { id: 8, label: 'Phòng mới' },
-  { id: 9, label: 'Phòng nhiều người' },
-  { id: 10, label: 'Phòng đơn' },
-];
+import { getAllTags, loadAllPost } from '../../api/post';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  endLoading,
+  getAll,
+  getAllTag,
+  selectPostList,
+  selectPostLoading,
+  selectTags,
+  startLoading,
+  Tag,
+} from '../../redux/slices/postSlice';
 
 const HomePage: React.FC = () => {
+  const tagsList = useSelector(selectTags);
+  const loading = useSelector(selectPostLoading);
+  const posts = useSelector(selectPostList);
+  const dispatch = useDispatch();
   const [searchKey, setSearchKey] = useState<string | null>(null);
   const [priceStart, setPriceStart] = useState<string | null>(null);
   const [priceEnd, setPriceEnd] = useState<string | null>(null);
   const [areaStart, setAreaStart] = useState<string | null>(null);
   const [areaEnd, setAreaEnd] = useState<string | null>(null);
   const [district, setDistrict] = useState<string | null>(null);
-  const [apartList, setApartList] = useState<ApartModel[]>([]);
   const [university, setUniversity] = useState<string | null>(null);
   const [page, setPage] = React.useState<number>(1);
-  const [tags, setTags] = React.useState<TagData[]>(tagsList);
-  const [selectedTags, setSelectedTags] = React.useState<TagData[]>([]);
-  const { setLoading, loading, error, setError } = useScreenState();
+  const [tags, setTags] = React.useState<Tag[]>(tagsList);
+  const [selectedTags, setSelectedTags] = React.useState<Tag[]>([]);
+
   const handleChangePagination = (
     event: React.ChangeEvent<unknown>,
     value: number
@@ -55,9 +49,19 @@ const HomePage: React.FC = () => {
     setPage(value);
   };
 
+  const loadAllTags = async () => {
+    try {
+      const res = await getAllTags();
+      console.log(res.data);
+      dispatch(getAllTag(res.data));
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   const loadHomePageData: () => Promise<void> = async () => {
     try {
-      setLoading(true);
+      dispatch(startLoading());
       const res = await loadAllPost({
         searchValue: searchKey,
         priceStart: Number(priceStart),
@@ -70,24 +74,23 @@ const HomePage: React.FC = () => {
         pageSize: 10,
         tags: selectedTags.map((item) => item.id.toString()),
       });
-      if (res.status === 201) {
-        console.log(res.data);
-        setApartList(res.data);
-      }
+      console.log(res.data);
+      dispatch(getAll(res.data));
     } catch (e: any) {
       console.log(e?.response?.data?.message);
     } finally {
-      setLoading(false);
+      dispatch(endLoading());
     }
   };
 
   useEffect(() => {
-    loadHomePageData().finally(() => {});
+    loadAllTags();
+    loadHomePageData();
+    setTags(tagsList);
   }, []);
 
   const searchApart = async () => {
     try {
-      // setLoading(true);
       const res = await loadAllPost({
         searchValue: searchKey,
         priceStart: Number(priceStart),
@@ -100,9 +103,7 @@ const HomePage: React.FC = () => {
         pageSize: 10,
       });
 
-      if (res.status === 201) {
-        setApartList(res.data);
-      }
+      dispatch(getAll(res.data));
     } catch (e: any) {
       console.log(e?.response?.data?.message);
     } finally {
@@ -190,7 +191,7 @@ const HomePage: React.FC = () => {
               color="secondary"
             />
           </Stack>
-          <ApartList data={apartList} />
+          <ApartList data={posts} />
         </Grid>
       </Grid>
     </Container>

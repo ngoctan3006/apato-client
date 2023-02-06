@@ -12,7 +12,7 @@ import {
 import { yellow } from '@mui/material/colors';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ApartModel } from '../../model/ApartModel';
+import { Post } from '../../redux/slices/postSlice';
 import { numberWithCommas } from '../../utils/utils';
 
 interface ApartListItemProps
@@ -20,7 +20,7 @@ interface ApartListItemProps
     React.HTMLAttributes<HTMLDivElement>,
     HTMLDivElement
   > {
-  item: ApartModel;
+  item: Post;
 }
 
 const Apart: React.FC<ApartListItemProps> = (props) => {
