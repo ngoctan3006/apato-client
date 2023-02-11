@@ -1,22 +1,5 @@
-import { Add, Delete, Edit } from '@mui/icons-material';
-import {
-  Box,
-  Button,
-  IconButton,
-  Paper,
-  Stack,
-  SvgIcon,
-  Tab,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Tabs,
-  Typography,
-} from '@mui/material';
-import moment from 'moment';
+import { Add } from '@mui/icons-material';
+import { Box, Button, Stack, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -28,30 +11,12 @@ import {
   selectAcceptedPost,
   selectPendingPost,
   selectSellerLoading,
+  setAcceptedPost,
+  setPendingPost,
   startLoading,
 } from '../../redux/slices/sellerSlice';
-
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
-}
-
-const TabPanel = (props: TabPanelProps) => {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`tabpanel-${index}`}
-      aria-labelledby={`tab-${index}`}
-      {...other}
-    >
-      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-    </div>
-  );
-};
+import TableComponent from './Table';
+import TabPanel from './TabPanel';
 
 const a11yProps = (index: number) => ({
   id: `tab-${index}`,
@@ -71,17 +36,25 @@ const ApartManagement: React.FC = () => {
     setValue(newValue);
   };
 
-  const loadPosts: () => Promise<void> = async () => {
+  const loadPosts = async () => {
     try {
       dispatch(startLoading());
-      const res = await loadAllPostByUser(
+      const pending = await loadAllPostByUser(
         {
           pageIndex: 1,
           pageSize: 10,
         },
-        value
+        0
       );
-      setApartList(res.data);
+      const accepted = await loadAllPostByUser(
+        {
+          pageIndex: 1,
+          pageSize: 10,
+        },
+        1
+      );
+      dispatch(setPendingPost(pending.data));
+      dispatch(setAcceptedPost(accepted.data));
     } catch (e: any) {
     } finally {
       dispatch(endLoading());
@@ -89,8 +62,12 @@ const ApartManagement: React.FC = () => {
   };
 
   useEffect(() => {
-    loadPosts().finally(() => {});
-  }, [value]);
+    loadPosts();
+  }, []);
+
+  useEffect(() => {
+    setApartList(value == 0 ? pendingPost : acceptedPost);
+  }, [value, pendingPost, acceptedPost]);
 
   if (loading) {
     return <AppLoading />;
@@ -127,7 +104,7 @@ const ApartManagement: React.FC = () => {
                 fontSize: 16,
               }}
               label="Đang duyệt"
-              {...a11yProps(1)}
+              {...a11yProps(0)}
             />
             <Tab
               sx={{
@@ -136,128 +113,18 @@ const ApartManagement: React.FC = () => {
                 fontSize: 16,
               }}
               label="Phòng đã đăng"
-              {...a11yProps(0)}
+              {...a11yProps(1)}
             />
           </Tabs>
         </Stack>
 
         <TabPanel value={value} index={0}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>STT</TableCell>
-                  <TableCell>Tên</TableCell>
-                  <TableCell>Địa chỉ</TableCell>
-                  <TableCell>Thời gian tạo</TableCell>
-                  <TableCell>Đánh giá</TableCell>
-                  <TableCell>Hành động</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {apartList.length == 0 ? (
-                  <TableRow
-                    sx={{
-                      '&:last-child td, &:last-child th': { border: 0 },
-                      height: 100,
-                    }}
-                  >
-                    <TableCell colSpan={6} align="center">
-                      <Typography variant="h6" color="text.secondary">
-                        Không có dữ liệu
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  apartList.map((apart, index) => (
-                    <TableRow
-                      key={apart.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{apart.title}</TableCell>
-                      <TableCell>{apart.address}</TableCell>
-                      <TableCell>
-                        {moment(apart.created_at).format('DD/MM/YYYY')}
-                      </TableCell>
-                      <TableCell>{apart.total_rating}/5</TableCell>
-                      <TableCell>
-                        <Stack direction="row" spacing={2}>
-                          <IconButton>
-                            <SvgIcon component={Edit} color="primary" />
-                          </IconButton>
-                          <IconButton>
-                            <SvgIcon component={Delete} color="error" />
-                          </IconButton>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <TableComponent data={apartList} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} aria-label="table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>STT.</TableCell>
-                  <TableCell>Tên</TableCell>
-                  <TableCell>Địa chỉ</TableCell>
-                  <TableCell>Thời gian tạo</TableCell>
-                  <TableCell>Đánh giá</TableCell>
-                  <TableCell>Hành động</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {apartList.length == 0 ? (
-                  <TableRow
-                    sx={{
-                      '&:last-child td, &:last-child th': { border: 0 },
-                      height: 100,
-                    }}
-                  >
-                    <TableCell colSpan={6} align="center">
-                      <Typography variant="h6" color="text.secondary">
-                        Không có dữ liệu
-                      </Typography>
-                    </TableCell>
-                  </TableRow>
-                ) : (
-                  apartList.map((apart, index) => (
-                    <TableRow
-                      key={apart.id}
-                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                    >
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell>{apart.title}</TableCell>
-                      <TableCell>{apart.address}</TableCell>
-                      <TableCell>
-                        {moment(apart.created_at).format('DD/MM/YYYY')}
-                      </TableCell>
-                      <TableCell>{apart.total_rating}/5</TableCell>
-                      <TableCell>
-                        <Stack direction="row" spacing={2}>
-                          <IconButton>
-                            <SvgIcon component={Edit} color="primary" />
-                          </IconButton>
-                          <IconButton>
-                            <SvgIcon component={Delete} color="error" />
-                          </IconButton>
-                        </Stack>
-                      </TableCell>
-                    </TableRow>
-                  ))
-                )}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <TableComponent data={apartList} />
         </TabPanel>
       </Box>
-
-      {/*<CreateApartModal />*/}
     </>
   );
 };
