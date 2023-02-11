@@ -13,7 +13,7 @@ import { yellow } from '@mui/material/colors';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Post } from '../../redux/slices/postSlice';
-import { numberWithCommas } from '../../utils/utils';
+import { numberWithCommas } from '../../utils';
 
 interface ApartListItemProps
   extends React.DetailedHTMLProps<

@@ -17,7 +17,7 @@ import AppText from '../../components/AppText/AppText';
 import Title from '../../components/Title';
 import { selectTags, Tag } from '../../redux/slices/postSlice';
 import { Input } from '../LoginPage/styled';
-import { RowStack, SaveButton } from '../Profile';
+import { RowStack, SaveButton } from '../../components/Profile';
 
 const AdminTags: React.FC = () => {
   const tagsList = useSelector(selectTags);

@@ -8,7 +8,6 @@ import AdminTags from '../pages/AdminPage/AdminTags';
 import AdminUser from '../pages/AdminPage/AdminUser';
 import ApartDetail from '../pages/ApartDetailPage/ApartDetail';
 import ApartManagement from '../pages/ApartManagement/ApartManagement';
-import EditPostPage from '../pages/EditPostPage/EditPostPage';
 import HomePage from '../pages/HomePage/HomePage';
 import Login from '../pages/LoginPage/Login';
 import PostApartPage from '../pages/PostApartPage/PostApartPage';
@@ -21,7 +20,6 @@ const Router: React.FC = () => {
           <Route index element={<HomePage />} />
           <Route path="apart-detail/:apartId" element={<ApartDetail />} />
           <Route path="post-apart" element={<PostApartPage />} />
-          <Route path="edit-post/:apartId" element={<EditPostPage />} />
           <Route path="apart-management" element={<ApartManagement />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>

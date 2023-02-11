@@ -30,7 +30,7 @@ const UniversityList = [
 
 export const Input = styled(TextField)({
   '& .MuiInputBase-input': {
-    fontSize: 10,
+    fontSize: 12,
   },
   '& label.Mui-focused': {
     color: '#b772ff',
@@ -120,7 +120,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           </Grid>
           <Grid item xs={5}>
             <Input
-              value={props.areaStart}
+              value={props.areaStart || ''}
               onChange={(e) => props.setAreaStart(e.target.value)}
               type="number"
               size="small"
@@ -133,7 +133,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           </Grid>
           <Grid item xs={5}>
             <Input
-              value={props.areaEnd}
+              value={props.areaEnd || ''}
               onChange={(e) => props.setAreaEnd(e.target.value)}
               type="number"
               size="small"
@@ -159,7 +159,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           </Grid>
           <Grid item xs={5}>
             <Input
-              value={props.priceStart}
+              value={props.priceStart || ''}
               onChange={(e) => props.setPriceStart(e.target.value)}
               type="number"
               size="small"
@@ -172,7 +172,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           </Grid>
           <Grid item xs={5}>
             <Input
-              value={props.priceEnd}
+              value={props.priceEnd || ''}
               onChange={(e) => props.setPriceEnd(e.target.value)}
               type="number"
               size="small"
@@ -193,7 +193,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           select
           size="small"
           defaultValue="all"
-          value={props.district}
+          value={props.district || 'all'}
           onChange={(e) => props.setDistrict(e.target.value)}
         >
           {DistrictList.map((district) => (
@@ -219,7 +219,7 @@ const FilterMenu: React.FC<FilterMenuProps> = (props) => {
           select
           size="small"
           defaultValue="all"
-          value={props.university}
+          value={props.university || 'all'}
           onChange={(e) => props.setUniversity(e.target.value)}
         >
           {UniversityList.map((university) => (

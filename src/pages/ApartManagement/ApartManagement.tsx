@@ -18,11 +18,18 @@ import {
 } from '@mui/material';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadAllPostByUser } from '../../api/service';
 import AppLoading from '../../components/AppLoading/AppLoading';
-import useScreenState from '../../hook/useScreenState';
 import { ApartModel } from '../../model/ApartModel';
+import {
+  endLoading,
+  selectAcceptedPost,
+  selectPendingPost,
+  selectSellerLoading,
+  startLoading,
+} from '../../redux/slices/sellerSlice';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,38 +37,35 @@ interface TabPanelProps {
   value: number;
 }
 
-function TabPanel(props: TabPanelProps) {
+const TabPanel = (props: TabPanelProps) => {
   const { children, value, index, ...other } = props;
 
   return (
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
-}
+};
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+const a11yProps = (index: number) => ({
+  id: `tab-${index}`,
+  'aria-controls': `tabpanel-${index}`,
+});
 
 const ApartManagement: React.FC = () => {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  const { setLoading, loading, error, setError } = useScreenState();
   const [apartList, setApartList] = useState<ApartModel[]>([]);
+  const dispatch = useDispatch();
+  const pendingPost = useSelector(selectPendingPost);
+  const acceptedPost = useSelector(selectAcceptedPost);
+  const loading = useSelector(selectSellerLoading);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -69,7 +73,7 @@ const ApartManagement: React.FC = () => {
 
   const loadPosts: () => Promise<void> = async () => {
     try {
-      setLoading(true);
+      dispatch(startLoading());
       const res = await loadAllPostByUser(
         {
           pageIndex: 1,
@@ -77,13 +81,10 @@ const ApartManagement: React.FC = () => {
         },
         value
       );
-      if (res.status === 201) {
-        setApartList(res.data);
-      }
+      setApartList(res.data);
     } catch (e: any) {
-      console.log(e?.response?.data?.message);
     } finally {
-      setLoading(false);
+      dispatch(endLoading());
     }
   };
 
@@ -145,7 +146,7 @@ const ApartManagement: React.FC = () => {
             <Table sx={{ minWidth: 650 }} aria-label="table">
               <TableHead>
                 <TableRow>
-                  <TableCell>STT.</TableCell>
+                  <TableCell>STT</TableCell>
                   <TableCell>Tên</TableCell>
                   <TableCell>Địa chỉ</TableCell>
                   <TableCell>Thời gian tạo</TableCell>

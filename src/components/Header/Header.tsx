@@ -24,7 +24,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Logo from '../../assets/imgs/logo.png';
-import Profile, { RowStack } from '../../pages/Profile';
+import Profile, { RowStack } from '../Profile';
 import { selectUser, signOut } from '../../redux/slices/authSlice';
 
 const Header: React.FC = () => {
@@ -198,50 +198,44 @@ const Header: React.FC = () => {
                     <Divider variant="middle" />
 
                     {user?.role === 'SELLER' && (
-                      <>
-                        <MenuItem>
-                          <Link
-                            to="/post-apart"
-                            style={{
-                              textDecoration: 'none',
-                            }}
-                          >
-                            <RowStack>
-                              <ListItemIcon>
-                                <PostAdd />
-                              </ListItemIcon>
-                              <Typography color="#757575">
-                                Thêm căn hộ
-                              </Typography>
-                            </RowStack>
-                          </Link>
-                        </MenuItem>
-                        <Divider variant="middle" />
-                      </>
+                      <MenuItem>
+                        <Link
+                          to="/post-apart"
+                          style={{
+                            textDecoration: 'none',
+                          }}
+                        >
+                          <RowStack>
+                            <ListItemIcon>
+                              <PostAdd />
+                            </ListItemIcon>
+                            <Typography color="#757575">Thêm căn hộ</Typography>
+                          </RowStack>
+                        </Link>
+                      </MenuItem>
                     )}
+                    {user?.role === 'SELLER' && <Divider variant="middle" />}
 
                     {user?.role === 'ADMIN' && (
-                      <>
-                        <MenuItem>
-                          <Link
-                            to="/admin"
-                            style={{
-                              textDecoration: 'none',
-                            }}
-                          >
-                            <RowStack>
-                              <ListItemIcon>
-                                <AdminPanelSettingsOutlined />
-                              </ListItemIcon>
-                              <Typography color="#757575">
-                                Trang quản trị
-                              </Typography>
-                            </RowStack>
-                          </Link>
-                        </MenuItem>
-                        <Divider variant="middle" />
-                      </>
+                      <MenuItem>
+                        <Link
+                          to="/admin"
+                          style={{
+                            textDecoration: 'none',
+                          }}
+                        >
+                          <RowStack>
+                            <ListItemIcon>
+                              <AdminPanelSettingsOutlined />
+                            </ListItemIcon>
+                            <Typography color="#757575">
+                              Trang quản trị
+                            </Typography>
+                          </RowStack>
+                        </Link>
+                      </MenuItem>
                     )}
+                    {user?.role === 'ADMIN' && <Divider variant="middle" />}
 
                     <MenuItem
                       onClick={() => {

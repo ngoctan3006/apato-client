@@ -21,7 +21,7 @@ import {
   signIn,
   startLoading,
 } from '../../redux/slices/authSlice';
-import { EMAIL_REGEX } from '../../utils/utils';
+import { EMAIL_REGEX } from '../../utils';
 import { CustomButton, Input, Label, SubmitBtn } from './styled';
 
 const Login: React.FC = () => {

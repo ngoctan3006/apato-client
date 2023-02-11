@@ -2,6 +2,7 @@ import { Star } from '@mui/icons-material';
 import {
   Avatar,
   Box,
+  Button,
   Chip,
   Container,
   Grid,
@@ -31,8 +32,8 @@ import {
   startLoading,
   Tag,
 } from '../../redux/slices/postSlice';
-import { numberWithCommas } from '../../utils/utils';
-import { Input } from '../LoginPage/styled';
+import { numberWithCommas } from '../../utils';
+import { Input, SubmitBtn } from '../LoginPage/styled';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
@@ -211,7 +212,30 @@ const ApartDetail: React.FC = () => {
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                 />
-                <Rating readOnly />
+                <Stack direction="row" mt={1} spacing={2}>
+                  <Rating
+                    sx={{
+                      mt: 1,
+                    }}
+                    value={rating}
+                    onChange={(event, newValue) => setRating(newValue)}
+                  />
+                  <Button
+                    variant="contained"
+                    size="small"
+                    sx={{
+                      backgroundColor: '#9854df',
+                      textTransform: 'none',
+                      fontWeight: 600,
+                      fontSize: 16,
+                      '&:hover': {
+                        backgroundColor: '#b772ff',
+                      },
+                    }}
+                  >
+                    Nhận xét
+                  </Button>
+                </Stack>
               </Box>
             </Stack>
 

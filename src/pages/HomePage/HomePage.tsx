@@ -51,18 +51,15 @@ const HomePage: React.FC = () => {
 
   const loadAllTags = async () => {
     try {
-      const res = await getAllTags();
-      console.log(res.data);
-      dispatch(getAllTag(res.data));
-    } catch (error: any) {
-      console.log(error);
-    }
+      const { data } = await getAllTags();
+      dispatch(getAllTag(data));
+    } catch (error: any) {}
   };
 
   const loadHomePageData: () => Promise<void> = async () => {
     try {
       dispatch(startLoading());
-      const res = await loadAllPost({
+      const { data } = await loadAllPost({
         searchValue: searchKey,
         priceStart: Number(priceStart),
         priceEnd: Number(priceEnd),
@@ -74,10 +71,8 @@ const HomePage: React.FC = () => {
         pageSize: 10,
         tags: selectedTags.map((item) => item.id.toString()),
       });
-      console.log(res.data);
-      dispatch(getAll(res.data));
+      dispatch(getAll(data));
     } catch (e: any) {
-      console.log(e?.response?.data?.message);
     } finally {
       dispatch(endLoading());
     }
@@ -86,8 +81,11 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     loadAllTags();
     loadHomePageData();
-    setTags(tagsList);
   }, []);
+
+  useEffect(() => {
+    setTags(tagsList);
+  }, [tagsList]);
 
   const searchApart = async () => {
     try {
@@ -104,11 +102,7 @@ const HomePage: React.FC = () => {
       });
 
       dispatch(getAll(res.data));
-    } catch (e: any) {
-      console.log(e?.response?.data?.message);
-    } finally {
-      // setLoading(false);
-    }
+    } catch (e: any) {}
   };
 
   const filterHandler = async () => {
@@ -169,7 +163,7 @@ const HomePage: React.FC = () => {
               size="small"
               fullWidth
               label="Tìm kiếm"
-              value={searchKey}
+              value={searchKey || ''}
               onChange={(e) => setSearchKey(e.target.value)}
               InputProps={{
                 endAdornment: (
