@@ -31,6 +31,7 @@ export interface Post {
   creator: User;
   comment: Comment;
   created_at: Date;
+  status: number;
   tags: Tag[];
 }
 

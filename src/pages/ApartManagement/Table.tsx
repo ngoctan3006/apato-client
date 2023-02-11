@@ -17,9 +17,10 @@ import { Post } from '../../redux/slices/postSlice';
 
 interface TableProps {
   data: Post[];
+  status: number;
 }
 
-const TableComponent: React.FC<TableProps> = ({ data }) => {
+const TableComponent: React.FC<TableProps> = ({ data, status }) => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="table">
@@ -28,8 +29,9 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
             <TableCell>STT</TableCell>
             <TableCell>Tên</TableCell>
             <TableCell>Địa chỉ</TableCell>
-            <TableCell>Thời gian tạo</TableCell>
-            <TableCell>Đánh giá</TableCell>
+            <TableCell>Thời gian đăng</TableCell>
+            {status === 1 && <TableCell>Đánh giá</TableCell>}
+            {status === 0 && <TableCell>Trạng thái</TableCell>}
             <TableCell>Hành động</TableCell>
           </TableRow>
         </TableHead>
@@ -59,17 +61,31 @@ const TableComponent: React.FC<TableProps> = ({ data }) => {
                 <TableCell>
                   {moment(apart.created_at).format('DD/MM/YYYY')}
                 </TableCell>
-                <TableCell>{apart.total_rating}/5</TableCell>
-                <TableCell>
-                  <Stack direction="row" spacing={2}>
+                {status === 1 && <TableCell>{apart.total_rating}/5</TableCell>}
+                {status === 0 && (
+                  <TableCell>
+                    {apart.status === 0 ? 'Đang chờ duyệt' : 'Bị từ chối'}
+                  </TableCell>
+                )}
+                {status === 1 && (
+                  <TableCell>
+                    <Stack direction="row" spacing={2}>
+                      <IconButton>
+                        <SvgIcon component={Edit} color="primary" />
+                      </IconButton>
+                      <IconButton>
+                        <SvgIcon component={Delete} color="error" />
+                      </IconButton>
+                    </Stack>
+                  </TableCell>
+                )}
+                {status === 0 && (
+                  <TableCell>
                     <IconButton>
                       <SvgIcon component={Edit} color="primary" />
                     </IconButton>
-                    <IconButton>
-                      <SvgIcon component={Delete} color="error" />
-                    </IconButton>
-                  </Stack>
-                </TableCell>
+                  </TableCell>
+                )}
               </TableRow>
             ))
           )}

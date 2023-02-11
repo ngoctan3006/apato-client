@@ -119,10 +119,10 @@ const ApartManagement: React.FC = () => {
         </Stack>
 
         <TabPanel value={value} index={0}>
-          <TableComponent data={apartList} />
+          <TableComponent data={apartList} status={value} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <TableComponent data={apartList} />
+          <TableComponent data={apartList} status={value} />
         </TabPanel>
       </Box>
     </>
