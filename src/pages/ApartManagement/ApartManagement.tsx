@@ -22,7 +22,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadAllPostByUser } from '../../api/service';
 import AppLoading from '../../components/AppLoading/AppLoading';
-import { ApartModel } from '../../model/ApartModel';
+import { Post } from '../../redux/slices/postSlice';
 import {
   endLoading,
   selectAcceptedPost,
@@ -61,7 +61,7 @@ const a11yProps = (index: number) => ({
 const ApartManagement: React.FC = () => {
   const [value, setValue] = useState(0);
   const navigate = useNavigate();
-  const [apartList, setApartList] = useState<ApartModel[]>([]);
+  const [apartList, setApartList] = useState<Post[]>([]);
   const dispatch = useDispatch();
   const pendingPost = useSelector(selectPendingPost);
   const acceptedPost = useSelector(selectAcceptedPost);

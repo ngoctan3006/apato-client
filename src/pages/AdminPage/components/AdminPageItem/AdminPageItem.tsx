@@ -1,14 +1,14 @@
-import React from 'react';
-import styles from './AdminPageItem.module.css';
-import AppText from '../../../../components/AppText/AppText';
-import { ApartModel } from '../../../../model/ApartModel';
+import DeleteIcon from '@mui/icons-material/Delete';
 import StarIcon from '@mui/icons-material/Star';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import AppText from '../../../../components/AppText/AppText';
+import { Post } from '../../../../redux/slices/postSlice';
+import styles from './AdminPageItem.module.css';
 
 interface AdminPageItemProps {
-  item: ApartModel;
+  item: Post;
   onDelete: () => void;
 }
 

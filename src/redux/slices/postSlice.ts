@@ -30,6 +30,7 @@ export interface Post {
   university: string;
   creator: User;
   comment: Comment;
+  created_at: Date;
   tags: Tag[];
 }
 
