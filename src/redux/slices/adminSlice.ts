@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Post } from './postSlice';
 
 export interface User {
   id: number;
@@ -24,12 +25,16 @@ export interface AdminState {
   users: User[];
   reports: Report[];
   loading: boolean;
+  posts: Post[];
+  pendingPosts: Post[];
 }
 
 const initialState = {
   loading: false,
   users: [],
   reports: [],
+  posts: [],
+  pendingPosts: [],
 };
 
 export const adminSlice = createSlice({
@@ -48,6 +53,12 @@ export const adminSlice = createSlice({
     getReports: (state, action) => {
       state.reports = action.payload;
     },
+    getAllPosts: (state, action) => {
+      state.posts = action.payload;
+    },
+    getPendingPosts: (state, action) => {
+      state.pendingPosts = action.payload;
+    },
   },
 });
 
@@ -57,8 +68,18 @@ export const selectUserList = (state: { admin: AdminState }) =>
   state.admin.users;
 export const selectReportList = (state: { admin: AdminState }) =>
   state.admin.reports;
+export const selectPostList = (state: { admin: AdminState }) =>
+  state.admin.posts;
+export const selectPendingPostList = (state: { admin: AdminState }) =>
+  state.admin.pendingPosts;
 
-export const { startLoading, endLoading, setUsers, getReports } =
-  adminSlice.actions;
+export const {
+  startLoading,
+  endLoading,
+  setUsers,
+  getReports,
+  getAllPosts,
+  getPendingPosts,
+} = adminSlice.actions;
 
 export default adminSlice.reducer;

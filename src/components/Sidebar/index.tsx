@@ -93,22 +93,28 @@ const Sidebar: React.FC = () => {
         height={300}
         alignItems="center"
         justifyContent="center"
-        spacing={2}
+        spacing={3}
+        mx={1}
       >
-        <Avatar
-          sx={{
-            width: 100,
-            height: 100,
-          }}
-        />
-        <Typography
-          sx={{
-            fontWeight: 'bold',
-            fontSize: 28,
-          }}
-        >
-          {user?.name}
-        </Typography>
+        <Link to="/" style={{ textAlign: 'center' }}>
+          <img src="/logo.png" alt="Logo" width="30%" />
+        </Link>
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Avatar
+            sx={{
+              width: 30,
+              height: 30,
+            }}
+          />
+          <Typography
+            sx={{
+              fontWeight: 'bold',
+              fontSize: 24,
+            }}
+          >
+            {user?.name}
+          </Typography>
+        </Stack>
       </Stack>
 
       <Stack p="0 20px" spacing={2}>

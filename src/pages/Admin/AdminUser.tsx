@@ -26,6 +26,7 @@ import { Visibility } from '@mui/icons-material';
 import UserInfo from '../../components/UserInfo';
 import { User } from '../../redux/slices/authSlice';
 import { a11yProps } from '../ApartManagement';
+import { DataGridBox } from './styled';
 
 interface UserRoleProps {
   role: string;
@@ -198,26 +199,7 @@ const AdminUser: React.FC = () => {
           <Tab sx={tabStyle} label="Người dùng" {...a11yProps(2)} />
         </Tabs>
       </Stack>
-      <Box
-        m="40px 0 0 0"
-        height="75vh"
-        sx={{
-          '& .MuiDataGrid-root': {
-            border: 'none',
-          },
-          '& .MuiDataGrid-cell': {
-            borderBottom: 'none',
-          },
-          '& .MuiDataGrid-columnHeaders': {
-            backgroundColor: '#a4a9fc',
-            borderBottom: 'none',
-          },
-          '& .MuiDataGrid-footerContainer': {
-            borderTop: 'none',
-            backgroundColor: '#a4a9fc',
-          },
-        }}
-      >
+      <DataGridBox>
         <DataGrid
           rows={
             value === 0
@@ -228,7 +210,7 @@ const AdminUser: React.FC = () => {
           }
           columns={columns}
         />
-      </Box>
+      </DataGridBox>
 
       <UserInfo user={user} open={open} handleClose={handleClose} />
     </Box>
