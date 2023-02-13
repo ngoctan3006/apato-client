@@ -21,8 +21,9 @@ const Router: React.FC = () => {
           <Route path="apart-management" element={<ApartManagement />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminApart />} />
-          <Route path="user" element={<AdminUser />} />
+          <Route index element={<AdminUser />} />
+          <Route path="apart" element={<AdminApart />} />
+          <Route path="new-apart" element={<AdminApart />} />
           <Route path="comment-report" element={<AdminComment />} />
           <Route path="tag" element={<AdminTags />} />
         </Route>

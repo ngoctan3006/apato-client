@@ -1,6 +1,15 @@
-import { Box, Typography } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  Stack,
+  SvgIcon,
+  Tab,
+  Tabs,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllUsersAPI } from '../../api/admin';
 import AppLoading from '../../components/AppLoading';
@@ -12,33 +21,79 @@ import {
   setUsers,
   startLoading,
 } from '../../redux/slices/adminSlice';
+import moment from 'moment';
+import { Visibility } from '@mui/icons-material';
+import UserInfo from '../../components/UserInfo';
+import { User } from '../../redux/slices/authSlice';
+import { a11yProps } from '../ApartManagement';
 
 interface UserRoleProps {
   role: string;
 }
 
-const UserRole: React.FC<UserRoleProps> = (props) => {
+interface UserStatusProps {
+  status: boolean;
+}
+
+const UserRole: React.FC<UserRoleProps> = ({ role }) => {
   return (
     <Box
       sx={{
-        width: '60%',
+        width: '75%',
         m: '0 auto',
         p: '5px',
         display: 'flex',
         justifyContent: 'center',
-        backgroundColor: props.role === 'SELLER' ? '#b772ff' : '#2db7f5',
+        backgroundColor: role === 'SELLER' ? '#b772ff' : '#2db7f5',
         borderRadius: '4px',
       }}
     >
-      <Typography color="#141414" sx={{ ml: '5px' }}>
-        {props.role.toLowerCase()}
+      <Typography sx={{ ml: '5px', fontWeight: 700, color: '#fff' }}>
+        {role === 'SELLER' ? 'Chủ trọ' : 'Người dùng'}
       </Typography>
     </Box>
   );
 };
 
+const UserStatus: React.FC<UserStatusProps> = ({ status }) => {
+  return (
+    <Box
+      sx={{
+        width: '75%',
+        m: '0 auto',
+        p: '5px',
+        display: 'flex',
+        justifyContent: 'center',
+        backgroundColor: status ? '#87d068' : '#f50',
+        borderRadius: '4px',
+      }}
+    >
+      <Typography sx={{ ml: '5px', fontWeight: 700, color: '#fff' }}>
+        {status ? 'Hoạt động' : 'Bị khóa'}
+      </Typography>
+    </Box>
+  );
+};
+
+const tabStyle = {
+  textTransform: 'none',
+  fontWeight: 600,
+  fontSize: 20,
+};
+
 const AdminUser: React.FC = () => {
+  const userList = useSelector(selectUserList);
+  const loading = useSelector(selectLoading);
+  const dispatch = useDispatch();
+  const [open, setOpen] = useState<boolean>(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [value, setValue] = useState<number>(0);
   const columns = [
+    {
+      field: 'id',
+      headerName: 'STT',
+      renderCell: (params: any) => params.api.getRowIndex(params.row.id) + 1,
+    },
     {
       field: 'name',
       headerName: 'Tên',
@@ -57,45 +112,57 @@ const AdminUser: React.FC = () => {
     },
     {
       field: 'role',
-      headerName: 'Role',
+      headerName: 'Vai trò',
       flex: 1,
       renderCell: (params: any) => {
         return <UserRole role={params?.row?.role} />;
       },
     },
     {
-      field: 'address',
-      headerName: 'Địa chỉ',
+      field: 'created_at',
+      headerName: 'Thời gian tham gia',
       flex: 1,
+      renderCell: (params: any) =>
+        moment(params?.row?.created_at).format('DD/MM/YYYY'),
     },
     {
       field: 'status',
       headerName: 'Trạng thái',
       flex: 1,
       renderCell: (params: any) => {
-        return (
-          <Box
-            sx={{
-              width: '60%',
-              m: '0 auto',
-              p: '5px',
-              display: 'flex',
-              justifyContent: 'center',
-              backgroundColor: params?.row?.status ? '#87d068' : '#f50',
-              borderRadius: '4px',
-            }}
-          >
-            <Typography color="#141414" sx={{ ml: '5px' }}>
-              {params?.row?.status ? 'Active' : 'Blocked'}
-            </Typography>
-          </Box>
-        );
+        return <UserStatus status={params?.row?.status} />;
       },
     },
+    {
+      field: 'action',
+      headerName: 'Hành động',
+      flex: 1,
+      renderCell: (params: any) => (
+        <Tooltip title="Xem thông tin">
+          <IconButton
+            onClick={() => {
+              setUser(params?.row);
+              handleOpen();
+            }}
+          >
+            <SvgIcon component={Visibility} color="primary" />
+          </IconButton>
+        </Tooltip>
+      ),
+    },
   ];
-  const userList = useSelector(selectUserList);
-  const loading = useSelector(selectLoading);
-  const dispatch = useDispatch();
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
 
   const getUsers = async (data: any) => {
     dispatch(startLoading());
@@ -104,7 +171,6 @@ const AdminUser: React.FC = () => {
       console.log(res);
       dispatch(setUsers(res.data));
     } catch (error: any) {
-      console.log(error);
     } finally {
       dispatch(endLoading());
     }
@@ -119,6 +185,19 @@ const AdminUser: React.FC = () => {
   return (
     <Box m="20px">
       <Title title="Quản lý người dùng" />
+      <Stack pt={1} alignItems="flex-start">
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          aria-label="tabs"
+          textColor="secondary"
+          indicatorColor="secondary"
+        >
+          <Tab sx={tabStyle} label="Tất cả" {...a11yProps(0)} />
+          <Tab sx={tabStyle} label="Chủ trọ" {...a11yProps(1)} />
+          <Tab sx={tabStyle} label="Người dùng" {...a11yProps(2)} />
+        </Tabs>
+      </Stack>
       <Box
         m="40px 0 0 0"
         height="75vh"
@@ -139,8 +218,19 @@ const AdminUser: React.FC = () => {
           },
         }}
       >
-        <DataGrid rows={userList} columns={columns} />
+        <DataGrid
+          rows={
+            value === 0
+              ? userList
+              : value === 1
+              ? userList.filter((user) => user.role === 'SELLER')
+              : userList.filter((user) => user.role === 'USER')
+          }
+          columns={columns}
+        />
       </Box>
+
+      <UserInfo user={user} open={open} handleClose={handleClose} />
     </Box>
   );
 };

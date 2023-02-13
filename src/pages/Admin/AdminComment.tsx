@@ -76,7 +76,6 @@ const AdminComment: React.FC = () => {
       console.log(reportDetails);
       dispatch(getReports(reportDetails));
     } catch (error) {
-      console.log(error);
     } finally {
       dispatch(endLoading());
     }

@@ -19,13 +19,13 @@ import {
 import TableComponent from './Table';
 import TabPanel from './TabPanel';
 
-const a11yProps = (index: number) => ({
+export const a11yProps = (index: number) => ({
   id: `tab-${index}`,
   'aria-controls': `tabpanel-${index}`,
 });
 
 const ApartManagement: React.FC = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState<number>(0);
   const [apartList, setApartList] = useState<Post[]>([]);
   const dispatch = useDispatch();
   const pendingPost = useSelector(selectPendingPost);

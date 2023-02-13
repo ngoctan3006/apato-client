@@ -20,22 +20,27 @@ export interface SidebarItemProps {
 const SidebarItem = [
   {
     id: 1,
-    title: 'Danh sách phòng trọ',
+    title: 'Người dùng',
     path: '/admin',
   },
   {
     id: 2,
-    title: 'Danh sách người dùng',
-    path: '/admin/user',
+    title: 'Phòng trọ',
+    path: '/admin/apart',
   },
   {
     id: 3,
-    title: 'Danh sách báo cáo comment',
-    path: '/admin/comment-report',
+    title: 'Phòng trọ mới',
+    path: '/admin/new-apart',
   },
   {
     id: 4,
-    title: 'Quản lý tags',
+    title: 'Báo cáo vi phạm',
+    path: '/admin/comment-report',
+  },
+  {
+    id: 5,
+    title: 'Tags',
     path: '/admin/tag',
   },
 ];
