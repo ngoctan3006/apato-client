@@ -25,10 +25,18 @@ import {
   startLoading,
   Tag,
 } from '../../redux/slices/postSlice';
+import { getMeAPI } from '../../api/auth';
+import {
+  signIn,
+  startLoading as start,
+  endLoading as end,
+  selectAuthLoading,
+} from '../../redux/slices/authSlice';
 
 const HomePage: React.FC = () => {
   const tagsList = useSelector(selectTags);
   const loading = useSelector(selectPostLoading);
+  const authLoading = useSelector(selectAuthLoading);
   const posts = useSelector(selectPostList);
   const dispatch = useDispatch();
   const [searchKey, setSearchKey] = useState<string | null>(null);
@@ -55,6 +63,19 @@ const HomePage: React.FC = () => {
       dispatch(getAllTag(data));
     } catch (error: any) {}
   };
+
+  useEffect(() => {
+    getMeAPI()
+      .then((res) => {
+        dispatch(start());
+        if (res) {
+          dispatch(signIn(res.data.user_info));
+        }
+      })
+      .finally(() => {
+        dispatch(end());
+      });
+  }, []);
 
   const loadHomePageData: () => Promise<void> = async () => {
     try {
@@ -123,7 +144,7 @@ const HomePage: React.FC = () => {
     return () => clearTimeout(timer);
   }, [searchKey]);
 
-  if (loading) {
+  if (loading || authLoading) {
     return <AppLoading />;
   }
 
