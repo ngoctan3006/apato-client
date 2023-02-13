@@ -25,6 +25,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { getApartDetail } from '../../api/post';
 import AppLoading from '../../components/AppLoading';
 import {
+  Comment,
   endLoading,
   getOne,
   selectCurPost,
@@ -33,12 +34,13 @@ import {
   Tag,
 } from '../../redux/slices/postSlice';
 import { numberWithCommas } from '../../utils';
-import { Input, SubmitBtn } from '../LoginPage/styled';
+import { Input } from '../LoginPage/styled';
+import moment from 'moment';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
   const [comment, setComment] = useState<string>('');
-  const [rating, setRating] = useState<number | null>(null);
+  const [rating, setRating] = useState<number | null>(5);
   const loading = useSelector(selectPostLoading);
   const curPost = useSelector(selectCurPost);
   const dispatch = useDispatch();
@@ -263,103 +265,49 @@ const ApartDetail: React.FC = () => {
                   fontSize={16}
                   lineHeight={2}
                 >
-                  3
+                  {curPost?.comments.length}
                 </Typography>
               </Stack>
 
-              <Stack mt={3} direction="row" alignItems="center" spacing={3}>
-                <Avatar
-                  sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}
+              {curPost?.comments.map((comment: Comment) => (
+                <Stack
+                  key={comment.id}
+                  mt={3}
+                  direction="row"
+                  alignItems="center"
+                  spacing={3}
                 >
-                  A
-                </Avatar>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    fontWeight={600}
-                    fontSize={16}
-                    component="div"
+                  <Avatar
+                    sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}
                   >
-                    Nguyen Van A
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </Typography>
-                  <Stack
-                    mt={1.5}
-                    spacing={2}
-                    direction="row"
-                    alignItems="center"
-                  >
-                    <Rating value={3} readOnly />
-                    <Typography variant="body1" component="div">
-                      12/12/2022
+                    {comment.user.name.charAt(0)}
+                  </Avatar>
+                  <Box>
+                    <Typography
+                      variant="h6"
+                      fontWeight={600}
+                      fontSize={16}
+                      component="div"
+                    >
+                      {comment.user.name}
                     </Typography>
-                  </Stack>
-                </Box>
-              </Stack>
-              <Stack mt={3} direction="row" alignItems="center" spacing={3}>
-                <Avatar
-                  sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}
-                >
-                  A
-                </Avatar>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    fontWeight={600}
-                    fontSize={16}
-                    component="div"
-                  >
-                    Nguyen Van A
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </Typography>
-                  <Stack
-                    mt={1.5}
-                    spacing={2}
-                    direction="row"
-                    alignItems="center"
-                  >
-                    <Rating value={3} readOnly />
                     <Typography variant="body1" component="div">
-                      12/12/2022
+                      {comment.comment}
                     </Typography>
-                  </Stack>
-                </Box>
-              </Stack>
-              <Stack mt={3} direction="row" alignItems="center" spacing={3}>
-                <Avatar
-                  sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}
-                >
-                  A
-                </Avatar>
-                <Box>
-                  <Typography
-                    variant="h6"
-                    fontWeight={600}
-                    fontSize={16}
-                    component="div"
-                  >
-                    Nguyen Van A
-                  </Typography>
-                  <Typography variant="body1" component="div">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  </Typography>
-                  <Stack
-                    mt={1.5}
-                    spacing={2}
-                    direction="row"
-                    alignItems="center"
-                  >
-                    <Rating value={3} readOnly />
-                    <Typography variant="body1" component="div">
-                      12/12/2022
-                    </Typography>
-                  </Stack>
-                </Box>
-              </Stack>
+                    <Stack
+                      mt={1.5}
+                      spacing={2}
+                      direction="row"
+                      alignItems="center"
+                    >
+                      <Rating value={comment.rating} readOnly />
+                      <Typography variant="body1" component="div">
+                        {moment(comment.created_at).format('DD/MM/YYYY')}
+                      </Typography>
+                    </Stack>
+                  </Box>
+                </Stack>
+              ))}
             </Box>
           </Box>
         </Grid>
@@ -389,10 +337,17 @@ const ApartDetail: React.FC = () => {
               justifyContent="space-between"
             >
               <Typography fontSize={14} variant="h6" component="div">
-                Email
+                Uy tín
               </Typography>
-              <Typography fontSize={14} variant="h6" component="div">
-                {curPost?.creator?.email || 'Không có'}
+              <Typography
+                fontSize={14}
+                variant="h6"
+                component="div"
+                color={curPost?.creator?.reputation ? '000' : '#337eff'}
+              >
+                {curPost?.creator?.reputation
+                  ? `${curPost?.creator?.reputation} / 5`
+                  : 'Chủ mới'}
               </Typography>
             </Stack>
             <Stack
@@ -405,6 +360,18 @@ const ApartDetail: React.FC = () => {
               </Typography>
               <Typography fontSize={14} variant="h6" component="div">
                 {curPost?.creator?.phone || 'Không có'}
+              </Typography>
+            </Stack>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Typography fontSize={14} variant="h6" component="div">
+                Email
+              </Typography>
+              <Typography fontSize={14} variant="h6" component="div">
+                {curPost?.creator?.email || 'Không có'}
               </Typography>
             </Stack>
           </Stack>

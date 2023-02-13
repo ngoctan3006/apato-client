@@ -5,7 +5,7 @@ export interface Comment {
   id: number;
   comment: string;
   rating: number;
-  createdAt: Date;
+  created_at: Date;
   user: {
     name: string;
   };
@@ -29,7 +29,7 @@ export interface Post {
   total_rating: number;
   university: string;
   creator: User;
-  comment: Comment;
+  comments: Comment[];
   created_at: Date;
   status: number;
   tags: Tag[];

@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { loginAPI } from '../../api/auth';
 
 export interface User {
   id: number;
@@ -9,6 +8,7 @@ export interface User {
   address: string | null;
   role: string | null;
   status: boolean | null;
+  reputation: number | null;
 }
 
 export interface AuthState {
