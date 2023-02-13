@@ -13,11 +13,10 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import AppText from '../../components/AppText/AppText';
+import { RowStack, SaveButton } from '../../components/Profile';
 import Title from '../../components/Title';
 import { selectTags, Tag } from '../../redux/slices/postSlice';
 import { Input } from '../LoginPage/styled';
-import { RowStack, SaveButton } from '../../components/Profile';
 
 const AdminTags: React.FC = () => {
   const tagsList = useSelector(selectTags);
@@ -170,17 +169,15 @@ const AdminTags: React.FC = () => {
         />
 
         {errorTag && (
-          <AppText
-            style={{
-              color: 'red',
-              fontSize: '12px',
-              textAlign: 'left',
-              margin: '0 0 5px 10px',
+          <Typography
+            sx={{
+              color: '#d32f2f',
+              fontStyle: 'italic',
+              fontSize: 12,
             }}
-            role="alert"
           >
             Bạn chưa nhập tên tag
-          </AppText>
+          </Typography>
         )}
 
         <RowStack mt={1.5} justifyContent="flex-end">

@@ -3,7 +3,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllReport, getReportDetail } from '../../api/admin';
-import AppLoading from '../../components/AppLoading/AppLoading';
+import AppLoading from '../../components/AppLoading';
 import Title from '../../components/Title';
 import {
   endLoading,

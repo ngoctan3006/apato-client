@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadAllPostByUser } from '../../api/seller';
-import AppLoading from '../../components/AppLoading/AppLoading';
+import AppLoading from '../../components/AppLoading';
 import CreatePostModal from '../../components/PostModal/CreatePost';
 import { Post } from '../../redux/slices/postSlice';
 import {

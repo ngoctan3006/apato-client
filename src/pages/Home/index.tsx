@@ -11,9 +11,9 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ApartList from '../../components/ApartPost/ApartList';
-import AppLoading from '../../components/AppLoading/AppLoading';
+import AppLoading from '../../components/AppLoading';
 import { Input } from '../LoginPage/styled';
-import FilterMenu from '../../components/FilterMenu/FilterMenu';
+import FilterMenu from '../../components/FilterMenu';
 import { getAllTags, loadAllPost } from '../../api/post';
 import { useDispatch, useSelector } from 'react-redux';
 import {

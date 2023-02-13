@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate, useNavigate } from 'react-router-dom';
 import { getMeAPI } from '../api/auth';
-import AppLoading from '../components/AppLoading/AppLoading';
+import AppLoading from '../components/AppLoading';
 import {
   selectIsAuthenticated,
   selectAuthLoading,

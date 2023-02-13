@@ -6,10 +6,10 @@ import AdminApart from '../pages/Admin/AdminApart';
 import AdminComment from '../pages/Admin/AdminComment';
 import AdminTags from '../pages/Admin/AdminTags';
 import AdminUser from '../pages/Admin/AdminUser';
-import ApartDetail from '../pages/ApartDetailPage/ApartDetail';
-import ApartManagement from '../pages/ApartManagement/ApartManagement';
+import ApartDetail from '../pages/ApartDetail';
+import ApartManagement from '../pages/ApartManagement';
 import Home from '../pages/Home';
-import Login from '../pages/LoginPage/Login';
+import Login from '../pages/LoginPage';
 
 const Router: React.FC = () => {
   return (

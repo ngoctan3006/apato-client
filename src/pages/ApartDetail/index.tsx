@@ -23,7 +23,7 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { getApartDetail } from '../../api/post';
-import AppLoading from '../../components/AppLoading/AppLoading';
+import AppLoading from '../../components/AppLoading';
 import {
   endLoading,
   getOne,
