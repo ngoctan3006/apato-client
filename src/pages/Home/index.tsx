@@ -1,6 +1,7 @@
 import Search from '@mui/icons-material/Search';
 import {
   Box,
+  CircularProgress,
   Container,
   Grid,
   IconButton,
@@ -22,6 +23,8 @@ import {
   selectPostList,
   selectPostLoading,
   selectTags,
+  selectTotalPage,
+  setTotalPage,
   startLoading,
   Tag,
 } from '../../redux/slices/postSlice';
@@ -49,12 +52,15 @@ const HomePage: React.FC = () => {
   const [page, setPage] = React.useState<number>(1);
   const [tags, setTags] = React.useState<Tag[]>(tagsList);
   const [selectedTags, setSelectedTags] = React.useState<Tag[]>([]);
+  const totalPage = useSelector(selectTotalPage);
+  const [searchLoading, setSearchLoading] = useState<boolean>(false);
 
-  const handleChangePagination = (
+  const handleChangePagination = async (
     event: React.ChangeEvent<unknown>,
     value: number
   ) => {
     setPage(value);
+    await loadHomePageData(value);
   };
 
   const loadAllTags = async () => {
@@ -77,22 +83,25 @@ const HomePage: React.FC = () => {
       });
   }, []);
 
-  const loadHomePageData: () => Promise<void> = async () => {
+  const loadHomePageData: (page: number) => Promise<void> = async (
+    page: number
+  ) => {
     try {
       dispatch(startLoading());
       const { data } = await loadAllPost({
         searchValue: searchKey,
-        priceStart: Number(priceStart),
-        priceEnd: Number(priceEnd),
-        areaStart: Number(areaStart),
-        areaEnd: Number(areaEnd),
+        priceStart: priceStart ? Number(priceStart) : null,
+        priceEnd: priceEnd ? Number(priceEnd) : null,
+        areaStart: areaStart ? Number(areaStart) : null,
+        areaEnd: areaEnd ? Number(areaEnd) : null,
         district: district,
         university: university,
-        pageIndex: 1,
+        pageIndex: page,
         pageSize: 10,
         tags: selectedTags.map((item) => item.id.toString()),
       });
-      dispatch(getAll(data));
+      dispatch(getAll(data.data));
+      dispatch(setTotalPage(data.totalPages));
     } catch (e: any) {
     } finally {
       dispatch(endLoading());
@@ -101,7 +110,7 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     loadAllTags();
-    loadHomePageData();
+    loadHomePageData(page);
   }, []);
 
   useEffect(() => {
@@ -109,25 +118,32 @@ const HomePage: React.FC = () => {
   }, [tagsList]);
 
   const searchApart = async () => {
+    setPage(1);
+    setSearchLoading(true);
     try {
-      const res = await loadAllPost({
+      const { data } = await loadAllPost({
         searchValue: searchKey,
-        priceStart: Number(priceStart),
-        priceEnd: Number(priceEnd),
-        areaStart: Number(areaStart),
-        areaEnd: Number(areaEnd),
+        priceStart: priceStart ? Number(priceStart) : null,
+        priceEnd: priceEnd ? Number(priceEnd) : null,
+        areaStart: areaStart ? Number(areaStart) : null,
+        areaEnd: areaEnd ? Number(areaEnd) : null,
         district: district,
         university: university,
-        pageIndex: 1,
+        pageIndex: page,
         pageSize: 10,
+        tags: selectedTags.map((item) => item.id.toString()),
       });
 
-      dispatch(getAll(res.data));
-    } catch (e: any) {}
+      dispatch(getAll(data.data));
+      dispatch(setTotalPage(data.totalPages));
+    } catch (e: any) {
+    } finally {
+      setSearchLoading(false);
+    }
   };
 
   const filterHandler = async () => {
-    await loadHomePageData();
+    await loadHomePageData(page);
     setAreaEnd(null);
     setAreaStart(null);
     setPriceStart(null);
@@ -189,9 +205,13 @@ const HomePage: React.FC = () => {
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
-                    <IconButton>
-                      <Search fontSize="small" />
-                    </IconButton>
+                    {searchLoading ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      <IconButton>
+                        <Search />
+                      </IconButton>
+                    )}
                   </InputAdornment>
                 ),
               }}
@@ -200,7 +220,7 @@ const HomePage: React.FC = () => {
 
           <Stack mt={5} justifyContent="center" alignItems="flex-end">
             <Pagination
-              count={1}
+              count={totalPage}
               page={page}
               onChange={handleChangePagination}
               color="secondary"

@@ -4,7 +4,7 @@ import { axiosInstance } from './axios';
 export const createPost = (data: any) => axiosInstance.post('/posts', data);
 
 export const loadAllPost = (data: any) =>
-  axiosInstance.post<Post[]>('posts/all', data);
+  axiosInstance.post<{ data: Post[]; totalPages: number }>('posts/all', data);
 
 export const getAllTags = () => axiosInstance.get<Tag[]>('tags');
 

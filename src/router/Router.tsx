@@ -2,24 +2,22 @@ import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import AdminLayout from '../layout/AdminLayout';
 import Layout from '../layout/Layout';
-import AdminApart from '../pages/AdminPage/AdminApart';
-import AdminComment from '../pages/AdminPage/AdminComment';
-import AdminTags from '../pages/AdminPage/AdminTags';
-import AdminUser from '../pages/AdminPage/AdminUser';
+import AdminApart from '../pages/Admin/AdminApart';
+import AdminComment from '../pages/Admin/AdminComment';
+import AdminTags from '../pages/Admin/AdminTags';
+import AdminUser from '../pages/Admin/AdminUser';
 import ApartDetail from '../pages/ApartDetailPage/ApartDetail';
 import ApartManagement from '../pages/ApartManagement/ApartManagement';
-import HomePage from '../pages/HomePage/HomePage';
+import Home from '../pages/Home';
 import Login from '../pages/LoginPage/Login';
-import PostApartPage from '../pages/PostApartPage/PostApartPage';
 
 const Router: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route index element={<HomePage />} />
+          <Route index element={<Home />} />
           <Route path="apart-detail/:apartId" element={<ApartDetail />} />
-          <Route path="post-apart" element={<PostApartPage />} />
           <Route path="apart-management" element={<ApartManagement />} />
         </Route>
         <Route path="/admin" element={<AdminLayout />}>

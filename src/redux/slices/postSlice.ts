@@ -40,12 +40,14 @@ export interface PostState {
   posts: Post[];
   tags: Tag[];
   loading: boolean;
+  totalPage: number;
 }
 
 const initialState: PostState = {
   posts: [],
   tags: [],
   loading: true,
+  totalPage: 0,
 };
 
 export const postSlice = createSlice({
@@ -67,6 +69,9 @@ export const postSlice = createSlice({
     getOne: (state, action: PayloadAction<Post>) => {
       state.curPost = action.payload;
     },
+    setTotalPage: (state, action: PayloadAction<number>) => {
+      state.totalPage = action.payload;
+    },
   },
 });
 
@@ -75,8 +80,16 @@ export const selectPostList = (state: { post: PostState }) => state.post.posts;
 export const selectPostLoading = (state: { post: PostState }) =>
   state.post.loading;
 export const selectTags = (state: { post: PostState }) => state.post.tags;
+export const selectTotalPage = (state: { post: PostState }) =>
+  state.post.totalPage;
 
-export const { startLoading, endLoading, getAll, getAllTag, getOne } =
-  postSlice.actions;
+export const {
+  startLoading,
+  endLoading,
+  getAll,
+  getAllTag,
+  getOne,
+  setTotalPage,
+} = postSlice.actions;
 
 export default postSlice.reducer;
