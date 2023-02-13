@@ -4,6 +4,7 @@ import AdminLayout from '../layout/AdminLayout';
 import Layout from '../layout/Layout';
 import AdminApart from '../pages/Admin/AdminApart';
 import AdminComment from '../pages/Admin/AdminComment';
+import AdminNewApart from '../pages/Admin/AdminNewApart';
 import AdminTags from '../pages/Admin/AdminTags';
 import AdminUser from '../pages/Admin/AdminUser';
 import ApartDetail from '../pages/ApartDetail';
@@ -23,7 +24,7 @@ const Router: React.FC = () => {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<AdminUser />} />
           <Route path="apart" element={<AdminApart />} />
-          <Route path="new-apart" element={<AdminApart />} />
+          <Route path="new-apart" element={<AdminNewApart />} />
           <Route path="comment-report" element={<AdminComment />} />
           <Route path="tag" element={<AdminTags />} />
         </Route>

@@ -22,7 +22,7 @@ import { toast } from 'react-toastify';
 import { getApartDetail, loadAllPost } from '../../api/post';
 import { deletePostAPI } from '../../api/seller';
 import AppLoading from '../../components/AppLoading';
-import PostDetail from '../../components/PostDetail';
+import PostDetail from '../../components/PostModal/PostDetail';
 import Title from '../../components/Title';
 import {
   deletePost,

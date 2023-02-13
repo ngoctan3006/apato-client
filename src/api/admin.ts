@@ -19,3 +19,15 @@ export const blockUserHandlerAPI = (userId: string, token?: string) => {
 export const deleteCommentAPI = (commentId: string) => {
   return axiosInstance.put(`admin/delete-comment/${commentId}`, {});
 };
+
+export const getAllPendingPostAPI = (data: any) => {
+  return axiosInstance.post('posts/pending', data);
+};
+
+export const approvePostAPI = (postId: number | undefined) => {
+  return axiosInstance.put(`admin/approve/${postId}`);
+};
+
+export const rejectPostAPI = (postId: number | undefined) => {
+  return axiosInstance.put(`admin/reject/${postId}`);
+};

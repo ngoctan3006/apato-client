@@ -76,7 +76,7 @@ const UserStatus: React.FC<UserStatusProps> = ({ status }) => {
   );
 };
 
-const tabStyle = {
+export const tabStyle = {
   textTransform: 'none',
   fontWeight: 600,
   fontSize: 20,

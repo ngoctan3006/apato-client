@@ -41,27 +41,37 @@ export const adminSlice = createSlice({
   name: 'admin',
   initialState,
   reducers: {
-    startLoading(state) {
+    startLoading(state: AdminState) {
       state.loading = true;
     },
-    endLoading(state) {
+    endLoading(state: AdminState) {
       state.loading = false;
     },
-    setUsers: (state, action) => {
+    setUsers: (state: AdminState, action) => {
       state.users = action.payload;
     },
-    getReports: (state, action) => {
+    getReports: (state: AdminState, action) => {
       state.reports = action.payload;
     },
-    getAllPosts: (state, action) => {
+    getAllPosts: (state: AdminState, action) => {
       state.posts = action.payload;
     },
-    getPendingPosts: (state, action) => {
+    getPendingPosts: (state: AdminState, action) => {
       state.pendingPosts = action.payload;
     },
-    deletePost: (state, action) => {
+    deletePost: (state: AdminState, action) => {
       state.posts = state.posts.filter(
         (post: Post) => post.id !== action.payload
+      );
+    },
+    approve: (state: AdminState, action) => {
+      state.pendingPosts = state.pendingPosts.filter(
+        (post: Post) => post.id !== action.payload
+      );
+    },
+    reject: (state: AdminState, action) => {
+      state.pendingPosts = state.pendingPosts.map((post: Post) =>
+        post.id === action.payload ? { ...post, status: -1 } : post
       );
     },
   },
@@ -86,6 +96,8 @@ export const {
   getAllPosts,
   getPendingPosts,
   deletePost,
+  approve,
+  reject,
 } = adminSlice.actions;
 
 export default adminSlice.reducer;
