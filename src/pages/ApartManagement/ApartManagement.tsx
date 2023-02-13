@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadAllPostByUser } from '../../api/seller';
 import AppLoading from '../../components/AppLoading/AppLoading';
+import CreatePostModal from '../../components/PostModal/CreatePost';
 import { Post } from '../../redux/slices/postSlice';
 import {
   endLoading,
@@ -25,12 +26,20 @@ const a11yProps = (index: number) => ({
 
 const ApartManagement: React.FC = () => {
   const [value, setValue] = useState(0);
-  const navigate = useNavigate();
   const [apartList, setApartList] = useState<Post[]>([]);
   const dispatch = useDispatch();
   const pendingPost = useSelector(selectPendingPost);
   const acceptedPost = useSelector(selectAcceptedPost);
   const loading = useSelector(selectSellerLoading);
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -84,7 +93,7 @@ const ApartManagement: React.FC = () => {
             variant="outlined"
             color="secondary"
             startIcon={<Add />}
-            onClick={() => navigate('/post-apart')}
+            onClick={handleOpen}
           >
             Đăng phòng trọ
           </Button>
@@ -125,6 +134,8 @@ const ApartManagement: React.FC = () => {
           <TableComponent data={apartList} status={value} />
         </TabPanel>
       </Box>
+
+      <CreatePostModal open={open} onClose={handleClose} />
     </>
   );
 };

@@ -29,6 +29,9 @@ export const sellerSlice = createSlice({
     setAcceptedPost: (state, action: PayloadAction<Post[]>) => {
       state.acceptedPost = action.payload;
     },
+    addPendingPost: (state, action: PayloadAction<Post>) => {
+      state.pendingPost.unshift(action.payload);
+    },
   },
 });
 
@@ -39,7 +42,12 @@ export const selectPendingPost = (state: { seller: SellerState }) =>
 export const selectAcceptedPost = (state: { seller: SellerState }) =>
   state.seller.acceptedPost;
 
-export const { startLoading, endLoading, setPendingPost, setAcceptedPost } =
-  sellerSlice.actions;
+export const {
+  startLoading,
+  endLoading,
+  setPendingPost,
+  setAcceptedPost,
+  addPendingPost,
+} = sellerSlice.actions;
 
 export default sellerSlice.reducer;

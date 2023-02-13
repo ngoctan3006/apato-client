@@ -16,3 +16,7 @@ export const loginAPI = (
 ): Promise<AxiosResponse> => {
   return axiosInstance.post('auth/login', { email, password });
 };
+
+export const getMeAPI = (): Promise<AxiosResponse> => {
+  return axiosInstance.get('user/me');
+};
