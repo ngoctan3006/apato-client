@@ -2,7 +2,6 @@ import { Star } from '@mui/icons-material';
 import {
   Avatar,
   Box,
-  Button,
   Chip,
   Container,
   Grid,
@@ -22,10 +21,11 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { getApartDetail } from '../../api/post';
+import { commentPostAPI, getApartDetail } from '../../api/post';
 import AppLoading from '../../components/AppLoading';
 import {
   Comment,
+  commentPost,
   endLoading,
   getOne,
   selectCurPost,
@@ -36,14 +36,22 @@ import {
 import { numberWithCommas } from '../../utils';
 import { Input } from '../LoginPage/styled';
 import moment from 'moment';
+import { useForm } from 'react-hook-form';
+import { LoadingButton } from '@mui/lab';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
-  const [comment, setComment] = useState<string>('');
   const [rating, setRating] = useState<number | null>(5);
   const loading = useSelector(selectPostLoading);
   const curPost = useSelector(selectCurPost);
   const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const [commentLoading, setCommentLoading] = useState<boolean>(false);
 
   const loadApartDetailPageData = async () => {
     try {
@@ -55,6 +63,22 @@ const ApartDetail: React.FC = () => {
       console.log(e?.response?.data?.message);
     } finally {
       dispatch(endLoading());
+    }
+  };
+
+  const handleCommentPost = async (data: any) => {
+    setCommentLoading(true);
+    try {
+      const res = await commentPostAPI(curPost?.id, {
+        comment: data.comment,
+        rating,
+      });
+      dispatch(commentPost(res.data));
+      reset();
+      setRating(5);
+    } catch (error: any) {
+    } finally {
+      setCommentLoading(false);
     }
   };
 
@@ -205,39 +229,49 @@ const ApartDetail: React.FC = () => {
                 {curPost?.creator?.name?.charAt(0)}
               </Avatar>
               <Box flexGrow={1}>
-                <Input
-                  size="small"
-                  fullWidth
-                  label="Đánh giá"
-                  multiline
-                  maxRows={3}
-                  value={comment}
-                  onChange={(e) => setComment(e.target.value)}
-                />
-                <Stack direction="row" mt={1} spacing={2}>
-                  <Rating
-                    sx={{
-                      mt: 1,
-                    }}
-                    value={rating}
-                    onChange={(event, newValue) => setRating(newValue)}
-                  />
-                  <Button
-                    variant="contained"
+                <form onSubmit={handleSubmit(handleCommentPost)}>
+                  <Input
                     size="small"
-                    sx={{
-                      backgroundColor: '#9854df',
-                      textTransform: 'none',
-                      fontWeight: 600,
-                      fontSize: 16,
-                      '&:hover': {
-                        backgroundColor: '#b772ff',
-                      },
-                    }}
-                  >
-                    Nhận xét
-                  </Button>
-                </Stack>
+                    fullWidth
+                    label="Đánh giá"
+                    multiline
+                    maxRows={3}
+                    {...register('comment', {
+                      required: true,
+                    })}
+                    error={!!errors.comment}
+                    helperText={
+                      errors.comment?.type === 'required' &&
+                      'Bạn chưa nhập nội dung nhận xét'
+                    }
+                  />
+                  <Stack direction="row" mt={1} spacing={2}>
+                    <Rating
+                      sx={{
+                        mt: 1,
+                      }}
+                      value={rating}
+                      onChange={(event, newValue) => setRating(newValue)}
+                    />
+                    <LoadingButton
+                      loading={commentLoading}
+                      variant="contained"
+                      size="small"
+                      type="submit"
+                      sx={{
+                        backgroundColor: '#9854df',
+                        textTransform: 'none',
+                        fontWeight: 600,
+                        fontSize: 16,
+                        '&:hover': {
+                          backgroundColor: '#b772ff',
+                        },
+                      }}
+                    >
+                      Nhận xét
+                    </LoadingButton>
+                  </Stack>
+                </form>
               </Box>
             </Stack>
 
@@ -278,7 +312,12 @@ const ApartDetail: React.FC = () => {
                   spacing={3}
                 >
                   <Avatar
-                    sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}
+                    sx={{
+                      width: 40,
+                      height: 40,
+                      bgcolor: deepPurple[500],
+                      mb: 'auto',
+                    }}
                   >
                     {comment.user.name.charAt(0)}
                   </Avatar>
@@ -346,7 +385,7 @@ const ApartDetail: React.FC = () => {
                 color={curPost?.creator?.reputation ? '000' : '#337eff'}
               >
                 {curPost?.creator?.reputation
-                  ? `${curPost?.creator?.reputation} / 5`
+                  ? `${curPost?.creator?.reputation.toFixed(1)} / 5`
                   : 'Chủ mới'}
               </Typography>
             </Stack>

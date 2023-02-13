@@ -72,6 +72,9 @@ export const postSlice = createSlice({
     setTotalPage: (state, action: PayloadAction<number>) => {
       state.totalPage = action.payload;
     },
+    commentPost: (state, action) => {
+      state.curPost = action.payload;
+    },
   },
 });
 
@@ -90,6 +93,7 @@ export const {
   getAllTag,
   getOne,
   setTotalPage,
+  commentPost,
 } = postSlice.actions;
 
 export default postSlice.reducer;

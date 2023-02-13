@@ -11,5 +11,5 @@ export const getAllTags = () => axiosInstance.get<Tag[]>('tags');
 export const getApartDetail = (apatoId: number) =>
   axiosInstance.get<Post>(`posts/${apatoId}`);
 
-export const commentPostAPI = async (postId: number, data: any) =>
+export const commentPostAPI = async (postId: number | undefined, data: any) =>
   axiosInstance.post(`posts/comment/${postId}`, data);
