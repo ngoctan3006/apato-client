@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 
 export const axiosInstance: AxiosInstance = axios.create({
-  baseURL: 'http://localhost:4000',
+  baseURL: 'https://apato-server.herokuapp.com/',
   responseType: 'json',
   timeout: 20000,
 });
