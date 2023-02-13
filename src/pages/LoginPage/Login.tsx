@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { loginAPI, signupAPI } from '../../api/auth';
 import BgLogin from '../../assets/imgs/bglogin.jpg';
 import Logo from '../../assets/imgs/logo.png';
+import { Required } from '../../components/PostModal/CreatePost';
 import {
   endLoading,
   selectAuthLoading,
@@ -65,6 +66,10 @@ const Login: React.FC = () => {
   };
 
   const registerHandler = async (data: any) => {
+    if (data.password !== data.confirmPassword) {
+      toast.error('Mật khẩu không khớp!');
+      return;
+    }
     dispatch(startLoading());
     try {
       const res = await signupAPI({
@@ -144,7 +149,9 @@ const Login: React.FC = () => {
             </CustomButton>
           </Typography>
 
-          <Label>Địa chỉ email</Label>
+          <Label>
+            Địa chỉ email <Required />
+          </Label>
           <Input
             size="small"
             error={!!errors.email}
@@ -159,7 +166,9 @@ const Login: React.FC = () => {
             }
           />
 
-          <Label>Mật khẩu</Label>
+          <Label>
+            Mật khẩu <Required />
+          </Label>
           <Input
             size="small"
             {...register('password', { required: true, minLength: 8 })}
@@ -187,7 +196,41 @@ const Login: React.FC = () => {
           />
           {isSignUp && (
             <>
-              <Label>Họ và tên</Label>
+              <Label>
+                Xác nhận mật khẩu <Required />
+              </Label>
+              <Input
+                size="small"
+                {...register('confirmPassword', {
+                  required: true,
+                  minLength: 8,
+                })}
+                fullWidth
+                type={showPassword ? 'text' : 'password'}
+                error={!!errors.confirmPassword}
+                helperText={
+                  errors.confirmPassword?.type === 'required'
+                    ? 'Bạn chưa nhập mật khẩu'
+                    : errors.password?.type === 'minLength' &&
+                      'Mật khẩu cần có tối thiêu 8 ký tự'
+                }
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                      >
+                        {showPassword ? <Visibility /> : <VisibilityOff />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <Label>
+                Họ và tên
+                <Required />
+              </Label>
               <Input
                 size="small"
                 type="text"
@@ -199,7 +242,9 @@ const Login: React.FC = () => {
                 }
               />
 
-              <Label>Address</Label>
+              <Label>
+                Địa chỉ <Required />
+              </Label>
               <Input
                 size="small"
                 type="text"
@@ -211,7 +256,9 @@ const Login: React.FC = () => {
                 }
               />
 
-              <Label>Số điện thoại</Label>
+              <Label>
+                Số điện thoại <Required />
+              </Label>
               <Input
                 size="small"
                 type="text"
