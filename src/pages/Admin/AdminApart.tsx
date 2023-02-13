@@ -2,10 +2,11 @@ import { Delete, Visibility } from '@mui/icons-material';
 import { Box, IconButton, SvgIcon, Tooltip } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loadAllPost } from '../../api/post';
+import { getApartDetail, loadAllPost } from '../../api/post';
 import AppLoading from '../../components/AppLoading';
+import PostDetail from '../../components/PostDetail';
 import Title from '../../components/Title';
 import {
   endLoading,
@@ -14,12 +15,25 @@ import {
   selectPostList,
   startLoading,
 } from '../../redux/slices/adminSlice';
+import { Post } from '../../redux/slices/postSlice';
 import { DataGridBox } from './styled';
 
 const AdminApart: React.FC = () => {
   const posts = useSelector(selectPostList);
   const dispatch = useDispatch();
   const loading = useSelector(selectLoading);
+  const [open, setOpen] = useState<boolean>(false);
+  const [postId, setPostId] = useState<number | null>(null);
+  const [post, setPost] = useState<Post | null>(null);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const columns = [
     {
       field: 'id',
@@ -57,7 +71,12 @@ const AdminApart: React.FC = () => {
       renderCell: (params: any) => (
         <>
           <Tooltip title="Xem thông tin">
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                setPostId(params.row?.id);
+                handleOpen();
+              }}
+            >
               <SvgIcon component={Visibility} color="primary" />
             </IconButton>
           </Tooltip>
@@ -70,6 +89,21 @@ const AdminApart: React.FC = () => {
       ),
     },
   ];
+
+  const loadApartDetailPageData = async () => {
+    try {
+      const res = await getApartDetail(Number(postId));
+      setPost(res.data);
+    } catch (e: any) {
+    } finally {
+    }
+  };
+
+  useEffect(() => {
+    if (postId) {
+      loadApartDetailPageData();
+    }
+  }, [postId]);
 
   const loadAllPosts = async (page: number) => {
     dispatch(startLoading());
@@ -98,6 +132,8 @@ const AdminApart: React.FC = () => {
       <DataGridBox>
         <DataGrid rows={posts} columns={columns} />
       </DataGridBox>
+
+      <PostDetail post={post} open={open} handleClose={handleClose} />
     </Box>
   );
 };

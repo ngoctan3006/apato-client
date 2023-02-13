@@ -102,8 +102,8 @@ const Sidebar: React.FC = () => {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Avatar
             sx={{
-              width: 30,
-              height: 30,
+              width: 40,
+              height: 40,
             }}
           />
           <Typography

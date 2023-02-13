@@ -2,7 +2,7 @@ import { Box, styled } from '@mui/material';
 
 export const DataGridBox = styled(Box)({
   margin: '40px 0 0 0',
-  height: '75vh',
+  height: '80vh',
   '& .MuiDataGrid-root': {
     border: 'none',
   },

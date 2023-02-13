@@ -57,10 +57,8 @@ const ApartDetail: React.FC = () => {
     try {
       dispatch(startLoading());
       const res = await getApartDetail(Number(params.apartId));
-      console.log(res.data);
       dispatch(getOne(res.data));
     } catch (e: any) {
-      console.log(e?.response?.data?.message);
     } finally {
       dispatch(endLoading());
     }
