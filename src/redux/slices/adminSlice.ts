@@ -59,6 +59,11 @@ export const adminSlice = createSlice({
     getPendingPosts: (state, action) => {
       state.pendingPosts = action.payload;
     },
+    deletePost: (state, action) => {
+      state.posts = state.posts.filter(
+        (post: Post) => post.id !== action.payload
+      );
+    },
   },
 });
 
@@ -80,6 +85,7 @@ export const {
   getReports,
   getAllPosts,
   getPendingPosts,
+  deletePost,
 } = adminSlice.actions;
 
 export default adminSlice.reducer;

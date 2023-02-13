@@ -169,7 +169,6 @@ const AdminUser: React.FC = () => {
     dispatch(startLoading());
     try {
       const res = await getAllUsersAPI(data);
-      console.log(res);
       dispatch(setUsers(res.data));
     } catch (error: any) {
     } finally {

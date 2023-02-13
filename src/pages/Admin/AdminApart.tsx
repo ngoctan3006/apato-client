@@ -1,14 +1,31 @@
 import { Delete, Visibility } from '@mui/icons-material';
-import { Box, IconButton, SvgIcon, Tooltip } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  IconButton,
+  Slide,
+  SvgIcon,
+  Tooltip,
+} from '@mui/material';
+import { TransitionProps } from '@mui/material/transitions';
 import { DataGrid } from '@mui/x-data-grid';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import { getApartDetail, loadAllPost } from '../../api/post';
+import { deletePostAPI } from '../../api/seller';
 import AppLoading from '../../components/AppLoading';
 import PostDetail from '../../components/PostDetail';
 import Title from '../../components/Title';
 import {
+  deletePost,
   endLoading,
   getAllPosts,
   selectLoading,
@@ -18,6 +35,15 @@ import {
 import { Post } from '../../redux/slices/postSlice';
 import { DataGridBox } from './styled';
 
+const Transition = React.forwardRef(function Transition(
+  props: TransitionProps & {
+    children: React.ReactElement<any, any>;
+  },
+  ref: React.Ref<unknown>
+) {
+  return <Slide direction="down" ref={ref} {...props} />;
+});
+
 const AdminApart: React.FC = () => {
   const posts = useSelector(selectPostList);
   const dispatch = useDispatch();
@@ -25,6 +51,16 @@ const AdminApart: React.FC = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [postId, setPostId] = useState<number | null>(null);
   const [post, setPost] = useState<Post | null>(null);
+  const [openCf, setOpenCf] = React.useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+
+  const handleOpenCf = () => {
+    setOpenCf(true);
+  };
+
+  const handleCloseCf = () => {
+    setOpenCf(false);
+  };
 
   const handleOpen = () => {
     setOpen(true);
@@ -32,6 +68,18 @@ const AdminApart: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
+  };
+
+  const handleDelete = async () => {
+    setLoadingDelete(true);
+    try {
+      await deletePostAPI(postId);
+      dispatch(deletePost(postId));
+      toast.success('Xóa thành công');
+    } catch (error) {
+    } finally {
+      setLoadingDelete(false);
+    }
   };
 
   const columns = [
@@ -81,7 +129,12 @@ const AdminApart: React.FC = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Xóa">
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                setPostId(params.row?.id);
+                handleOpenCf();
+              }}
+            >
               <SvgIcon component={Delete} color="error" />
             </IconButton>
           </Tooltip>
@@ -112,7 +165,6 @@ const AdminApart: React.FC = () => {
         pageIndex: page,
         pageSize: 20,
       });
-      console.log(data);
       dispatch(getAllPosts(data.data));
     } catch (error: any) {
     } finally {
@@ -134,6 +186,42 @@ const AdminApart: React.FC = () => {
       </DataGridBox>
 
       <PostDetail post={post} open={open} handleClose={handleClose} />
+      <Dialog
+        open={openCf}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleCloseCf}
+        aria-describedby="delete-post"
+        sx={{ margin: '40px auto auto' }}
+      >
+        <DialogTitle>Bạn chắc chăn muốn xóa nhà này?</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="delete-post">
+            Thao tác này không thể hoàn tác
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            sx={{ textTransform: 'none' }}
+            variant="outlined"
+            onClick={handleCloseCf}
+          >
+            Hủy
+          </Button>
+          <LoadingButton
+            sx={{ textTransform: 'none' }}
+            variant="contained"
+            color="error"
+            onClick={async () => {
+              await handleDelete();
+              handleCloseCf();
+            }}
+            loading={loadingDelete}
+          >
+            Xóa
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
