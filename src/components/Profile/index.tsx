@@ -1,9 +1,9 @@
 import { CameraAlt, CancelOutlined, Edit } from '@mui/icons-material';
+import { LoadingButton } from '@mui/lab';
 import {
   Avatar,
   Badge,
   Box,
-  Button,
   Dialog,
   Divider,
   IconButton,
@@ -51,7 +51,7 @@ export const RowStack = styled(Stack)({
   alignItems: 'center',
 });
 
-const CustomButton = styled(Button)({
+const CustomButton = styled(LoadingButton)({
   fontSize: 12,
   fontWeight: 500,
   textTransform: 'none',

@@ -11,11 +11,22 @@ import {
   Typography,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
+import { createTagAPI } from '../../api/admin';
+import { getAllTags } from '../../api/post';
+import AppLoading from '../../components/AppLoading';
 import { RowStack, SaveButton } from '../../components/Profile';
 import Title from '../../components/Title';
-import { selectTags, Tag } from '../../redux/slices/postSlice';
+import {
+  addTag,
+  endLoading,
+  getAllTag,
+  selectPostLoading,
+  selectTags,
+  startLoading,
+  Tag,
+} from '../../redux/slices/postSlice';
 import { Input } from '../LoginPage/styled';
 
 const AdminTags: React.FC = () => {
@@ -26,7 +37,25 @@ const AdminTags: React.FC = () => {
     id: NaN,
     tag_name: '',
   });
+  const loading = useSelector(selectPostLoading);
+  const [addLoading, setAddLoading] = useState<boolean>(false);
   const [errorTag, setErrorTag] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
+  const loadAllTags = async () => {
+    dispatch(startLoading());
+    try {
+      const { data } = await getAllTags();
+      dispatch(getAllTag(data));
+    } catch (error: any) {
+    } finally {
+      dispatch(endLoading());
+    }
+  };
+
+  useEffect(() => {
+    loadAllTags();
+  }, []);
 
   const handleAdd = (tag: Tag) => () => {
     setTags((prev: Tag[]) => [...prev, tag]);
@@ -47,23 +76,34 @@ const AdminTags: React.FC = () => {
     });
   };
 
-  const handleSaveTag = () => {
+  const handleSaveTag = async () => {
     if (tag.tag_name === '') {
       setErrorTag(true);
       return;
     }
-    toast.success('Tạo tag thành công');
-    handleAdd(tag)();
-    handleClose();
-    setTag({
-      id: NaN,
-      tag_name: '',
-    });
+    setAddLoading(true);
+    try {
+      const { data } = await createTagAPI({ tagName: tag.tag_name });
+      dispatch(addTag({ id: data.id, tag_name: data.tag_name }));
+      toast.success('Tạo tag thành công');
+      handleAdd(tag)();
+      handleClose();
+      setTag({
+        id: NaN,
+        tag_name: '',
+      });
+    } catch (error: any) {
+      if (error.response.status === 400) toast.error('Tag đã tồn tại');
+    } finally {
+      setAddLoading(false);
+    }
   };
 
   useEffect(() => {
     setErrorTag(false);
   }, [tag]);
+
+  if (loading) return <AppLoading />;
 
   return (
     <>
@@ -181,7 +221,9 @@ const AdminTags: React.FC = () => {
         )}
 
         <RowStack mt={1.5} justifyContent="flex-end">
-          <SaveButton onClick={handleSaveTag}>Lưu</SaveButton>
+          <SaveButton loading={addLoading} onClick={handleSaveTag}>
+            Lưu
+          </SaveButton>
         </RowStack>
       </Dialog>
     </>

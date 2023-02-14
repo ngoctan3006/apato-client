@@ -10,12 +10,12 @@ import {
   Stack,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllTags, loadAllPost } from '../../api/post';
 import ApartList from '../../components/ApartPost/ApartList';
 import AppLoading from '../../components/AppLoading';
-import { Input } from '../LoginPage/styled';
 import FilterMenu from '../../components/FilterMenu';
-import { getAllTags, loadAllPost } from '../../api/post';
-import { useDispatch, useSelector } from 'react-redux';
+import { selectAuthLoading } from '../../redux/slices/authSlice';
 import {
   endLoading,
   getAll,
@@ -28,13 +28,7 @@ import {
   startLoading,
   Tag,
 } from '../../redux/slices/postSlice';
-import { getMeAPI } from '../../api/auth';
-import {
-  signIn,
-  startLoading as start,
-  endLoading as end,
-  selectAuthLoading,
-} from '../../redux/slices/authSlice';
+import { Input } from '../LoginPage/styled';
 
 const HomePage: React.FC = () => {
   const tagsList = useSelector(selectTags);
@@ -69,19 +63,6 @@ const HomePage: React.FC = () => {
       dispatch(getAllTag(data));
     } catch (error: any) {}
   };
-
-  useEffect(() => {
-    getMeAPI()
-      .then((res) => {
-        dispatch(start());
-        if (res) {
-          dispatch(signIn(res.data.user_info));
-        }
-      })
-      .finally(() => {
-        dispatch(end());
-      });
-  }, []);
 
   const loadHomePageData: (page: number) => Promise<void> = async (
     page: number

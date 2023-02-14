@@ -73,7 +73,6 @@ const AdminComment: React.FC = () => {
           };
         })
       );
-      console.log(reportDetails);
       dispatch(getReports(reportDetails));
     } catch (error) {
     } finally {

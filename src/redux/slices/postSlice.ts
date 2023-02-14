@@ -54,26 +54,29 @@ export const postSlice = createSlice({
   name: 'post',
   initialState,
   reducers: {
-    startLoading(state) {
+    startLoading(state: PostState) {
       state.loading = true;
     },
-    endLoading(state) {
+    endLoading(state: PostState) {
       state.loading = false;
     },
-    getAll: (state, action: PayloadAction<Post[]>) => {
+    getAll: (state: PostState, action: PayloadAction<Post[]>) => {
       state.posts = action.payload;
     },
-    getAllTag: (state, action: PayloadAction<Tag[]>) => {
+    getAllTag: (state: PostState, action: PayloadAction<Tag[]>) => {
       state.tags = action.payload;
     },
-    getOne: (state, action: PayloadAction<Post>) => {
+    getOne: (state: PostState, action: PayloadAction<Post>) => {
       state.curPost = action.payload;
     },
-    setTotalPage: (state, action: PayloadAction<number>) => {
+    setTotalPage: (state: PostState, action: PayloadAction<number>) => {
       state.totalPage = action.payload;
     },
-    commentPost: (state, action) => {
+    commentPost: (state: PostState, action) => {
       state.curPost = action.payload;
+    },
+    addTag: (state: PostState, action: PayloadAction<Tag>) => {
+      state.tags.push(action.payload);
     },
   },
 });
@@ -94,6 +97,7 @@ export const {
   getOne,
   setTotalPage,
   commentPost,
+  addTag,
 } = postSlice.actions;
 
 export default postSlice.reducer;

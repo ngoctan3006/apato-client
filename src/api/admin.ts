@@ -31,3 +31,7 @@ export const approvePostAPI = (postId: number | undefined) => {
 export const rejectPostAPI = (postId: number | undefined) => {
   return axiosInstance.put(`admin/reject/${postId}`);
 };
+
+export const createTagAPI = (data: any) => {
+  return axiosInstance.post('tags', data);
+};
