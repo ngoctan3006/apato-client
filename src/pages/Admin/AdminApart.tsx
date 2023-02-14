@@ -53,6 +53,7 @@ const AdminApart: React.FC = () => {
   const [post, setPost] = useState<Post | null>(null);
   const [openCf, setOpenCf] = React.useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(false);
 
   const handleOpenCf = () => {
     setOpenCf(true);
@@ -144,11 +145,13 @@ const AdminApart: React.FC = () => {
   ];
 
   const loadApartDetailPageData = async () => {
+    setLoadingPost(true);
     try {
       const res = await getApartDetail(Number(postId));
       setPost(res.data);
     } catch (e: any) {
     } finally {
+      setLoadingPost(false);
     }
   };
 
@@ -185,7 +188,12 @@ const AdminApart: React.FC = () => {
         <DataGrid rows={posts} columns={columns} />
       </DataGridBox>
 
-      <PostDetail post={post} open={open} handleClose={handleClose} />
+      <PostDetail
+        post={post}
+        open={open}
+        handleClose={handleClose}
+        loading={loadingPost}
+      />
       <Dialog
         open={openCf}
         TransitionComponent={Transition}
