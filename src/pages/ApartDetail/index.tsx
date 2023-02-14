@@ -35,12 +35,14 @@ import { Input } from '../LoginPage/styled';
 import moment from 'moment';
 import { useForm } from 'react-hook-form';
 import { LoadingButton } from '@mui/lab';
+import { selectUser } from '../../redux/slices/authSlice';
 
 const ApartDetail: React.FC = () => {
   const params = useParams();
   const [rating, setRating] = useState<number | null>(5);
   const loading = useSelector(selectPostLoading);
   const curPost = useSelector(selectCurPost);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const {
     register,
@@ -219,58 +221,75 @@ const ApartDetail: React.FC = () => {
           </Box>
 
           <Box mt={3}>
-            <Stack direction="row" spacing={2}>
-              <Avatar sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}>
-                {curPost?.creator?.name?.charAt(0)}
-              </Avatar>
-              <Box flexGrow={1}>
-                <form onSubmit={handleSubmit(handleCommentPost)}>
-                  <Input
-                    size="small"
-                    fullWidth
-                    label="Đánh giá"
-                    multiline
-                    maxRows={3}
-                    {...register('comment', {
-                      required: true,
-                    })}
-                    error={!!errors.comment}
-                    helperText={
-                      errors.comment?.type === 'required' &&
-                      'Bạn chưa nhập nội dung nhận xét'
-                    }
-                  />
-                  <Stack direction="row" mt={1} spacing={2}>
-                    <Rating
-                      sx={{
-                        mt: 1,
-                      }}
-                      value={rating}
-                      onChange={(event, newValue) => setRating(newValue)}
-                    />
-                    <LoadingButton
-                      loading={commentLoading}
-                      variant="contained"
+            {user ? (
+              <Stack direction="row" spacing={2} mb={3}>
+                <Avatar
+                  sx={{ width: 40, height: 40, bgcolor: deepPurple[500] }}
+                >
+                  {user?.name?.charAt(0)}
+                </Avatar>
+                <Box flexGrow={1}>
+                  <form onSubmit={handleSubmit(handleCommentPost)}>
+                    <Input
                       size="small"
-                      type="submit"
-                      sx={{
-                        backgroundColor: '#9854df',
-                        textTransform: 'none',
-                        fontWeight: 600,
-                        fontSize: 16,
-                        '&:hover': {
-                          backgroundColor: '#b772ff',
-                        },
-                      }}
-                    >
-                      Nhận xét
-                    </LoadingButton>
-                  </Stack>
-                </form>
-              </Box>
-            </Stack>
+                      fullWidth
+                      label="Đánh giá"
+                      multiline
+                      maxRows={3}
+                      {...register('comment', {
+                        required: true,
+                      })}
+                      error={!!errors.comment}
+                      helperText={
+                        errors.comment?.type === 'required' &&
+                        'Bạn chưa nhập nội dung nhận xét'
+                      }
+                    />
+                    <Stack direction="row" mt={1} spacing={2}>
+                      <Rating
+                        sx={{
+                          mt: 1,
+                        }}
+                        value={rating}
+                        onChange={(event, newValue) => setRating(newValue)}
+                      />
+                      <LoadingButton
+                        loading={commentLoading}
+                        variant="contained"
+                        size="small"
+                        type="submit"
+                        sx={{
+                          backgroundColor: '#9854df',
+                          textTransform: 'none',
+                          fontWeight: 600,
+                          fontSize: 16,
+                          '&:hover': {
+                            backgroundColor: '#b772ff',
+                          },
+                        }}
+                      >
+                        Nhận xét
+                      </LoadingButton>
+                    </Stack>
+                  </form>
+                </Box>
+              </Stack>
+            ) : (
+              <Typography
+                variant="h6"
+                component="div"
+                sx={{
+                  height: '50px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                Bạn cần đăng nhập để đăng nhận xét
+              </Typography>
+            )}
 
-            <Box mt={3}>
+            <Box>
               <Stack direction="row" alignItems="center">
                 <Typography
                   fontSize={16}
