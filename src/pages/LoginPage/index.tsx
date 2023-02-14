@@ -76,7 +76,7 @@ const Login: React.FC = () => {
         name: data?.name,
         email: data?.email,
         password: data?.password,
-        role: data?.seller || undefined,
+        role: data?.seller ? 'SELLER' : undefined,
       });
       if (res) {
         console.log(res);
